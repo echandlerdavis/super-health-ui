@@ -1,0 +1,12 @@
+.input {
+  margin-top: .5em;
+  width: 100%;
+  padding: .5em;
+  box-sizing: border-box;
+}
+
+.label {
+  font-weight: 700;
+  color: #666666;
+  margin-bottom: .5em;
+}
