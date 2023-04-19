@@ -5,6 +5,7 @@ import ProductPage from '../product-page/ProductPage';
 import CheckoutPage from '../checkout-page/CheckoutPage';
 import ConfirmationPage from '../confirmation-page/ConfirmationPage';
 import Header from '../header/Header';
+import Footer from '../footer/Footer';
 
 /**
  * @name App
@@ -18,6 +19,7 @@ const App = () => (
       <Route exact path="/checkout" render={() => <CheckoutPage />} />
       <Route exact path="/confirmation" render={() => <ConfirmationPage />} />
     </Switch>
+    <Footer />
   </BrowserRouter>
 );
 
