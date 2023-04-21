@@ -4,10 +4,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ProductPage from '../product-page/ProductPage';
 import CheckoutPage from '../checkout-page/CheckoutPage';
 import ConfirmationPage from '../confirmation-page/ConfirmationPage';
-import MaintenancePage from '../maintenance-page/MaintenancePage';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
-// import HomePage from '../home/HomePage';
 /**
  * @name App
  * @returns component
