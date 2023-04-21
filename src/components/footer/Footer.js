@@ -1,8 +1,9 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import './Footer.css';
 
 function Copyright() {
   const copyright = String.fromCodePoint(0x00A9);
@@ -17,28 +18,11 @@ function Copyright() {
 
 export default function StickyFooter() {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        bottom: 0
-      }}
-    >
+    <Box className="box">
       <CssBaseline />
-      <Box
-        component="footer"
-        sx={{
-          py: 3,
-          px: 2,
-          mb: 'auto'
-        }}
-      >
-        <Container maxWidth="sm">
-          <Copyright />
-        </Container>
-      </Box>
+      <Container>
+        <Copyright />
+      </Container>
     </Box>
   );
 }

@@ -6,6 +6,7 @@
   height: 40vmin;
 }
 
+
 @media (prefers-reduced-motion: no-preference) {
 .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -44,6 +45,13 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.Container{
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes App-logo-spin {
