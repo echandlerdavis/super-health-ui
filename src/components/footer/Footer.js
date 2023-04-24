@@ -2,7 +2,6 @@ import * as React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Container from '@material-ui/core/Container';
 import './Footer.css';
 
 function Copyright() {
@@ -20,9 +19,9 @@ export default function StickyFooter() {
   return (
     <Box className="box">
       <CssBaseline />
-      <Container>
+      <footer>
         <Copyright />
-      </Container>
+      </footer>
     </Box>
   );
 }
