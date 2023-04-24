@@ -18,12 +18,9 @@ const App = () => (
         <Switch>
           <Route exact path="/" render={() => <ProductPage />} />
           <Route exact path="/checkout" render={() => <CheckoutPage />} />
-          {/* <Route exact path="/home" render={() => <div />} /> */}
           <Route exact path="/confirmation" render={() => <ConfirmationPage />} />
         </Switch>
-
         <Footer />
-
       </BrowserRouter>
     </div>
   </div>
