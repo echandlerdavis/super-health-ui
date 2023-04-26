@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, createElement } from 'react';
 import GoogleLogin, { GoogleLogout } from 'react-google-login';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { AllInclusive } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import loginUser from './HeaderService';
-import constants from '../../utils/constants';
 import iconWithBadge from './IconWithBadge';
 import { useCart } from '../checkout-page/CartContext';
 import styles from './Header.module.css';
+import constants from '../../utils/constants';
+import javaTheHuttLogo from '../../assets/images/javaTheHuttLogo.jpg';
 
 /**
  * @name Header
@@ -83,9 +83,16 @@ const Header = () => {
     history.push('/checkout');
   };
 
+  const logo = createElement('img', {
+    src: javaTheHuttLogo,
+    alt: constants.LOGO_ALT,
+    className: 'App-logo',
+    onClick: handleLogoClick
+  });
+
   return (
-    <div id={styles.header} className="Set-to-front">
-      <AllInclusive className={styles.appLogo} onClick={handleLogoClick} />
+    <header id={styles.header} className="Set-to-front">
+      {logo}
       {googleError && <span>{googleError}</span>}
       {apiError && <span>Api Error</span>}
       {iconWithBadge(
@@ -115,7 +122,7 @@ const Header = () => {
           {user && `${user.firstName} ${user.lastName}`}
         </span>
       }
-    </div>
+    </header>
   );
 };
 

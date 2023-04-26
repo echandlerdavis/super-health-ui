@@ -23,5 +23,6 @@ module.exports = Object.freeze({
   ADD_PRODUCT_SUCCESS: (description) => ({
     MESSAGE: `${description} added to cart!`,
     SEVERITY: SEVERITY_LEVELS.SUCCESS
-  })
+  }),
+  LOGO_ALT: 'Jaba the Hutt drinking coffee'
 });

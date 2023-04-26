@@ -23,7 +23,7 @@
   }
   
   #header > svg:hover,
-  button:hover, span:hover {
+  button:hover, img:hover, span:hover {
     cursor: pointer;
     fill: gainsboro;
   }
