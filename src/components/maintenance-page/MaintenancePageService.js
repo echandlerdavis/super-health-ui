@@ -10,7 +10,7 @@ import Constants from '../../utils/constants';
  * @returns sets state for products if 200 response, else sets state for apiError
  */
 const fetchProducts = async (setProducts, setApiError) => {
-  await HttpHelper(Constants.ACTIVE_PRODUCT_ENDPOINT, 'GET')
+  await HttpHelper(Constants.PRODUCTS_ENPOINT, 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -18,8 +18,8 @@ const fetchProducts = async (setProducts, setApiError) => {
       throw new Error(Constants.API_ERROR);
     })
     .then(setProducts)
-    .catch(() => {
-      setApiError(true);
+    .catch((e) => {
+      setApiError(e.message);
     });
 };
 export default fetchProducts;
