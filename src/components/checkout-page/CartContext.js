@@ -1,15 +1,10 @@
 import React from 'react';
+import setLastActive from '../../utils/UpdateLastActive';
 
 const CartContext = React.createContext();
 
 function cartReducer(state, action) {
   switch (action.type) {
-    case 'delete': {
-      return {
-        ...state,
-        products: state.products.filter((product) => product.title !== action.product.title)
-      };
-    }
     case 'add': {
       return {
         ...state,
@@ -20,6 +15,41 @@ function cartReducer(state, action) {
       return {
         ...state,
         products: []
+      };
+    }
+    case 'remove': {
+      const { title } = action.product;
+      const updatedProducts = state.products.filter((product) => product.title !== title);
+      setLastActive();
+      return {
+        ...state,
+        products: updatedProducts
+      };
+    }
+    case 'updateQuantity': {
+      const { products } = action;
+      const updatedProducts = products.map((product) => {
+        const { title, quantity } = product;
+        let updatedQuantity;
+
+        if (quantity === '' || Number.isNaN(parseInt(quantity, 10))) {
+          updatedQuantity = 0;
+        } else {
+          updatedQuantity = parseInt(quantity, 10);
+        }
+
+        if (quantity === 0 || updatedQuantity === 0 || parseInt(quantity, 10) === 0) {
+          // Display the modal
+          return { ...product, showModal: true, quantity: updatedQuantity };
+        }
+        return state.products.find((p) => p.title === title)
+          ? { ...product }
+          : { ...product, quantity: updatedQuantity };
+      });
+
+      return {
+        ...state,
+        products: updatedProducts
       };
     }
     default: {
