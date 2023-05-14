@@ -26,11 +26,15 @@ const CheckoutPage = () => {
   const [openToast, setOpenToast] = useState(false);
   const [errors, setErrors] = useState('');
 
-  const {
-    state: { products }
-  } = useCart();
+  const { state: { products }, dispatch } = useCart();
 
-  const { dispatch } = useCart();
+  const handleRemove = (product) => {
+    dispatch({ type: 'remove', product: { title: product.title } });
+    if (product.quantity === '' || product.quantity === 0) {
+      dispatch({ type: 'UpdateQuantity', products: [{ ...product, quantity: 1 }] });
+    }
+    setLastActive();
+  };
 
   const clearCart = () => (
     dispatch({ type: 'clear', product: {} })
@@ -389,7 +393,7 @@ const CheckoutPage = () => {
       <section className={`${styles.step} ${styles.order}`}>
         <h2 className={styles.title}>1. Review Order</h2>
         <div className={`Card ${styles.stepCard}`}>
-          <ReviewOrderWidget />
+          <ReviewOrderWidget onRemoveConfirmation={handleRemove} />
         </div>
       </section>
       <section className={`${styles.step} ${styles.delivery}`}>
