@@ -55,7 +55,7 @@ const BillingDetails = ({
             onChange={onChange}
             value={billingData.billingState}
             options={usStates}
-            className={errors && errors.includes('billingZip') && styles.invalidField}
+            className={errors && errors.includes('billingState') && styles.invalidField}
             required
           />
 

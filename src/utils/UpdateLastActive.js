@@ -48,8 +48,8 @@ const errorSetter = () => null;
  */
 const setLastActive = () => {
   const biscuits = parseCookies();
-  // if no user in cookies, return without doing anything
-  if (Object.keys(biscuits).includes('user')) {
+  // if no user in cookies or no token in sessionStorage, return without doing anything
+  if (Object.keys(biscuits).includes('user') && sessionStorage.getItem('token')) {
     const user = JSON.parse(biscuits.user);
     updateLastActive(user, errorSetter);
   }

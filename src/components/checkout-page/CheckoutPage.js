@@ -9,6 +9,7 @@ import makePurchase from './CheckoutService';
 import AppAlert from '../alert/Alert';
 import setLastActive from '../../utils/UpdateLastActive';
 import Toast from '../toast/Toast';
+import { usePromoCode } from './PromoCodeWidgetService';
 import Constants from '../../utils/constants';
 
 /**
@@ -19,6 +20,7 @@ import Constants from '../../utils/constants';
 const CheckoutPage = () => {
   const history = useHistory();
   const [purchaseConfirmation, setPurchaseConfirmation] = useState({});
+  // for setting insufficient inventory toast
   const [toastData, setToastData] = useState({
     MESSAGE: '',
     SEVERITY: Constants.SEVERITY_LEVELS.INFO
@@ -70,6 +72,7 @@ const CheckoutPage = () => {
   const billingZipIsValid = useRef(false);
   const deliveryZipIsValid = useRef(false);
   const phoneFormatIsValid = useRef(false);
+  const { promoCode, setPromoCode } = usePromoCode();
 
   const showToast = () => setOpenToast(true);
   const closeToast = () => setOpenToast(false);
@@ -86,8 +89,8 @@ const CheckoutPage = () => {
     setUseSameAddress(e.target.checked);
   };
 
-  const getEmptyFields = async (requiredFields, object) => (
-    requiredFields.filter((field) => !object[field] || object[field].trim().length === 0 || object[field === '-'])
+  const getEmptyFields = async (requiredFields, object) => requiredFields.filter(
+    (field) => !object[field] || object[field].trim().length === 0 || object[field] === '-'
   );
 
   const getDeliveryFieldsEmpty = () => {
@@ -203,15 +206,20 @@ const CheckoutPage = () => {
     return false;
   };
 
-  const getFormErrors = () => {
+  const checkMissingFields = async () => {
     // reset errors
     setBillingEmptyErrors([]);
-    setBillingInvalidErrors([]);
     setDeliveryEmptyErrors([]);
-    setDeliveryInvalidErrors([]);
     // set validation values equal to validation results
     deliveryEmptyFields.current = getDeliveryFieldsEmpty();
     billingEmptyFields.current = getBillingFieldsEmpty();
+  };
+
+  const getFormErrors = async () => {
+    // reset errors
+    setBillingInvalidErrors([]);
+    setDeliveryInvalidErrors([]);
+    // set validation values equal to validation results
     cvvIsValid.current = validateCVVIs3Digits();
     expirationIsValidFormat.current = validateExpirationFormat();
     expirationIsValidDate.current = validateExpirationDate();
@@ -222,14 +230,16 @@ const CheckoutPage = () => {
     phoneFormatIsValid.current = validatePhoneFormat();
 
     // build list of empty fields and add them to error message
-    if (deliveryEmptyFields.current.length) {
-      setDeliveryEmptyErrors([...deliveryEmptyFields.current]);
-      deliveryEmptyFieldMessage.current = Constants.FORM_FIELDS_EMPTY(deliveryEmptyFields.current);
+    const missingDeliveryFields = await deliveryEmptyFields.current;
+    if (missingDeliveryFields.length) {
+      setDeliveryEmptyErrors([...missingDeliveryFields]);
+      deliveryEmptyFieldMessage.current = Constants.FORM_FIELDS_EMPTY(missingDeliveryFields);
       formHasError.current = true;
     }
-    if (billingEmptyFields.current.length) {
-      setBillingEmptyErrors([...billingEmptyFields.current]);
-      billingEmptyFieldMessage.current = Constants.FORM_FIELDS_EMPTY(billingEmptyFields.current);
+    const missingBillingFields = await billingEmptyFields.current;
+    if (missingBillingFields.length) {
+      setBillingEmptyErrors([...missingBillingFields]);
+      billingEmptyFieldMessage.current = Constants.FORM_FIELDS_EMPTY(missingBillingFields);
       formHasError.current = true;
     }
 
@@ -284,10 +294,11 @@ const CheckoutPage = () => {
     billingErrorMessage.current = '';
     formHasError.current = false;
     handleClose();
+    await checkMissingFields();
     getFormErrors();
 
     // if form has no errors ...
-    if (formHasError.current === false) {
+    if (!formHasError.current) {
       // Create purchase objects: products, delivery addresss, billing address, and credit card
       const productData = products.map(({ id, quantity }) => (
         { product: { id }, quantity }));
@@ -324,7 +335,7 @@ const CheckoutPage = () => {
       };
       // Then save the purchase with the created objects
       const purchase = await makePurchase(
-        productData, deliveryAddress, billingAddress, creditCard, contact
+        productData, deliveryAddress, billingAddress, creditCard, contact, promoCode
       );
       setPurchaseConfirmation(purchase);
 
@@ -347,7 +358,7 @@ const CheckoutPage = () => {
         products.pop();
       }
       history.push('/confirmation');
-    } else if (purchaseConfirmation.data) {
+    } else if (purchaseConfirmation.data && !purchaseConfirmation.data.bodyUsed) {
       // set errors
       setErrors(purchaseConfirmation.data.json());
     }
@@ -355,16 +366,20 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     // set toast data and open toast
+    let toastMessage = null;
     if (errors) {
-      // errors should be a promise
-      errors.then((error) => {
+      errors.then((response) => {
         // construct message
-        let toastMessage = error.payload.reduce((message, product) => `${message + product.name},`, error.errorMessage);
-        toastMessage = toastMessage.replace(/.$/, '.');
+        try {
+          toastMessage = response.payload.reduce((message, product) => `${message + product.name},`, response.errorMessage);
+          toastMessage = toastMessage.replace(/.$/, '.');
+        } catch {
+          toastMessage = response.errorMessage;
+        }
         // set toast data
         setToastData({ MESSAGE: toastMessage, SEVERITY: Constants.SEVERITY_LEVELS.ERROR });
         // show toast
-        if (toastMessage.length > 0) {
+        if (toastMessage && toastMessage.length > 0) {
           showToast();
         }
       });
@@ -393,7 +408,11 @@ const CheckoutPage = () => {
       <section className={`${styles.step} ${styles.order}`}>
         <h2 className={styles.title}>1. Review Order</h2>
         <div className={`Card ${styles.stepCard}`}>
-          <ReviewOrderWidget onRemoveConfirmation={handleRemove} />
+          <ReviewOrderWidget
+            promoCode={promoCode}
+            promoCodeSetter={setPromoCode}
+            onRemoveConfirmation={handleRemove}
+          />
         </div>
       </section>
       <section className={`${styles.step} ${styles.delivery}`}>

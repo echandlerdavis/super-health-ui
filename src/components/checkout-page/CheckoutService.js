@@ -7,17 +7,30 @@ import Constants from '../../utils/constants';
  * @param {*} cartContents items to purchase
  * @returns payment confirmation response
  */
-const makePurchase = async (products, deliveryAddress, billingAddress, creditCard, contact) => {
+const makePurchase = async (
+  products,
+  deliveryAddress,
+  billingAddress,
+  creditCard,
+  contact,
+  promoCode
+) => {
   const purchaseReport = {
     success: false,
     data: null
   };
+  let promoCodeObj;
+  // null protect promocode
+  if (promoCode === '') {
+    promoCodeObj = null;
+  }
   try {
     const response = await HttpHelper(Constants.PURCHASE_ENDPOINT, 'POST', {
       products,
       deliveryAddress,
       billingAddress,
       creditCard,
+      promoCodeObj,
       contact
     });
     if (response.status === 201) {

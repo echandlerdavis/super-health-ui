@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from './CartContext';
 import OrderItem from './OrderItem';
-import { getSubtotal } from './ReviewOrderWidgetService';
+import { getSubtotal, toPrice } from './ReviewOrderWidgetService';
 import styles from './ReviewOrderWidget.module.css';
+import PromoCodeWidget from './PromoCodeWidget';
+import { applyPromoCode, calculateDiscount } from './PromoCodeWidgetService';
 import setLastActive from '../../utils/UpdateLastActive';
 
 /**
@@ -10,7 +12,7 @@ import setLastActive from '../../utils/UpdateLastActive';
  * @description Displays order items and subtotal
  * @return component
  */
-const ReviewOrderWidget = () => {
+const ReviewOrderWidget = ({ promoCode, promoCodeSetter }) => {
   const { state: { products }, dispatch } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [productToRemove, setProductToRemove] = useState(null);
@@ -70,6 +72,12 @@ const ReviewOrderWidget = () => {
     setLastActive();
   };
 
+  const noDiscount = getSubtotal(products);
+  const [discount, setDiscount] = useState(calculateDiscount(noDiscount, promoCode));
+
+  useEffect(() => {
+    setDiscount(calculateDiscount(noDiscount, promoCode));
+  }, [promoCode, noDiscount]);
   return (
     <>
       {products.map(({
@@ -101,14 +109,22 @@ const ReviewOrderWidget = () => {
           )}
         </div>
       ))}
-
+      <PromoCodeWidget promoCode={promoCode} setPromoCode={promoCodeSetter} />
       <hr />
       <div className={styles.subtotal}>
         <div>
+          {discount > 0 && <p>Discount</p>}
+          <br />
           <p>Subtotal</p>
         </div>
         <div className={styles.price}>
-          <p>{getSubtotal(products)}</p>
+          {discount > 0 && (
+          <p>
+            {`(${toPrice(discount)})`}
+          </p>
+          )}
+          <br />
+          <p>{toPrice(applyPromoCode(noDiscount, discount))}</p>
         </div>
       </div>
     </>
