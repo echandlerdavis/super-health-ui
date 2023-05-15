@@ -295,7 +295,7 @@ const CheckoutPage = () => {
     formHasError.current = false;
     handleClose();
     await checkMissingFields();
-    getFormErrors();
+    await getFormErrors();
 
     // if form has no errors ...
     if (!formHasError.current) {
