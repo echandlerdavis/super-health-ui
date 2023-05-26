@@ -323,7 +323,8 @@ const ProfilePage = ({ user, setUser }) => {
                 </label>
               </div>
             </div>
-            {formErrorMessage && formErrorMessage.emptyFields && (
+            {formErrorMessage
+            && (formErrorMessage.emptyFields || formErrorMessage.emptyBillingFields) && (
               <p className={styles.error}>Please fill in all fields.</p>
             )}
             {formErrorMessage && formErrorMessage.zipcodeInvalid && (
