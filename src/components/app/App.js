@@ -14,20 +14,19 @@ import FilterComponentExample from '../filter-component/FilterContainer';
  * @returns component
  */
 const App = () => {
-  const [user, setUser] = useState(null);
   return (
     <div className="App">
       <div className="Container">
         <BrowserRouter>
-          <Header user={user} setUser={setUser} />
+          <Header />
           <main>
             <Switch>
               <Route exact path="/" render={() => <ProductPage />} />
-              <Route exact path="/checkout" render={() => <CheckoutPage />} />
-              <Route exact path="/confirmation" render={() => <ConfirmationPage />} />
-              <Route path="/maintenance" render={() => <MaintenancePage />} />
+              <Route exact path="/reservations" render={() => <CheckoutPage />} />
+              <Route exact path="/room-type" render={() => <ConfirmationPage />} />
+              {/* <Route path="/maintenance" render={() => <MaintenancePage />} />
               <Route exact path="/profilepage" render={() => <ProfilePage user={user} setUser={setUser} />} />
-              <Route exact path="/filter" render={() => <FilterComponentExample />} />
+              <Route exact path="/filter" render={() => <FilterComponentExample />} /> */}
             </Switch>
           </main>
           <Footer />

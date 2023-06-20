@@ -1,155 +1,71 @@
-import React, { useState, createElement } from 'react';
-import GoogleLogin, { GoogleLogout } from 'react-google-login';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PersonIcon from '@material-ui/icons/Person';
-import { Button } from '@material-ui/core';
+import React from 'react';
+import { AppBar, Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import loginUser from './HeaderService';
-import iconWithBadge from './IconWithBadge';
-import { useCart } from '../checkout-page/CartContext';
-import styles from './Header.module.css';
-import constants from '../../utils/constants';
-import javaTheHuttLogo from '../../assets/images/javaTheHuttLogo.jpg';
-import setLastActive from '../../utils/UpdateLastActive';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 /**
  * @name Header
  * @description Displays the navigation header
  * @return component
  */
-const Header = ({ user, setUser }) => {
-  const [googleError, setGoogleError] = useState('');
-  const [apiError, setApiError] = useState(false);
+const Header = () => {
+  // const [apiError, setApiError] = useState(false);
   const history = useHistory();
-  const {
-    state: { products }
-  } = useCart();
+  const classes = useStyles();
+  const [active, setActive] = useState("");
+
 
   /**
-   * @name handleGoogleLoginSuccess
-   * @description Function to run if google login was successful
-   * @param {Object} response Response object from google
-   */
-  const handleGoogleLoginSuccess = (response) => {
-    sessionStorage.setItem('token', response.getAuthResponse().id_token);
-    const googleUser = {
-      email: response.profileObj.email,
-      firstName: response.profileObj.givenName,
-      lastName: response.profileObj.familyName
-    };
-    loginUser(googleUser, setUser, setApiError);
-    setLastActive();
-    setGoogleError('');
-  };
-
-  /**
-   * @name handleGoogleLoginFailure
-   * @description Function to run if google login was unsuccessful
-   */
-  const handleGoogleLoginFailure = () => {
-    setGoogleError(
-      'There was a problem logging in with Google. Please wait and try again later.'
-    );
-  };
-
-  /**
-   * @name handleGoogleLogoutSuccess
-   * @description Function to run if google logout was successful
-   */
-  const handleGoogleLogoutSuccess = () => {
-    setUser(null);
-    setGoogleError('');
-    sessionStorage.removeItem('token');
-    history.push('/');
-    window.dispatchEvent(new Event('logout'));
-  };
-
-  /**
-   * @name handleGoogleLogoutFailure
-   * @description Function to run if google logout was unsuccessful
-   */
-  const handleGoogleLogoutFailure = () => {
-    setGoogleError(
-      'There was a problem logging out with Google. Please wait and try again later.'
-    );
-  };
-
-  /**
-   * @name handleLogoClick
-   * @description Redirect the page to / when clicked
-   */
-  const handleLogoClick = () => {
-    history.push('/');
-  };
-  /**
-   * @name handleCartClick
+   * @name handleReservationsClick
    * @description Redirect the page to /checkout when clicked
    */
-  const handleCartClick = () => {
-    history.push('/checkout');
+  const handleReservationsClick = (event) => {
+    history.push('/reservations');
+    setActive(event.target.id);
   };
 
-  const logo = createElement('img', {
-    src: javaTheHuttLogo,
-    alt: constants.LOGO_ALT,
-    className: styles.appLogo,
-    onClick: handleLogoClick
-  });
-
   /**
-   * @name handleProfileClick
+   * @name handleRoomTypeClick
    * @description Redirect the page to /profilepage when clicked
    */
-  const handleProfileClick = () => {
-    history.push('/ProfilePage');
+  const handleRoomTypeClick = (event) => {
+    history.push('/room-types');
+    setActive(event.target.id);
   };
 
   return (
-    <header id={styles.header} className="Set-to-front">
-      <div className={styles.appLogoContainer}>{logo}</div>
-      <div>{googleError && <span>{googleError}</span>}</div>
-      {apiError && <span>Api Error</span>}
-      <div>
-        {iconWithBadge(
-          {
-            baseIcon: <ShoppingCartIcon onClick={handleCartClick} />,
-            displayValue: products.length
-          }
-        )}
-      </div>
-      <div>
-        {!user ? (
-          <GoogleLogin
-            clientId={constants.GOOGLE_CLIENT_ID}
-            buttonText="Login"
-            onSuccess={handleGoogleLoginSuccess}
-            onFailure={handleGoogleLoginFailure}
-            cookiePolicy="single_host_origin"
-          />
-        ) : (
-          <GoogleLogout
-            clientId={constants.GOOGLE_CLIENT_ID}
-            buttonText="Logout"
-            onLogoutSuccess={handleGoogleLogoutSuccess}
-            onFailure={handleGoogleLogoutFailure}
-          />
-        )}
-      </div>
-      <div className={styles.optionalText}>
-        {user && `${user.firstName} ${user.lastName}`}
-      </div>
-      {user && (
-        <Button
-          onClick={handleProfileClick}
-          variant="contained"
-          color="primary"
-          style={{ marginLeft: '10px' }}
-        >
-          <PersonIcon style={{ backgroundColor: 'transparent' }} />
-          {/* Profile icon */}
+    <AppBar data-au="nav-bar" position="static">
+      <Toolbar>
+        <Typography variant="h6" className={classes.title}>
+          Hotel Bookings
+        </Typography>
+        <Button 
+          id={"1"} 
+          data-au="reservation-link"
+          color="inherit" 
+          className={active === "1" ? "active" : undefined}
+          onClick={handleReservationsClick}>
+          Reservations
         </Button>
-      )}
-    </header>
+        <Button 
+          id={"2"} 
+          data-au="room-typ-link"
+          color="inherit" 
+          className={active === "2" ? "active" : undefined}
+          onClick={handleRoomTypeClick}>
+            Room Types
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 
