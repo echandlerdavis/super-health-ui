@@ -1,5 +1,6 @@
 import HttpHelper from '../../utils/HttpHelper';
-import Constants from '../../utils/constants';
+import constants from '../../utils/constants';
+import constants from '../../utils/constants';
 
 /**
  *
@@ -9,17 +10,17 @@ import Constants from '../../utils/constants';
  * @param {*} setApiError sets error if response other than 200 is returned
  * @returns sets state for products if 200 response, else sets state for apiError
  */
-const fetchProducts = async (setProducts, setApiError) => {
-  await HttpHelper(Constants.ACTIVE_PRODUCT_ENDPOINT, 'GET')
+const fetchReservations = async (setReservations, setApiError) => {
+  await HttpHelper(constants.RESERVATIONS_ENDPOINT, 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
-      throw new Error(Constants.API_ERROR);
+      throw new Error(constants.API_ERROR);
     })
-    .then(setProducts)
+    .then(setReservations)
     .catch(() => {
       setApiError(true);
     });
 };
-export default fetchProducts;
+export default fetchReservations;

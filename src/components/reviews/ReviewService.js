@@ -1,8 +1,8 @@
 import HttpHelper from '../../utils/HttpHelper';
 import Constants from '../../utils/constants';
 
-const fetchReviews = async (setReviews, setApiError, productId) => {
-  await HttpHelper(Constants.REVIEWS_ENDPOINT(productId), 'GET')
+const fetchReviews = (setReviews, setApiError, productId) => {
+ HttpHelper(Constants.REVIEWS_ENDPOINT(productId), 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
