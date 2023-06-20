@@ -105,7 +105,7 @@ const useStyles = makeStyles(() => ({
  * @return component
  */
 const ReservationCard = ({
-  reservation
+  reservation, handleDelete
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -126,6 +126,7 @@ const ReservationCard = ({
   const handleEditClick = () => {
     history.push('/reservations/:id');
   };
+
   // TODO: use apiError.
   return (
     <>
@@ -155,7 +156,7 @@ const ReservationCard = ({
           <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
             <Edit />
           </IconButton>
-          <IconButton data-au="delete-button" aria-label="delete">
+          <IconButton data-au="delete-button" aria-label="delete" id={reservation.id} onClick={handleDelete}>
             <Delete />
           </IconButton>
         </CardActions>

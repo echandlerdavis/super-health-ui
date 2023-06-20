@@ -22,4 +22,18 @@ const fetchReservations = async (setReservations, setApiError) => {
       setApiError(true);
     });
 };
+
+export const deleteReservation = (id, setApiError) => {
+  HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${id}`, 'DELETE')
+    .then((response) => {
+      if (response.ok) {
+        return;
+      }
+      throw new Error(constants.API_ERROR);
+    })
+    .catch(() => {
+      setApiError(true);
+    });
+};
+
 export default fetchReservations;
