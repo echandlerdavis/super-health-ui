@@ -5,7 +5,6 @@ import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
 import fetchReservations from './ReservationPageService';
 
-
 /**
  * @name ReservationPage
  * @description fetches products from API and displays products as product cards
@@ -14,7 +13,6 @@ import fetchReservations from './ReservationPageService';
 const ReservationPage = () => {
   const [reservations, setReservations] = useState([]);
   const [apiError, setApiError] = useState(false);
-
 
   useEffect(() => {
     fetchReservations(setReservations, setApiError);
@@ -36,4 +34,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ProductPage;
+export default ReservationPage;

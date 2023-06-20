@@ -1,32 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
-import ShareIcon from '@material-ui/icons/Share';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Constants from '../../utils/constants';
-import { useCart } from '../checkout-page/CartContext';
-import styles from './ProductCard.module.css';
-import setLastActive from '../../utils/UpdateLastActive';
-import { DeleteIcon, EditIcon } from '@material-ui/icons';
+import { Delete, Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import getRoomType, { getTotal } from './ReservationCardService';
+import getRoomType from './ReservationCardService';
+import AppAlert from '../alert/Alert';
+import constants from '../../utils/constants';
 
 /**
  * @name useStyles
  * @description Material-ui styling for ProductCard component
  * @return styling
  */
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     // maxWidth: 345,
     height: '100%'
@@ -119,49 +109,59 @@ const ReservationCard = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
-  const [roomType, setRoomType] = useState(null);
-  // const [totalPrice, setTotalPrice] = useState("");
+  const [totalPrice, setTotalPrice] = useState('');
+  const [roomName, setRoomName] = useState('');
   const [apiError, setApiError] = useState(false);
 
   useEffect(() => {
-    getRoomType(setRoomType, setApiError, reservation.roomTypeId)
-  }, [reservation])
+    getRoomType(
+      setRoomName,
+      setTotalPrice,
+      setApiError,
+      reservation.roomTypeId,
+      reservation.numberOfNights
+    );
+  }, [reservation]);
 
   const handleEditClick = () => {
-    history.push("/reservations/:id")
-  }
-  //TODO: use apiError.
+    history.push('/reservations/:id');
+  };
+  // TODO: use apiError.
   return (
-    <Card id={reservation.id} className={classes.root}>
-      {/* <div className={styles.CardContainer}> */}
-          <CardContent>
-            <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
-              {reservation.guestEmail}
-            </Typography>
-            <Typography data-au="nights-label">
-              {reservation.numberOfNights}
-            </Typography>
-            <Typography data-au="room-type-label">
-              {roomType.name}
-            </Typography>
-            <Typography data-au="check-in-date-label">
-              {reservation.checkInDate}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              Price: ${getTotal(roomType.rate, reservation.numberOfNights)}
-            </Typography>
-          </CardContent>
+    <>
+      {apiError && <AppAlert severity="error" title="Error" message={constants.API_ERROR} />}
+      <Card id={reservation.id} className={classes.root}>
+        {/* <div className={styles.CardContainer}> */}
+        <CardContent>
+          <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
+            {reservation.guestEmail}
+          </Typography>
+          <Typography data-au="nights-label">
+            {reservation.numberOfNights}
+          </Typography>
+          <Typography data-au="room-type-label">
+            {roomName}
+          </Typography>
+          <Typography data-au="check-in-date-label">
+            {reservation.checkInDate}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            Price: $
+            {totalPrice}
+          </Typography>
+        </CardContent>
         {/* </div> */}
         <CardActions disableSpacing>
           <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
-            <EditIcon />
+            <Edit />
           </IconButton>
           <IconButton data-au="delete-button" aria-label="delete">
-            <DeleteIcon />
+            <Delete />
           </IconButton>
         </CardActions>
-    </Card>
+      </Card>
+    </>
   );
 };
 
-export default ProductCard;
+export default ReservationCard;

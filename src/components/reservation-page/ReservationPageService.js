@@ -1,6 +1,5 @@
 import HttpHelper from '../../utils/HttpHelper';
 import constants from '../../utils/constants';
-import constants from '../../utils/constants';
 
 /**
  *

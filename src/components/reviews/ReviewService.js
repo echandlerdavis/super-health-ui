@@ -2,7 +2,7 @@ import HttpHelper from '../../utils/HttpHelper';
 import Constants from '../../utils/constants';
 
 const fetchReviews = (setReviews, setApiError, productId) => {
- HttpHelper(Constants.REVIEWS_ENDPOINT(productId), 'GET')
+  HttpHelper(Constants.REVIEWS_ENDPOINT(productId), 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();

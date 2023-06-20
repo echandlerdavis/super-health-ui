@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ReservationPage from '../reservation-page/ReservationPage';
@@ -9,26 +9,25 @@ import Footer from '../footer/Footer';
  * @name App
  * @returns component
  */
-const App = () => {
-  return (
-    <div className="App">
-      <div className="Container">
-        <BrowserRouter>
-          <Header />
-          <main>
-            <Switch>
-              <Route exact path="/" render={() => <ProductPage />} />
-              <Route exact path="/reservations" render={() => <ReservationPage />} />
-              <Route exact path="/room-type" render={() => <ConfirmationPage />} />
-              {/* <Route path="/maintenance" render={() => <MaintenancePage />} />
-              <Route exact path="/profilepage" render={() => <ProfilePage user={user} setUser={setUser} />} />
+const App = () => (
+  <div className="App">
+    <div className="Container">
+      <BrowserRouter>
+        <Header />
+        <main>
+          <Switch>
+            {/* <Route exact path="/" render={() => <ProductPage />} /> */}
+            <Route exact path="/reservations" render={() => <ReservationPage />} />
+            <Route exact path="/room-type" render={() => <ConfirmationPage />} />
+            {/* <Route path="/maintenance" render={() => <MaintenancePage />} />
+              <Route exact path="/profilepage" '
+              render={() => <ProfilePage user={user} setUser={setUser} />} />
               <Route exact path="/filter" render={() => <FilterComponentExample />} /> */}
-            </Switch>
-          </main>
-          <Footer />
-        </BrowserRouter>
-      </div>
+          </Switch>
+        </main>
+        <Footer />
+      </BrowserRouter>
     </div>
-  );
-};
+  </div>
+);
 export default App;

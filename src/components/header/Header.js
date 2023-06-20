@@ -1,15 +1,16 @@
-import React from 'react';
-import { AppBar, Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import {
+  AppBar, Button, Toolbar, Typography, makeStyles
+} from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   title: {
-    flexGrow: 1,
-  },
+    flexGrow: 1
+  }
 }));
 
 /**
@@ -21,8 +22,7 @@ const Header = () => {
   // const [apiError, setApiError] = useState(false);
   const history = useHistory();
   const classes = useStyles();
-  const [active, setActive] = useState("");
-
+  const [active, setActive] = useState('');
 
   /**
    * @name handleReservationsClick
@@ -48,21 +48,23 @@ const Header = () => {
         <Typography variant="h6" className={classes.title}>
           Hotel Bookings
         </Typography>
-        <Button 
-          id={"1"} 
+        <Button
+          id="1"
           data-au="reservation-link"
-          color="inherit" 
-          className={active === "1" ? "active" : undefined}
-          onClick={handleReservationsClick}>
+          color="inherit"
+          className={active === '1' ? 'active' : undefined}
+          onClick={handleReservationsClick}
+        >
           Reservations
         </Button>
-        <Button 
-          id={"2"} 
+        <Button
+          id="2"
           data-au="room-typ-link"
-          color="inherit" 
-          className={active === "2" ? "active" : undefined}
-          onClick={handleRoomTypeClick}>
-            Room Types
+          color="inherit"
+          className={active === '2' ? 'active' : undefined}
+          onClick={handleRoomTypeClick}
+        >
+          Room Types
         </Button>
       </Toolbar>
     </AppBar>

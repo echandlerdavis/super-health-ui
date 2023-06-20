@@ -13,7 +13,7 @@ module.exports = Object.freeze({
   PLACEHOLDER_IMAGE: 'https://www.signfix.com.au/wp-content/uploads/2017/09/placeholder-600x400.png',
   PURCHASE_ENDPOINT: '/purchases',
   STATES_ENDPOINT: '/purchases/StateOptions',
-  SINGLE_ROOM_TYPE_ENDPOINT: (id) => `/reservations/${id}`,
+  SINGLE_ROOM_TYPE_ENDPOINT: (id) => `/room-types/${id}`,
   RESERVATIONS_ENDPOINT: '/reservations',
   REVIEWS_ENDPOINT: (productId) => `/products/${productId}/reviews`,
   USERS_ENDPOINT,
