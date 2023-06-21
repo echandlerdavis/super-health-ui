@@ -37,12 +37,28 @@ const FormItem = ({
     />
   );
 
-  if (label === 'price') {
+  if (label === 'Rate:') {
     inputBox = (
       <div className={styles.priceInputBox}>
         <div className={styles.priceInputIcon}>$</div>
         {inputBox}
       </div>
+    );
+  }
+
+  if (type === 'textarea') {
+    inputBox = (
+      <textarea
+        className={`${styles.textarea} ${className}`}
+        id={id}
+        onChange={onChange}
+        placeholder={placeholder}
+        type={type}
+        value={value}
+        min={min}
+        step={step}
+        autoCapitalize={autoCapitalize}
+      />
     );
   }
 

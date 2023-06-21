@@ -1,5 +1,5 @@
 import React, {
-  useState, useRef, useEffect
+  useState, useRef
 } from 'react';
 import {
   Button, Card
@@ -9,33 +9,26 @@ import { useHistory } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
-import { fetchRoomData, saveReservation } from './AddReservationService';
-import styles from './AddReservation.module.css';
-import FormItemDropdown from '../form/FormItemDropdown';
+import saveRoomType from './AddRoomTypeService';
+import styles from './AddRoomType.module.css';
 
-const AddReservation = () => {
+const AddRoomType = () => {
   const history = useHistory();
   const initialFormData = {
-    user: 'user',
-    guestEmail: '',
-    roomTypeId: '',
-    checkInDate: '',
-    numberOfNights: null
+    name: '',
+    description: '',
+    rate: null,
+    active: true
   };
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
-  const [roomData, setRoomData] = useState([]);
-  const [roomOptions, setRoomOptions] = useState([]);
-  // const [userErrorMessage, setUserErrorMessage] = useState('');
+
   //   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
   //   const inputsAreInvalid = useRef(false);
   //   const commentaryLengthIsInvalid = useRef(false);
   //   const ratingIsInvalid = useRef(false);
 
-  useEffect(() => {
-    fetchRoomData(setRoomData, setRoomOptions, setApiError);
-  }, []);
   // const validateInputsNotEmpty = () => {
   //   const summary = formData.title;
   //   const commentary = formData.review;
@@ -90,19 +83,12 @@ const AddReservation = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleRoomId = () => {
-    if (formData.roomTypeId && roomData) {
-      const singleRoomData = roomData.find((room) => room.name === formData.roomTypeId);
-      setFormData({ ...formData, roomTypeId: singleRoomData.id });
-    }
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleRoomId();
     //   generateError();
     if (!formHasError.current) {
-      const newReservation = await saveReservation(formData, setApiError);
-      if (newReservation && !newReservation.error) {
+      const newRoomType = await saveRoomType(formData, setApiError);
+      if (newRoomType && !newRoomType.error) {
         history.push('/');
       } else {
         setApiError(constants.SAVE_REVIEW_FAILURE);
@@ -119,59 +105,50 @@ const AddReservation = () => {
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reviewForm}>
           <FormItem
-            placeholder="example@example.com"
-            type="email"
-            id="guestEmail"
-            label="Guest Email:"
-            // className={!inputsAreInvalid.current ? styles.summaryInput : styles.invalidField}
-            onChange={handleFormChange}
-            value={formData.guestEmail}
-          />
-          {/* {inputsAreInvalid.current
-              && (
-              <FormHelperText className={styles.helperTextFirstInput}>
-                Either summary or commentary must be filled in.
-              </FormHelperText>
-              )} */}
-          <FormItem
-            placeholder="mm-dd-yyyy"
-            id="checkInDate"
+            placeholder="Write room name here."
             type="text"
-            label="Check-in Date:"
-            // className={
-            //       (inputsAreInvalid.current || commentaryLengthIsInvalid.current)
-            //       && styles.invalidField
-            //     }
+            id="name"
+            label="Name:"
+              // className={!inputsAreInvalid.current ? styles.summaryInput : styles.invalidField}
             onChange={handleFormChange}
-            value={formData.checkInDate}
+            value={formData.name}
           />
           {/* {inputsAreInvalid.current
-              && (
-              <FormHelperText className={styles.helperTextSecondInput}>
-                Either summary or commentary must be filled in.
-              </FormHelperText>
-              )} */}
-          {/* {commentaryLengthIsInvalid.current
-              && (
-              <FormHelperText className={styles.helperTextSecondInput}>
-                Commentary must be less than 500 characters.
-              </FormHelperText>
-              )} */}
+                && (
+                <FormHelperText className={styles.helperTextFirstInput}>
+                  Either summary or commentary must be filled in.
+                </FormHelperText>
+                )} */}
           <FormItem
-            // placeholder="e.g, 3"
-            id="numberOfNights"
-            type="number"
-            label="Number of Nights:"
-            value={formData.numberOfNights}
-          />
-          <FormItemDropdown
-            placeholder="Select room type"
-            id="roomTypeId"
-            type="select"
-            label="Room Type:"
+            placeholder="Write description here."
+            id="description"
+            type="textarea"
+            label="Description:"
+              // className={
+              //       (inputsAreInvalid.current || commentaryLengthIsInvalid.current)
+              //       && styles.invalidField
+              //     }
             onChange={handleFormChange}
-            options={roomOptions}
-            value={formData.roomTypeId}
+            value={formData.description}
+          />
+          {/* {inputsAreInvalid.current
+                && (
+                <FormHelperText className={styles.helperTextSecondInput}>
+                  Either summary or commentary must be filled in.
+                </FormHelperText>
+                )} */}
+          {/* {commentaryLengthIsInvalid.current
+                && (
+                <FormHelperText className={styles.helperTextSecondInput}>
+                  Commentary must be less than 500 characters.
+                </FormHelperText>
+                )} */}
+          <FormItem
+              // placeholder="e.g, 3"
+            id="rate"
+            type="number"
+            label="Rate:"
+            value={formData.rate}
           />
 
           <div className={styles.buttonContainer}>
@@ -209,4 +186,4 @@ const AddReservation = () => {
     </div>
   );
 };
-export default AddReservation;
+export default AddRoomType;
