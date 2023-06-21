@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import ReservationCard from '../reservation-card/ReservationCard';
 import styles from './ProductPage.module.css';
 import Constants from '../../utils/constants';
@@ -13,6 +16,7 @@ import fetchReservations, { deleteReservation } from './ReservationPageService';
 const ReservationPage = () => {
   const [reservations, setReservations] = useState([]);
   const [apiError, setApiError] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     fetchReservations(setReservations, setApiError);
@@ -31,6 +35,21 @@ const ReservationPage = () => {
 
   return (
     <article>
+      <h1>Reservations</h1>
+      <section>
+        <h2>Create New</h2>
+        <div className={styles.buttonSection} />
+        <Button
+          style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
+          disabled={false}
+          size="small"
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => history.push('reservations/create')}
+        >
+          Reservation
+        </Button>
+      </section>
       {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {reservations.map((reservation) => (
