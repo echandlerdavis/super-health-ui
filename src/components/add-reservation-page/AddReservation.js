@@ -12,6 +12,7 @@ import React, {
   import { fetchRoomData } from './AddReservationService';
   import styles from './ReviewPage.module.css';
   import FormItemDataList from '../form/FormItemDataList';
+import FormItemDropdown from '../form/FormItemDropdown';
   const NewReviewPage = ({
     reviewProduct, openToast, setToastData
   }) => {
@@ -88,15 +89,18 @@ import React, {
     //todo set roomtypedid by finding name in the data.
     const handleFormChange = (e) => {
       formHasError.current = false;
-      if(e.target.id === "roomTypeId"){
-
-      }else{
         setFormData({ ...formData, [e.target.id]: e.target.value });
-      }
-        
     };
+
+    const handleRoomId = () => {
+        if(formData.roomTypeId && roomData){
+          const singleRoomData = roomData.find(room => room.name === formData.roomTypeId);
+          setFormData({...formData, roomTypeId: singleRoomData.id})
+        }
+    }
     const handleSubmit = async (e) => {
       e.preventDefault();
+      handleRoomId();
       generateError();
       if (!formHasError.current) {
         const newReview = await saveReview(formData, setApiError, productId);
@@ -164,7 +168,7 @@ import React, {
                 label="Number of Nights:"
                 value={formData.numberOfNights}
                 />
-              <FormItemDataList 
+              <FormItemDropdown 
                 placeholder="Select room type"
                 id="roomTypeId"
                 type="select"
