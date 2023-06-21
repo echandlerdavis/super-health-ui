@@ -9,8 +9,8 @@ import constants from '../../utils/constants';
  * @param {*} setApiError sets error if response other than 200 is returned
  * @returns sets state for products if 200 response, else sets state for apiError
  */
-const fetchReservations = async (setReservations, setApiError) => {
-  await HttpHelper(constants.RESERVATIONS_ENDPOINT, 'GET')
+const fetchReservations = (setReservations, setApiError) => {
+ HttpHelper(constants.RESERVATIONS_ENDPOINT, 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
