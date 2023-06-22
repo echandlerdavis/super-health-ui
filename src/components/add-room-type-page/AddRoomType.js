@@ -14,11 +14,11 @@ import styles from './AddRoomType.module.css';
 
 const AddRoomType = () => {
   const history = useHistory();
-  const { id } = useParams();
+  const { roomTypeId } = useParams();
   const initialFormData = {
     name: '',
     description: '',
-    rate: 0,
+    rate: 0.00,
     active: true
   };
   const [formData, setFormData] = useState(initialFormData);
@@ -31,11 +31,11 @@ const AddRoomType = () => {
   const roomRateInvalid = useRef(false);
 
   useEffect(() => {
-    if (id && !dataLoaded) {
+    if (roomTypeId && !dataLoaded) {
       console.log('hit here');
-      getInitialData(id, setFormData, setDataLoaded, setApiError);
+      getInitialData(roomTypeId, setFormData, setDataLoaded, setApiError);
     }
-  }, [id, formData, dataLoaded]);
+  }, [roomTypeId, dataLoaded]);
 
   const getEmptyFields = () => {
     const emptyInputs = Object.keys(formData).filter((key) => {
@@ -89,9 +89,14 @@ const AddRoomType = () => {
   };
 
   // todo set roomtypedid by finding name in the data.
-  const handleFormChange = (e) => {
+  const handleFormChange = ({ target }) => {
+    let { value } = target;
+    const { id, type } = target;
     formHasError.current = false;
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    if (type === 'checkbox') {
+      value = !formData[id];
+    }
+    setFormData({ ...formData, [id]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -99,7 +104,7 @@ const AddRoomType = () => {
     generateError();
     if (!formHasError.current) {
       let newRoomType;
-      if (id) {
+      if (roomTypeId) {
         newRoomType = await updateRoomType(formData, setApiError);
       } else {
         newRoomType = await saveRoomType(formData, setApiError);
@@ -115,7 +120,7 @@ const AddRoomType = () => {
   return (
     <div className={styles.pageContainer}>
       <h2>
-        New Reservation
+        New Room Type
       </h2>
       {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
@@ -160,11 +165,19 @@ const AddRoomType = () => {
                 </FormHelperText>
                 )} */}
           <FormItem
-              // placeholder="e.g, 3"
+            placeholder="0.00"
             id="rate"
             type="number"
             label="Rate:"
-            value={formData.rate}
+            value={parseFloat(formData.rate).toFixed(2)}
+            onChange={handleFormChange}
+            step={0.01}
+          />
+          <FormItem
+            id="active"
+            type="checkbox"
+            label="Active Status: "
+            value={formData.active}
             onChange={handleFormChange}
           />
 

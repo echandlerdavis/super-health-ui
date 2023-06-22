@@ -21,10 +21,10 @@ const App = () => (
             {/* <Route exact path="/" render={() => <ProductPage />} /> */}
             <Route exact path="/reservations" render={() => <ReservationPage />} />
             <Route exact path="/reservations/create" render={() => <AddReservation />} />
+            <Route exact path="/reservations/edit/:reservationId" render={() => <AddRoomType />} />
             <Route exact path="/room-types" render={() => <RoomTypePage />} />
             <Route exact path="/room-types/create" render={() => <AddRoomType />} />
-            <Route exact path="/room-types/edit/:id" render={() => <AddRoomType />} />
-
+            <Route exact path="/room-types/edit/:roomTypeId" render={() => <AddRoomType />} />
           </Switch>
         </main>
         <Footer />

@@ -5,16 +5,19 @@ import {
   Button, Card
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
-import { fetchRoomData, saveReservation } from './AddReservationService';
+import {
+  fetchRoomData, saveReservation, getInitialData, updateReservation
+} from './AddReservationService';
 import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
 const AddReservation = () => {
   const history = useHistory();
+  const { reservationId } = useParams();
   const initialFormData = {
     user: 'user',
     guestEmail: '',
@@ -25,6 +28,7 @@ const AddReservation = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
   const [roomData, setRoomData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [roomOptions, setRoomOptions] = useState([]);
   const [roomName, setRoomName] = useState('');
   const [formErrorMessage, setFormErrorMessage] = useState(null);
@@ -37,6 +41,12 @@ const AddReservation = () => {
   useEffect(() => {
     fetchRoomData(setRoomData, setRoomOptions, setApiError);
   }, []);
+
+  useEffect(() => {
+    if (reservationId && !dataLoaded) {
+      getInitialData(reservationId, setFormData, setDataLoaded, setApiError);
+    }
+  }, [reservationId, dataLoaded]);
 
   const validateNumberOfNights = () => {
     const { numberOfNights } = formData;
@@ -138,7 +148,12 @@ const AddReservation = () => {
     e.preventDefault();
     generateError();
     if (!formHasError.current) {
-      const newReservation = await saveReservation(formData, setApiError);
+      let newReservation;
+      if (reservationId) {
+        newReservation = await updateReservation(formData, setApiError);
+      } else {
+        newReservation = await saveReservation(formData, setApiError);
+      }
       if (newReservation && !newReservation.error) {
         history.push('/reservations');
       } else {

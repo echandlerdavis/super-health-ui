@@ -8,7 +8,9 @@ export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
       setRoomData(data);
       const roomArray = [];
       Object.keys(data).forEach((key) => {
-        roomArray.push(data[key].name);
+        if (data[key].active === true) {
+          roomArray.push(data[key].name);
+        }
       });
       setRoomOptions(roomArray);
     })
@@ -18,6 +20,33 @@ export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
 export const saveReservation = async (reservation, setApiError) => {
   try {
     const response = await HttpHelper(constants.RESERVATIONS_ENDPOINT, 'POST', reservation);
+    return response.json();
+  } catch {
+    setApiError(true);
+    return false;
+  }
+};
+
+export const getInitialData = (id, setFormData, setDataLoaded, setApiError) => {
+  HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${id}`, 'GET')
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(constants.API_ERROR);
+    })
+    .then((data) => {
+      setFormData(data);
+      setDataLoaded(true);
+    })
+    .catch(() => {
+      setApiError(true);
+    });
+};
+
+export const updateReservation = async (reservation, setApiError) => {
+  try {
+    const response = await HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${reservation.id}`, 'PUT', reservation);
     return response.json();
   } catch {
     setApiError(true);
