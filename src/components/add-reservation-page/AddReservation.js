@@ -15,6 +15,40 @@ import {
 import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
+export const validateNumberOfNights = (formData) => {
+  const { numberOfNights } = formData;
+  return numberOfNights !== undefined && numberOfNights !== null && numberOfNights > 0;
+};
+
+/**
+   * Generates a list of empty fields
+   * @returns array of field names that are empty
+   */
+export const getEmptyFields = (formData) => {
+  const emptyInputs = Object.keys(formData).filter((key) => {
+    let formInput = formData[key];
+    if (typeof formInput === 'string') {
+      formInput = formInput.trim();
+    }
+    return formInput.length === 0;
+  });
+  return emptyInputs;
+};
+
+export const validateCheckInDate = (formData) => {
+  const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
+  return formData.checkInDate !== undefined
+  && formData.checkInDate !== null
+  && regex.test(formData.checkInDate);
+};
+
+export const validateGuestEmail = (formData) => {
+  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  return formData.guestEmail !== undefined
+  && formData.guestEmail !== null
+  && regex.test(formData.guestEmail);
+};
+
 const AddReservation = () => {
   const history = useHistory();
   const { reservationId } = useParams();
@@ -48,81 +82,53 @@ const AddReservation = () => {
     }
   }, [reservationId, dataLoaded]);
 
-  const validateNumberOfNights = () => {
-    const { numberOfNights } = formData;
-    return numberOfNights && numberOfNights <= 0;
-  };
-
-  /**
-   * Generates a list of empty fields
-   * @returns array of field names that are empty
-   */
-  const getFieldsNotEmpty = () => {
-    const emptyInputs = Object.keys(formData).filter((key) => {
-      let formInput = formData[key];
-      if (typeof formInput === 'string') {
-        formInput = formInput.trim();
-      }
-      return formInput.length === 0;
-    });
-    return emptyInputs;
-  };
-
-  const validateCheckInDate = () => {
-    const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
-    return !regex.test(formData.checkInDate);
-  };
-
-  const validateGuestEmail = () => {
-    const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    return !regex.test(formData.guestEmail);
-  };
-
   const validateFormData = () => {
-    emptyFields.current = getFieldsNotEmpty();
-    numberOfNightsInvalid.current = validateNumberOfNights();
-    checkInDateInvalid.current = validateCheckInDate();
-    guestEmailInvalid.current = validateGuestEmail();
+    emptyFields.current = getEmptyFields(formData);
+    numberOfNightsInvalid.current = !validateNumberOfNights(formData);
+    checkInDateInvalid.current = !validateCheckInDate(formData);
+    guestEmailInvalid.current = !validateGuestEmail(formData);
     if (emptyFields.current.length
       || numberOfNightsInvalid.current
       || checkInDateInvalid.current
       || guestEmailInvalid.current) {
       formHasError.current = true;
-    } else {
-      formHasError.current = false;
+      return false;
     }
+    formHasError.current = false;
+    return true;
   };
 
-  // TODO: Change error messages.
+  // TODO: Change Error messages
   const generateError = () => {
     setFormErrorMessage(null);
-    validateFormData();
-    let errorMessage = null;
-    if (emptyFields.current.length) {
-      errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
-    }
-    if (numberOfNightsInvalid.current) {
-      if (errorMessage) {
-        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
-      } else {
-        errorMessage = constants.REVIEW_FORM_INVALID_RATING;
+    if (!validateFormData()) {
+      let errorMessage = null;
+      if (emptyFields.current.length) {
+        errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
       }
-    }
-    if (checkInDateInvalid.current) {
-      if (errorMessage) {
-        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-      } else {
-        errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
+      if (numberOfNightsInvalid.current) {
+        if (errorMessage) {
+          errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
+        } else {
+          errorMessage = constants.REVIEW_FORM_INVALID_RATING;
+        }
       }
-
-      if (guestEmailInvalid.current) {
+      if (checkInDateInvalid.current) {
         if (errorMessage) {
           errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
         } else {
           errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
         }
+
+        if (guestEmailInvalid.current) {
+          if (errorMessage) {
+            errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+          } else {
+            errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
+          }
+        }
+        setFormErrorMessage(errorMessage);
       }
-      setFormErrorMessage(errorMessage);
     }
   };
 
