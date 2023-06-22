@@ -23,60 +23,65 @@ const AddRoomType = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
 
-  //   const [formErrorMessage, setFormErrorMessage] = useState(null);
+    const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
-  //   const inputsAreInvalid = useRef(false);
-  //   const commentaryLengthIsInvalid = useRef(false);
-  //   const ratingIsInvalid = useRef(false);
+    const inputsAreInvalid = useRef(false);
+    const nameLengthInvalid = useRef(false);
+    const roomRateInvalid = useRef(false);
 
-  // const validateInputsNotEmpty = () => {
-  //   const summary = formData.title;
-  //   const commentary = formData.review;
-  //   return (summary.trim().length === 0 && commentary.trim().length === 0);
-  // };
-  // const validateCommentaryLength = () => {
-  //   const commentary = formData.review;
-  //   return (commentary.trim().length > 500);
-  // };
-  // const validateRating = () => {
-  //   const { rating } = formData;
-  //   return !(rating && rating >= 0.5 && rating <= 5);
-  // };
-  // const validateFormData = () => {
-  //   inputsAreInvalid.current = validateInputsNotEmpty();
-  //   commentaryLengthIsInvalid.current = validateCommentaryLength();
-  //   ratingIsInvalid.current = validateRating();
-  //   if (inputsAreInva
-  //   lid.current || ratingIsInvalid.current || commentaryLengthIsInvalid.current) {
-  //     formHasError.current = true;
-  //   } else {
-  //     formHasError.current = false;
-  //   }
-  // };
-  // const generateError = () => {
-  //   setFormErrorMessage(null);
-  //   validateFormData();
-  //   let errorMessage = null;
-  //   if (inputsAreInvalid.current) {
-  //     errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
-  //   }
-  //   if (ratingIsInvalid.current) {
-  //     if (errorMessage) {
-  //       errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
-  //     } else {
-  //       errorMessage = constants.REVIEW_FORM_INVALID_RATING;
-  //     }
-  //   }
-  //   if (commentaryLengthIsInvalid.current) {
-  //     if (errorMessage) {
-  //       errorMessage =
-  //    errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-  //     } else {
-  //       errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
-  //     }
-  //   }
-  //   setFormErrorMessage(errorMessage);
-  // };
+  const validateFieldsNotEmpty = () => {
+    Object.keys(formData).filter((key) => {
+      let formInput = formData[key];
+      if (typeof formInput === 'string') {
+        formInput = formInput.trim();
+      }
+      return formInput.length === 0;
+    })
+};
+
+  const validateNameLength = () => {
+    const name = formData.name;
+    return name && name.trim().length < 3;
+  };
+
+  const validateRate = () => {
+    return formData.rate && formData.rate <= 0;
+  };
+  const validateFormData = () => {
+    inputsAreInvalid.current = validateFieldsNotEmpty();
+    nameLengthInvalid.current = validateNameLength();
+    roomRateInvalid.current = validateRate();
+    if (inputsAreInvalid.current || nameLengthInvalid.current || roomRateInvalid.current) {
+      formHasError.current = true;
+    } else {
+      formHasError.current = false;
+    }
+  };
+  const generateError = () => {
+    setFormErrorMessage(null);
+    validateFormData();
+    let errorMessage = null;
+    if (inputsAreInvalid.current) {
+      errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
+    }
+    if (nameLengthInvalid.current) {
+      if (errorMessage) {
+        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
+      } else {
+        errorMessage = constants.REVIEW_FORM_INVALID_RATING;
+      }
+    }
+    if (roomRateInvalid.current) {
+      if (errorMessage) {
+        errorMessage =
+     errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+      } else {
+        errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
+      }
+    }
+    setFormErrorMessage(errorMessage);
+  };
+
   // todo set roomtypedid by finding name in the data.
   const handleFormChange = (e) => {
     formHasError.current = false;
@@ -85,7 +90,7 @@ const AddRoomType = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //   generateError();
+    generateError();
     if (!formHasError.current) {
       const newRoomType = await saveRoomType(formData, setApiError);
       if (newRoomType && !newRoomType.error) {
