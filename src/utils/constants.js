@@ -65,5 +65,19 @@ module.exports = Object.freeze({
     MESSAGE: 'Connection Failure, unable to save Promotional Code!',
     SEVERITY: SEVERITY_LEVELS.ERROR
   }),
-  FREE_SHIPPING_MIN: 50.00
+  FREE_SHIPPING_MIN: 50.00,
+
+  // General Form Error Messages
+  // FORM_FIELDS_EMPTY: (emptyFields) => `The
+  // following fields can not be empty: ${emptyFields.join(', ')}`,
+  NUMBER_INVALID: 'Must be number greater than zero',
+  // EMPTY_FIELD: 'This Field is reqiured',
+
+  // Reservations Form Messages
+  INVAID_EMAIL: 'Must be a valid email.',
+  INVALID_DATE: 'Date must be mm-dd-yyyy',
+  ROOM_TYPE_INVALID: 'Must select a room type',
+
+  // Room type form messages
+  NAME_INVALID: 'Must be at least 3 characters'
 });

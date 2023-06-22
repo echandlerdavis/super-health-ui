@@ -3,11 +3,6 @@
     flex-direction: column;
     height: 100%;    
 }
-
-.CardContainer span{
-    margin-left: 0;
-    margin-right: 0;
-}
 .description {
     display: flex;
     flex-direction: row;

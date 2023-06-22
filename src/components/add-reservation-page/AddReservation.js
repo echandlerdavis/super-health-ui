@@ -2,7 +2,7 @@ import React, {
   useState, useRef, useEffect
 } from 'react';
 import {
-  Button, Card
+  Button, Card, FormHelperText
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
@@ -92,43 +92,20 @@ const AddReservation = () => {
       || checkInDateInvalid.current
       || guestEmailInvalid.current) {
       formHasError.current = true;
-      return false;
     }
     formHasError.current = false;
-    return true;
   };
 
   // TODO: Change Error messages
   const generateError = () => {
     setFormErrorMessage(null);
-    if (!validateFormData()) {
-      let errorMessage = null;
+    validateFormData();
+    let errorMessage = null;
+    if (formHasError.current) {
       if (emptyFields.current.length) {
         errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
       }
-      if (numberOfNightsInvalid.current) {
-        if (errorMessage) {
-          errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
-        } else {
-          errorMessage = constants.REVIEW_FORM_INVALID_RATING;
-        }
-      }
-      if (checkInDateInvalid.current) {
-        if (errorMessage) {
-          errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-        } else {
-          errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
-        }
-
-        if (guestEmailInvalid.current) {
-          if (errorMessage) {
-            errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-          } else {
-            errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
-          }
-        }
-        setFormErrorMessage(errorMessage);
-      }
+      setFormErrorMessage(errorMessage);
     }
   };
 
@@ -164,6 +141,7 @@ const AddReservation = () => {
         history.push('/reservations');
       } else {
         setApiError(true);
+        setFormErrorMessage(constants.API_ERROR);
       }
     }
   };
@@ -181,16 +159,17 @@ const AddReservation = () => {
             type="email"
             id="guestEmail"
             label="Guest Email:"
-            // className={!inputsAreInvalid.current ? styles.summaryInput : styles.invalidField}
+            // className={(emptyFields.contains('email') ||
+            // guestEmailInvalid.current) ? styles.summaryInput : styles.invalidField}
             onChange={handleFormChange}
             value={formData.guestEmail}
           />
-          {/* {inputsAreInvalid.current
+          {guestEmailInvalid.current
               && (
               <FormHelperText className={styles.helperTextFirstInput}>
-                Either summary or commentary must be filled in.
+                {constants.INVAID_EMAIL}
               </FormHelperText>
-              )} */}
+              )}
           <FormItem
             placeholder="mm-dd-yyyy"
             id="checkInDate"
@@ -203,26 +182,31 @@ const AddReservation = () => {
             onChange={handleFormChange}
             value={formData.checkInDate}
           />
-          {/* {inputsAreInvalid.current
+          {checkInDateInvalid.current
               && (
               <FormHelperText className={styles.helperTextSecondInput}>
-                Either summary or commentary must be filled in.
+                {constants.INVALID_DATE}
+                \
+                {' '}
               </FormHelperText>
-              )} */}
-          {/* {commentaryLengthIsInvalid.current
-              && (
-              <FormHelperText className={styles.helperTextSecondInput}>
-                Commentary must be less than 500 characters.
-              </FormHelperText>
-              )} */}
+              )}
           <FormItem
             // placeholder="e.g, 3"
             id="numberOfNights"
             type="number"
             label="Number of Nights:"
+            // className: conditional statement
             value={formData.numberOfNights}
             onChange={handleFormChange}
           />
+          {numberOfNightsInvalid.current
+              && (
+              <FormHelperText className={styles.helperTextSecondInput}>
+                {constants.NUMBER_INVALID}
+                \
+                {' '}
+              </FormHelperText>
+              )}
           <FormItemDropdown
             placeholder="Select room type"
             id="roomTypeId"
@@ -233,7 +217,14 @@ const AddReservation = () => {
             value={roomName}
             formValue={formData.roomTypeId}
           />
-
+          {/* {emptyFields.contains('roomTypeId')
+              && (
+              <FormHelperText className={styles.helperTextSecondInput}>
+                {constants.ROOM_TYPE_INVALID}
+                \
+                {' '}
+              </FormHelperText>
+              )} */}
           <div className={styles.buttonContainer}>
             <Button
               type="button"

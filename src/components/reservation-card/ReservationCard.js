@@ -10,6 +10,7 @@ import { useHistory } from 'react-router-dom';
 import getRoomType from './ReservationCardService';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
+import styles from './ReservationCard.module.css';
 
 /**
  * @name useStyles
@@ -60,26 +61,26 @@ const ReservationCard = ({
     <>
       {apiError && <AppAlert severity="error" title="Error" message={constants.API_ERROR} />}
       <Card id={reservation.id} className={classes.root}>
-        {/* <div className={styles.CardContainer}> */}
-        <CardContent>
-          <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
-            {reservation.guestEmail}
-          </Typography>
-          <Typography data-au="nights-label">
-            {reservation.numberOfNights}
-          </Typography>
-          <Typography data-au="room-type-label">
-            {roomName}
-          </Typography>
-          <Typography data-au="check-in-date-label">
-            {reservation.checkInDate}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Price:
-            {totalPrice}
-          </Typography>
-        </CardContent>
-        {/* </div> */}
+        <div className={styles.CardContainer}>
+          <CardContent>
+            <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
+              {reservation.guestEmail}
+            </Typography>
+            <Typography data-au="nights-label">
+              {reservation.numberOfNights}
+            </Typography>
+            <Typography data-au="room-type-label">
+              {roomName}
+            </Typography>
+            <Typography data-au="check-in-date-label">
+              {reservation.checkInDate}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              Price:
+              {totalPrice}
+            </Typography>
+          </CardContent>
+        </div>
         <CardActions disableSpacing>
           <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
             <Edit />
