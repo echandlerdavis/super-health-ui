@@ -110,7 +110,7 @@ const RoomTypeCard = ({
   const history = useHistory();
 
   const handleEditClick = () => {
-    history.push('/room-types/edit/:id');
+    history.push(`/room-types/edit/${roomType.id}`);
   };
 
   // TODO: use apiError.

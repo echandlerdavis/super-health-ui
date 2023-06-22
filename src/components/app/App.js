@@ -23,10 +23,8 @@ const App = () => (
             <Route exact path="/reservations/create" render={() => <AddReservation />} />
             <Route exact path="/room-types" render={() => <RoomTypePage />} />
             <Route exact path="/room-types/create" render={() => <AddRoomType />} />
-            {/* <Route path="/maintenance" render={() => <MaintenancePage />} />
-              <Route exact path="/profilepage" '
-              render={() => <ProfilePage user={user} setUser={setUser} />} />
-              <Route exact path="/filter" render={() => <FilterComponentExample />} /> */}
+            <Route exact path="/room-types/edit/:id" render={() => <AddRoomType />} />
+
           </Switch>
         </main>
         <Footer />

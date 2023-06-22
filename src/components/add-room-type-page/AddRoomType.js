@@ -1,19 +1,20 @@
 import React, {
-  useState, useRef
+  useState, useRef, useEffect
 } from 'react';
 import {
   Button, Card
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
-import saveRoomType from './AddRoomTypeService';
+import saveRoomType, { getInitialData, updateRoomType } from './AddRoomTypeService';
 import styles from './AddRoomType.module.css';
 
 const AddRoomType = () => {
   const history = useHistory();
+  const { id } = useParams();
   const initialFormData = {
     name: '',
     description: '',
@@ -21,13 +22,20 @@ const AddRoomType = () => {
     active: true
   };
   const [formData, setFormData] = useState(initialFormData);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [apiError, setApiError] = useState(false);
-
   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
   const emptyFields = useRef([]);
   const nameLengthInvalid = useRef(false);
   const roomRateInvalid = useRef(false);
+
+  useEffect(() => {
+    if (id && !dataLoaded) {
+      console.log('hit here');
+      getInitialData(id, setFormData, setDataLoaded, setApiError);
+    }
+  }, [id, formData, dataLoaded]);
 
   const getEmptyFields = () => {
     const emptyInputs = Object.keys(formData).filter((key) => {
@@ -90,7 +98,12 @@ const AddRoomType = () => {
     e.preventDefault();
     generateError();
     if (!formHasError.current) {
-      const newRoomType = await saveRoomType(formData, setApiError);
+      let newRoomType;
+      if (id) {
+        newRoomType = await updateRoomType(formData, setApiError);
+      } else {
+        newRoomType = await saveRoomType(formData, setApiError);
+      }
       if (newRoomType && !newRoomType.error) {
         history.push('/room-types');
       } else {
