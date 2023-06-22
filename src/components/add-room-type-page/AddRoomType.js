@@ -17,17 +17,17 @@ const AddRoomType = () => {
   const initialFormData = {
     name: '',
     description: '',
-    rate: null,
+    rate: 0,
     active: true
   };
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
 
-    const [formErrorMessage, setFormErrorMessage] = useState(null);
+  const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
-    const inputsAreInvalid = useRef(false);
-    const nameLengthInvalid = useRef(false);
-    const roomRateInvalid = useRef(false);
+  const inputsAreInvalid = useRef(false);
+  const nameLengthInvalid = useRef(false);
+  const roomRateInvalid = useRef(false);
 
   const validateFieldsNotEmpty = () => {
     Object.keys(formData).filter((key) => {
@@ -36,17 +36,15 @@ const AddRoomType = () => {
         formInput = formInput.trim();
       }
       return formInput.length === 0;
-    })
-};
+    });
+  };
 
   const validateNameLength = () => {
-    const name = formData.name;
+    const { name } = formData;
     return name && name.trim().length < 3;
   };
 
-  const validateRate = () => {
-    return formData.rate && formData.rate <= 0;
-  };
+  const validateRate = () => formData.rate && formData.rate <= 0;
   const validateFormData = () => {
     inputsAreInvalid.current = validateFieldsNotEmpty();
     nameLengthInvalid.current = validateNameLength();
@@ -73,8 +71,7 @@ const AddRoomType = () => {
     }
     if (roomRateInvalid.current) {
       if (errorMessage) {
-        errorMessage =
-     errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
       } else {
         errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
       }
@@ -106,7 +103,7 @@ const AddRoomType = () => {
       <h2>
         New Reservation
       </h2>
-      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message="Error" />}
+      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reviewForm}>
           <FormItem

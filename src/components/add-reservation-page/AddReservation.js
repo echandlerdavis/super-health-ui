@@ -18,74 +18,78 @@ const AddReservation = () => {
   const initialFormData = {
     user: 'user',
     guestEmail: '',
-    roomTypeId: '',
+    roomTypeId: null,
     checkInDate: '',
-    numberOfNights: null
+    numberOfNights: 0
   };
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
   const [roomData, setRoomData] = useState([]);
   const [roomOptions, setRoomOptions] = useState([]);
+  const [roomName, setRoomName] = useState('');
   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
-    const inputsAreInvalid = useRef(false);
-    const numberOfNightsInvalid = useRef(false);
-    const guestEmailInvalid = useRef(false);
-    const checkInDateInvalid = useRef(false);
+  const emptyFields = useRef([]);
+  const numberOfNightsInvalid = useRef(false);
+  const guestEmailInvalid = useRef(false);
+  const checkInDateInvalid = useRef(false);
 
   useEffect(() => {
     fetchRoomData(setRoomData, setRoomOptions, setApiError);
   }, []);
 
-const validateNumberOfNights = () => {
+  const validateNumberOfNights = () => {
     const { numberOfNights } = formData;
     return numberOfNights && numberOfNights <= 0;
   };
 
-    /**
+  /**
    * Generates a list of empty fields
    * @returns array of field names that are empty
    */
-const getFieldsNotEmpty = () => {
-        Object.keys(formData).filter((key) => {
-          let formInput = formData[key];
-          if (typeof formInput === 'string') {
-            formInput = formInput.trim();
-          }
-          return formInput.length === 0;
-        })
-    };
+  const getFieldsNotEmpty = () => {
+    const emptyInputs = Object.keys(formData).filter((key) => {
+      let formInput = formData[key];
+      if (typeof formInput === 'string') {
+        formInput = formInput.trim();
+      }
+      return formInput.length === 0;
+    });
+    return emptyInputs;
+  };
 
-const validateCheckInDate = () => {
-    const regex = /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/
-    return regex.test(formData.checkInDate);
-}
+  const validateCheckInDate = () => {
+    const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
+    return !regex.test(formData.checkInDate);
+  };
 
-const validateGuestEmail = () => {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]+$/
-    return regex.test(formData.guestEmail);
-}
-
+  const validateGuestEmail = () => {
+    const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return !regex.test(formData.guestEmail);
+  };
 
   const validateFormData = () => {
-    inputsAreInvalid.current = getFieldsNotEmpty();
+    emptyFields.current = getFieldsNotEmpty();
     numberOfNightsInvalid.current = validateNumberOfNights();
     checkInDateInvalid.current = validateCheckInDate();
     guestEmailInvalid.current = validateGuestEmail();
-    if (inputsAreInvalid.current || numberOfNightsInvalid.current || checkInDateInvalid.current || guestEmailInvalid.current) {
+    if (emptyFields.current.length
+      || numberOfNightsInvalid.current
+      || checkInDateInvalid.current
+      || guestEmailInvalid.current) {
       formHasError.current = true;
     } else {
       formHasError.current = false;
     }
   };
 
-  //TODO: Change error messages.
+  // TODO: Change error messages.
   const generateError = () => {
     setFormErrorMessage(null);
     validateFormData();
     let errorMessage = null;
-    if (inputsAreInvalid.current) {
-      errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
+    if (emptyFields.current.length) {
+      errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
     }
     if (numberOfNightsInvalid.current) {
       if (errorMessage) {
@@ -96,44 +100,49 @@ const validateGuestEmail = () => {
     }
     if (checkInDateInvalid.current) {
       if (errorMessage) {
-        errorMessage =
-     errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
       } else {
         errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
       }
 
-    if (guestEmailInvalid.current) {
+      if (guestEmailInvalid.current) {
         if (errorMessage) {
-          errorMessage =
-       errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+          errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
         } else {
           errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
         }
+      }
+      setFormErrorMessage(errorMessage);
     }
-    setFormErrorMessage(errorMessage);
-  }}
-  // todo set roomtypedid by finding name in the data.
-  const handleFormChange = (e) => {
-    formHasError.current = false;
-    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleRoomId = () => {
-    if (formData.roomTypeId && roomData) {
-      const singleRoomData = roomData.find((room) => room.name === formData.roomTypeId);
+    if (roomName && roomData) {
+      console.log('hit handle room id');
+      const singleRoomData = roomData.find((room) => room.name === roomName);
       setFormData({ ...formData, roomTypeId: singleRoomData.id });
     }
   };
+  // todo set roomtypedid by finding name in the data.
+  const handleFormChange = (e) => {
+    formHasError.current = false;
+    if (e.target.id !== 'roomTypeId') {
+      setFormData({ ...formData, [e.target.id]: e.target.value });
+    } else {
+      setRoomName(e.target.value);
+      handleRoomId();
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleRoomId();
     generateError();
     if (!formHasError.current) {
       const newReservation = await saveReservation(formData, setApiError);
       if (newReservation && !newReservation.error) {
         history.push('/');
       } else {
-        setApiError(constants.SAVE_REVIEW_FAILURE);
+        setApiError(true);
       }
     }
   };
@@ -143,7 +152,7 @@ const validateGuestEmail = () => {
       <h2>
         New Reservation
       </h2>
-      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message="Error" />}
+      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reviewForm}>
           <FormItem
@@ -191,6 +200,7 @@ const validateGuestEmail = () => {
             type="number"
             label="Number of Nights:"
             value={formData.numberOfNights}
+            onChange={handleFormChange}
           />
           <FormItemDropdown
             placeholder="Select room type"
@@ -199,7 +209,8 @@ const validateGuestEmail = () => {
             label="Room Type:"
             onChange={handleFormChange}
             options={roomOptions}
-            value={formData.roomTypeId}
+            value={roomName}
+            formValue={formData.roomTypeId}
           />
 
           <div className={styles.buttonContainer}>
