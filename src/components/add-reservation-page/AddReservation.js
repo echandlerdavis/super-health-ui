@@ -26,64 +26,92 @@ const AddReservation = () => {
   const [apiError, setApiError] = useState(false);
   const [roomData, setRoomData] = useState([]);
   const [roomOptions, setRoomOptions] = useState([]);
-  // const [userErrorMessage, setUserErrorMessage] = useState('');
-  //   const [formErrorMessage, setFormErrorMessage] = useState(null);
+  const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
-  //   const inputsAreInvalid = useRef(false);
-  //   const commentaryLengthIsInvalid = useRef(false);
-  //   const ratingIsInvalid = useRef(false);
+    const inputsAreInvalid = useRef(false);
+    const numberOfNightsInvalid = useRef(false);
+    const guestEmailInvalid = useRef(false);
+    const checkInDateInvalid = useRef(false);
 
   useEffect(() => {
     fetchRoomData(setRoomData, setRoomOptions, setApiError);
   }, []);
-  // const validateInputsNotEmpty = () => {
-  //   const summary = formData.title;
-  //   const commentary = formData.review;
-  //   return (summary.trim().length === 0 && commentary.trim().length === 0);
-  // };
-  // const validateCommentaryLength = () => {
-  //   const commentary = formData.review;
-  //   return (commentary.trim().length > 500);
-  // };
-  // const validateRating = () => {
-  //   const { rating } = formData;
-  //   return !(rating && rating >= 0.5 && rating <= 5);
-  // };
-  // const validateFormData = () => {
-  //   inputsAreInvalid.current = validateInputsNotEmpty();
-  //   commentaryLengthIsInvalid.current = validateCommentaryLength();
-  //   ratingIsInvalid.current = validateRating();
-  //   if (inputsAreInva
-  //   lid.current || ratingIsInvalid.current || commentaryLengthIsInvalid.current) {
-  //     formHasError.current = true;
-  //   } else {
-  //     formHasError.current = false;
-  //   }
-  // };
-  // const generateError = () => {
-  //   setFormErrorMessage(null);
-  //   validateFormData();
-  //   let errorMessage = null;
-  //   if (inputsAreInvalid.current) {
-  //     errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
-  //   }
-  //   if (ratingIsInvalid.current) {
-  //     if (errorMessage) {
-  //       errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
-  //     } else {
-  //       errorMessage = constants.REVIEW_FORM_INVALID_RATING;
-  //     }
-  //   }
-  //   if (commentaryLengthIsInvalid.current) {
-  //     if (errorMessage) {
-  //       errorMessage =
-  //    errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-  //     } else {
-  //       errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
-  //     }
-  //   }
-  //   setFormErrorMessage(errorMessage);
-  // };
+
+const validateNumberOfNights = () => {
+    const { numberOfNights } = formData;
+    return numberOfNights && numberOfNights <= 0;
+  };
+
+    /**
+   * Generates a list of empty fields
+   * @returns array of field names that are empty
+   */
+const getFieldsNotEmpty = () => {
+        Object.keys(formData).filter((key) => {
+          let formInput = formData[key];
+          if (typeof formInput === 'string') {
+            formInput = formInput.trim();
+          }
+          return formInput.length === 0;
+        })
+    };
+
+const validateCheckInDate = () => {
+    const regex = /(^0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4}$)/
+    return regex.test(formData.checkInDate);
+}
+
+const validateGuestEmail = () => {
+    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]+$/
+    return regex.test(formData.guestEmail);
+}
+
+
+  const validateFormData = () => {
+    inputsAreInvalid.current = getFieldsNotEmpty();
+    numberOfNightsInvalid.current = validateNumberOfNights();
+    checkInDateInvalid.current = validateCheckInDate();
+    guestEmailInvalid.current = validateGuestEmail();
+    if (inputsAreInvalid.current || numberOfNightsInvalid.current || checkInDateInvalid.current || guestEmailInvalid.current) {
+      formHasError.current = true;
+    } else {
+      formHasError.current = false;
+    }
+  };
+
+  //TODO: Change error messages.
+  const generateError = () => {
+    setFormErrorMessage(null);
+    validateFormData();
+    let errorMessage = null;
+    if (inputsAreInvalid.current) {
+      errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
+    }
+    if (numberOfNightsInvalid.current) {
+      if (errorMessage) {
+        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
+      } else {
+        errorMessage = constants.REVIEW_FORM_INVALID_RATING;
+      }
+    }
+    if (checkInDateInvalid.current) {
+      if (errorMessage) {
+        errorMessage =
+     errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+      } else {
+        errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
+      }
+
+    if (guestEmailInvalid.current) {
+        if (errorMessage) {
+          errorMessage =
+       errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
+        } else {
+          errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
+        }
+    }
+    setFormErrorMessage(errorMessage);
+  }}
   // todo set roomtypedid by finding name in the data.
   const handleFormChange = (e) => {
     formHasError.current = false;
@@ -99,7 +127,7 @@ const AddReservation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     handleRoomId();
-    //   generateError();
+    generateError();
     if (!formHasError.current) {
       const newReservation = await saveReservation(formData, setApiError);
       if (newReservation && !newReservation.error) {
