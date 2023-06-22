@@ -140,7 +140,7 @@ const AddReservation = () => {
     if (!formHasError.current) {
       const newReservation = await saveReservation(formData, setApiError);
       if (newReservation && !newReservation.error) {
-        history.push('/');
+        history.push('/reservations');
       } else {
         setApiError(true);
       }

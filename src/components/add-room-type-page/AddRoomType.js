@@ -25,18 +25,19 @@ const AddRoomType = () => {
 
   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const formHasError = useRef(false);
-  const inputsAreInvalid = useRef(false);
+  const emptyFields = useRef([]);
   const nameLengthInvalid = useRef(false);
   const roomRateInvalid = useRef(false);
 
-  const validateFieldsNotEmpty = () => {
-    Object.keys(formData).filter((key) => {
+  const getEmptyFields = () => {
+    const emptyInputs = Object.keys(formData).filter((key) => {
       let formInput = formData[key];
       if (typeof formInput === 'string') {
         formInput = formInput.trim();
       }
       return formInput.length === 0;
     });
+    return emptyInputs;
   };
 
   const validateNameLength = () => {
@@ -46,10 +47,10 @@ const AddRoomType = () => {
 
   const validateRate = () => formData.rate && formData.rate <= 0;
   const validateFormData = () => {
-    inputsAreInvalid.current = validateFieldsNotEmpty();
+    emptyFields.current = getEmptyFields();
     nameLengthInvalid.current = validateNameLength();
     roomRateInvalid.current = validateRate();
-    if (inputsAreInvalid.current || nameLengthInvalid.current || roomRateInvalid.current) {
+    if (emptyFields.current.length || nameLengthInvalid.current || roomRateInvalid.current) {
       formHasError.current = true;
     } else {
       formHasError.current = false;
@@ -59,8 +60,8 @@ const AddRoomType = () => {
     setFormErrorMessage(null);
     validateFormData();
     let errorMessage = null;
-    if (inputsAreInvalid.current) {
-      errorMessage = constants.REVIEW_FORM_INVALID_INPUTS;
+    if (emptyFields.current.length) {
+      errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
     }
     if (nameLengthInvalid.current) {
       if (errorMessage) {
@@ -91,7 +92,7 @@ const AddRoomType = () => {
     if (!formHasError.current) {
       const newRoomType = await saveRoomType(formData, setApiError);
       if (newRoomType && !newRoomType.error) {
-        history.push('/');
+        history.push('/room-types');
       } else {
         setApiError(constants.SAVE_REVIEW_FAILURE);
       }
@@ -151,6 +152,7 @@ const AddRoomType = () => {
             type="number"
             label="Rate:"
             value={formData.rate}
+            onChange={handleFormChange}
           />
 
           <div className={styles.buttonContainer}>
