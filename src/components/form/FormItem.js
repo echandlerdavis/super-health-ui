@@ -9,10 +9,11 @@ import styles from './FormItem.module.css';
  * @return component
  */
 const FormItem = ({
-  onChange, value, id, label, placeholder, type, className, min, step, autoCapitalize
+  onChange, value, id, label, placeholder, type, className, min, step, dataAU
 }) => {
   const checkbox = (
     <Checkbox
+      data-au={dataAU}
       id={id}
       value={value}
       checked={value}
@@ -24,6 +25,7 @@ const FormItem = ({
 
   let inputBox = (
     <input
+      data-au={dataAU}
       className={`${styles.input} ${className}`}
       id={id}
       onChange={onChange}
@@ -33,14 +35,13 @@ const FormItem = ({
       checked={value}
       min={min}
       step={step}
-      autoCapitalize={autoCapitalize}
     />
   );
 
   if (label === 'Rate:') {
     inputBox = (
-      <div className={styles.priceInputBox}>
-        <div className={styles.priceInputIcon}>$</div>
+      <div className={styles.rateInputBox}>
+        <div className={styles.rateInputIcon}>$</div>
         {inputBox}
       </div>
     );
@@ -49,6 +50,7 @@ const FormItem = ({
   if (type === 'textarea') {
     inputBox = (
       <textarea
+        data-au={dataAU}
         className={`${styles.textarea} ${className}`}
         id={id}
         onChange={onChange}
@@ -57,7 +59,6 @@ const FormItem = ({
         value={value}
         min={min}
         step={step}
-        autoCapitalize={autoCapitalize}
       />
     );
   }

@@ -81,10 +81,10 @@ const AddReservation = () => {
   }, []);
 
   useEffect(() => {
-    if (reservationId && !dataLoaded) {
-      getInitialData(reservationId, setFormData, setDataLoaded, setApiError);
+    if (reservationId && !dataLoaded && roomData.length) {
+      getInitialData(reservationId, setFormData, setDataLoaded, setRoomName, roomData, setApiError);
     }
-  }, [reservationId, dataLoaded]);
+  }, [reservationId, dataLoaded, roomData]);
 
   const validateFormData = () => {
     emptyFields.current = getEmptyFields(formData);
@@ -158,11 +158,13 @@ const AddReservation = () => {
   return (
     <div className={styles.pageContainer}>
       <h2>
-        New Reservation
+        {reservationId ? 'Update ' : 'New '}
+        {' '}
+        Reservation
       </h2>
       {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
-        <form onSubmit={handleSubmit} className={styles.reviewForm}>
+        <form onSubmit={handleSubmit} className={styles.reservationForm}>
           <FormItem
             placeholder="example@example.com"
             type="email"
@@ -171,10 +173,11 @@ const AddReservation = () => {
             className={(emptyFields.current.includes('guestEmail') || guestEmailInvalid.current) && styles.invalidField}
             onChange={handleFormChange}
             value={formData.guestEmail}
+            dataAU="guest-email-input"
           />
           {guestEmailInvalid.current
               && (
-              <FormHelperText className={styles.helperTextSecondInput}>
+              <FormHelperText className={styles.helperText}>
                 {constants.INVAID_EMAIL}
               </FormHelperText>
               )}
@@ -183,34 +186,31 @@ const AddReservation = () => {
             id="checkInDate"
             type="text"
             label="Check-in Date:"
-            className={
-                  (emptyFields.current.includes('checkInDate') || checkInDateInvalid.current)
-                  && styles.invalidField
-                }
+            className={(emptyFields.current.includes('checkInDate') || checkInDateInvalid.current)
+                  && styles.invalidField}
             onChange={handleFormChange}
             value={formData.checkInDate}
+            dataAU="checkin-date-input"
           />
           {checkInDateInvalid.current
               && (
-              <FormHelperText className={styles.helperTextSecondInput}>
+              <FormHelperText className={styles.helperText}>
                 {constants.INVALID_DATE}
               </FormHelperText>
               )}
           <FormItem
-            // placeholder="e.g, 3"
             id="numberOfNights"
             type="number"
             label="Number of Nights:"
-            className={
-              (emptyFields.current.includes('numberOfNights') || numberOfNightsInvalid.current)
-              && styles.invalidField
-            }
+            className={(emptyFields.current.includes('numberOfNights') || numberOfNightsInvalid.current)
+              && styles.invalidField}
             value={formData.numberOfNights}
             onChange={handleFormChange}
+            dataAU="nights-input"
           />
           {numberOfNightsInvalid.current
               && (
-              <FormHelperText className={styles.helperTextSecondInput}>
+              <FormHelperText className={styles.helperText}>
                 {constants.NUMBER_INVALID}
               </FormHelperText>
               )}
@@ -219,20 +219,18 @@ const AddReservation = () => {
             id="roomTypeId"
             type="select"
             label="Room Type:"
-            className={
-              emptyFields.current.includes('roomTypeId')
-              && styles.invalidField
-            }
+            className={emptyFields.current.includes('roomTypeId')
+              && styles.invalidField}
             onChange={handleFormChange}
             options={roomOptions}
             value={roomName}
             formValue={formData.roomTypeId}
+            dataAU="room-type-select"
           />
           {(emptyFields.current && emptyFields.current.includes('roomTypeId'))
               && (
-              <FormHelperText className={styles.helperTextSecondInput}>
+              <FormHelperText className={styles.helperText}>
                 {constants.ROOM_TYPE_INVALID}
-                {' '}
               </FormHelperText>
               )}
           <div className={styles.buttonContainer}>
@@ -262,7 +260,7 @@ const AddReservation = () => {
               }}
               disabled={formHasError.current}
             >
-              Create
+              {reservationId ? 'Update' : 'Create'}
             </Button>
           </div>
         </form>

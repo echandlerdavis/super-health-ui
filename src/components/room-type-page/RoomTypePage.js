@@ -42,9 +42,8 @@ const RoomTypePage = () => {
           </div>
         </section>
       </div>
-
-      {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <h1 className={styles.title}>Room Types</h1>
+      {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {roomTypes.map((roomType) => (
           <div key={roomType.id}>

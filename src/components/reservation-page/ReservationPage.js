@@ -52,8 +52,8 @@ const ReservationPage = () => {
           </div>
         </section>
       </div>
-      {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <h1 className={styles.title}>Reservations</h1>
+      {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {reservations.map((reservation) => (
           <div key={reservation.id}>

@@ -46,23 +46,27 @@ const RoomTypeCard = ({
         <div className={styles.CardContainer}>
           <CardContent>
             <div className={styles.content}>
-              <Typography variant="body2" color="textSecondary">Name:</Typography>
-              <Typography data-au="room-type-label">
-                {roomType.name}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">Description:</Typography>
-              <Typography data-au="room-description-label">
-                {roomType.description}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">Nightly Rate:</Typography>
-              <Typography data-au="room-rate-label">
-                $
-                {roomType.rate.toFixed(2)}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">Active Status:</Typography>
-              <Typography data-au="room-active-label">
-                {roomType.active ? 'Active' : 'Inactive'}
-              </Typography>
+              <div>
+                <Typography variant="body2" color="textSecondary">Name:</Typography>
+                <Typography data-au="room-type-label">
+                  {roomType.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Description:</Typography>
+                <Typography data-au="room-description-label">
+                  {roomType.description}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant="body2" color="textSecondary">Nightly Rate:</Typography>
+                <Typography data-au="room-rate-label">
+                  $
+                  {roomType.rate.toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Active Status:</Typography>
+                <Typography data-au="room-active-label">
+                  {roomType.active ? 'Active' : 'Inactive'}
+                </Typography>
+              </div>
             </div>
           </CardContent>
           <CardActions disableSpacing>

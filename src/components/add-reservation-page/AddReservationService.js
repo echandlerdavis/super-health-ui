@@ -27,7 +27,9 @@ export const saveReservation = async (reservation, setApiError) => {
   }
 };
 
-export const getInitialData = (id, setFormData, setDataLoaded, setApiError) => {
+export const getInitialData = (
+  id, setFormData, setDataLoaded, setRoomName, roomData, setApiError
+) => {
   HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${id}`, 'GET')
     .then((response) => {
       if (response.ok) {
@@ -38,6 +40,10 @@ export const getInitialData = (id, setFormData, setDataLoaded, setApiError) => {
     .then((data) => {
       setFormData(data);
       setDataLoaded(true);
+      return data.roomTypeId;
+    })
+    .then((roomTypeId) => {
+      setRoomName(roomData.find((room) => room.id === roomTypeId).name);
     })
     .catch(() => {
       setApiError(true);
