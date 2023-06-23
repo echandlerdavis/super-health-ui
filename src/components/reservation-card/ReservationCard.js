@@ -53,7 +53,7 @@ const ReservationCard = ({
   }, [reservation]);
 
   const handleEditClick = () => {
-    history.push('/reservations/:id');
+    history.push(`/reservations/edit/${reservation.id}`);
   };
 
   // TODO: use apiError.
@@ -63,36 +63,44 @@ const ReservationCard = ({
       <Card id={reservation.id} className={classes.root}>
         <div className={styles.CardContainer}>
           <CardContent>
-            <div>
-              <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
-                {reservation.guestEmail}
-              </Typography>
-              <Typography data-au="nights-label">
-                {reservation.numberOfNights}
-              </Typography>
-              <Typography data-au="room-type-label">
-                {roomName}
-              </Typography>
-              <Typography data-au="check-in-date-label">
-                {reservation.checkInDate}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Price:
-                {totalPrice}
-              </Typography>
+            <div className={styles.content}>
+              <div>
+                <Typography variant="body2" color="textSecondary">Guest Email:</Typography>
+                <Typography data-au="guest-email-label">
+                  {reservation.guestEmail}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Number of Nights:</Typography>
+                <Typography data-au="nights-label">
+                  {reservation.numberOfNights}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Room Type:</Typography>
+                <Typography data-au="room-type-label">
+                  {roomName}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant="body2" color="textSecondary">Check-in Date:</Typography>
+                <Typography data-au="check-in-date-label">
+                  {reservation.checkInDate}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Total Price:</Typography>
+                <Typography variant="body2" component="p">
+                  {totalPrice}
+                </Typography>
+              </div>
             </div>
           </CardContent>
-          <div>
-
-            <CardActions disableSpacing>
+          <CardActions disableSpacing>
+            <div className={styles.buttons}>
               <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
                 <Edit />
               </IconButton>
               <IconButton data-au="delete-button" aria-label="delete" id={reservation.id} onClick={handleDelete}>
                 <Delete />
               </IconButton>
-            </CardActions>
-          </div>
+            </div>
+
+          </CardActions>
 
         </div>
       </Card>
