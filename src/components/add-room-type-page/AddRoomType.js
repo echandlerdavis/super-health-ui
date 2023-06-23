@@ -22,8 +22,9 @@ export const getEmptyFields = (formData) => {
       return formInput.length === 0;
     }
 
-    return !formInput;
+    return formInput === null;
   });
+
   return emptyInputs;
 };
 
@@ -111,11 +112,13 @@ const AddRoomType = () => {
   return (
     <div className={styles.pageContainer}>
       <h2>
-        New Room Type
+        {roomTypeId ? 'Update ' : 'New '}
+        {' '}
+        Room Type
       </h2>
       {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
-        <form onSubmit={handleSubmit} className={styles.reviewForm}>
+        <form onSubmit={handleSubmit} className={styles.roomTypeForm}>
           <FormItem
             placeholder="Write room name here."
             type="text"
@@ -127,7 +130,7 @@ const AddRoomType = () => {
           />
           {(emptyFields.current.includes('name') || nameLengthInvalid.current)
                 && (
-                <FormHelperText className={styles.helperTextFirstInput}>
+                <FormHelperText className={styles.helperText}>
                   {constants.NAME_INVALID}
                 </FormHelperText>
                 )}
@@ -145,7 +148,7 @@ const AddRoomType = () => {
           />
           {emptyFields.current.includes('description')
                 && (
-                <FormHelperText className={styles.helperTextSecondInput}>
+                <FormHelperText className={styles.helperText}>
                   {constants.EMPTY_FIELD}
                 </FormHelperText>
                 )}
@@ -161,7 +164,7 @@ const AddRoomType = () => {
           />
           {(emptyFields.current.includes('rate') || roomRateInvalid.current)
                 && (
-                <FormHelperText className={styles.helperTextSecondInput}>
+                <FormHelperText className={styles.helperText}>
                   {constants.NUMBER_INVALID}
                 </FormHelperText>
                 )}
@@ -199,7 +202,7 @@ const AddRoomType = () => {
               }}
               disabled={formHasError.current}
             >
-              Create
+              {roomTypeId ? 'Update' : 'Create'}
             </Button>
           </div>
         </form>

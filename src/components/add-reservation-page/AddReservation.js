@@ -36,6 +36,7 @@ export const getEmptyFields = (formData) => {
 
     return !formInput;
   });
+
   return emptyInputs;
 };
 

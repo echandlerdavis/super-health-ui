@@ -15,48 +15,34 @@ h2{
     margin-top: 1em;
 }
 
-.reviewForm {
+.roomTypeForm {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     padding: 1em 2em!important;
     margin: 2em 2em!important;
 }
 
-.inputFields {
+.roomTypeForm div {
     width: 100%;
-    padding: 0.5em;  
+    padding-top: 0.25em;
+    padding-bottom: 0;
+    margin-bottom: 0;
 }
 
-.summaryInput {
-    margin-bottom: 1.5em;
-}
 
 .invalidField{
     border: .05em solid red;
 }
 
-.helperTextFirstInput {
+.helperText {
     color: red!important;;
     margin-top:0;
     margin-bottom: 1.5em!important;
     padding-top:0;
 }
 
-.helperTextSecondInput {
-    color: red!important;;
-    margin-top:0;
-    margin-bottom: 0em!important;
-    padding-top:0;
-}
-.ratingContainer span{
-    margin: 0!important;
-}
-
-.ratingContainer fieldset {
-    margin-bottom: 0!important;
-}
 .buttonContainer button{
     margin:0.5em;
 }
@@ -65,5 +51,6 @@ h2{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    align-self: center;
     justify-content: center;
 }
