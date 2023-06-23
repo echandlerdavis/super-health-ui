@@ -34,7 +34,6 @@ module.exports = Object.freeze({
   QUANTITY_MUST_BE_ENTERED: 'Product quantity must contain a positive number.',
   QUANTITY_MUST_BE_INT: 'Product quantity must be a whole number.',
   SEVERITY_LEVELS,
-  FORM_FIELDS_EMPTY: (emptyFields) => `The following fields can not be empty: ${emptyFields.join(', ')}`,
   PRODUCT_FORM_INVALID_PRICE: 'Price must be a number with 2 digits after the decimal place',
   PRODUCT_FORM_INVALID_QUANTITY: 'Quantity can not be a negative number',
   SAVE_PRODUCT_SUCCESS: { MESSAGE: 'Product Successfully Created!', SEVERITY: SEVERITY_LEVELS.SUCCESS },
@@ -68,8 +67,7 @@ module.exports = Object.freeze({
   FREE_SHIPPING_MIN: 50.00,
 
   // General Form Error Messages
-  // FORM_FIELDS_EMPTY: (emptyFields) => `The
-  // following fields can not be empty: ${emptyFields.join(', ')}`,
+  FORM_FIELDS_EMPTY: (emptyFields) => `The following fields can not be empty: ${emptyFields.join(', ')}`,
   NUMBER_INVALID: 'Must be number greater than zero',
   // EMPTY_FIELD: 'This Field is reqiured',
 

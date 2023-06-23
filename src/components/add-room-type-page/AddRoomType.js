@@ -2,7 +2,7 @@ import React, {
   useState, useRef, useEffect
 } from 'react';
 import {
-  Button, Card
+  Button, Card, FormHelperText
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,6 +11,28 @@ import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
 import saveRoomType, { getInitialData, updateRoomType } from './AddRoomTypeService';
 import styles from './AddRoomType.module.css';
+
+export const getEmptyFields = (formData) => {
+  const emptyInputs = Object.keys(formData).filter((key) => {
+    const formInput = formData[key];
+    if (formInput) {
+      if (typeof formInput === 'string') {
+        formInput.trim();
+      }
+      return formInput.length === 0;
+    }
+
+    return !formInput;
+  });
+  return emptyInputs;
+};
+
+export const validateNameLength = (formData) => {
+  const { name } = formData;
+  return name && name.trim().length > 3;
+};
+
+export const validateRate = (formData) => formData.rate && formData.rate > 0;
 
 const AddRoomType = () => {
   const history = useHistory();
@@ -32,32 +54,14 @@ const AddRoomType = () => {
 
   useEffect(() => {
     if (roomTypeId && !dataLoaded) {
-      console.log('hit here');
       getInitialData(roomTypeId, setFormData, setDataLoaded, setApiError);
     }
   }, [roomTypeId, dataLoaded]);
 
-  const getEmptyFields = () => {
-    const emptyInputs = Object.keys(formData).filter((key) => {
-      let formInput = formData[key];
-      if (typeof formInput === 'string') {
-        formInput = formInput.trim();
-      }
-      return formInput.length === 0;
-    });
-    return emptyInputs;
-  };
-
-  const validateNameLength = () => {
-    const { name } = formData;
-    return name && name.trim().length < 3;
-  };
-
-  const validateRate = () => formData.rate && formData.rate <= 0;
   const validateFormData = () => {
-    emptyFields.current = getEmptyFields();
-    nameLengthInvalid.current = validateNameLength();
-    roomRateInvalid.current = validateRate();
+    emptyFields.current = getEmptyFields(formData);
+    nameLengthInvalid.current = !validateNameLength(formData);
+    roomRateInvalid.current = !validateRate(formData);
     if (emptyFields.current.length || nameLengthInvalid.current || roomRateInvalid.current) {
       formHasError.current = true;
     } else {
@@ -70,20 +74,6 @@ const AddRoomType = () => {
     let errorMessage = null;
     if (emptyFields.current.length) {
       errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
-    }
-    if (nameLengthInvalid.current) {
-      if (errorMessage) {
-        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_INVALID_RATING);
-      } else {
-        errorMessage = constants.REVIEW_FORM_INVALID_RATING;
-      }
-    }
-    if (roomRateInvalid.current) {
-      if (errorMessage) {
-        errorMessage = errorMessage.concat(' ** AND ** ', constants.REVIEW_FORM_COMMENTARY_LENGTH);
-      } else {
-        errorMessage = constants.REVIEW_FORM_COMMENTARY_LENGTH;
-      }
     }
     setFormErrorMessage(errorMessage);
   };
@@ -112,7 +102,8 @@ const AddRoomType = () => {
       if (newRoomType && !newRoomType.error) {
         history.push('/room-types');
       } else {
-        setApiError(constants.SAVE_REVIEW_FAILURE);
+        setApiError(true);
+        setFormErrorMessage(constants.API_ERROR);
       }
     }
   };
@@ -122,7 +113,7 @@ const AddRoomType = () => {
       <h2>
         New Room Type
       </h2>
-      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+      {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reviewForm}>
           <FormItem
@@ -130,49 +121,50 @@ const AddRoomType = () => {
             type="text"
             id="name"
             label="Name:"
-              // className={!inputsAreInvalid.current ? styles.summaryInput : styles.invalidField}
+            className={(emptyFields.current.includes('name') || nameLengthInvalid.current) && styles.invalidField}
             onChange={handleFormChange}
             value={formData.name}
           />
-          {/* {inputsAreInvalid.current
+          {(emptyFields.current.includes('name') || nameLengthInvalid.current)
                 && (
                 <FormHelperText className={styles.helperTextFirstInput}>
-                  Either summary or commentary must be filled in.
+                  {constants.NAME_INVALID}
                 </FormHelperText>
-                )} */}
+                )}
           <FormItem
             placeholder="Write description here."
             id="description"
             type="textarea"
             label="Description:"
-              // className={
-              //       (inputsAreInvalid.current || commentaryLengthIsInvalid.current)
-              //       && styles.invalidField
-              //     }
+            className={
+                    (emptyFields.current.includes('description'))
+                    && styles.invalidField
+                  }
             onChange={handleFormChange}
             value={formData.description}
           />
-          {/* {inputsAreInvalid.current
+          {emptyFields.current.includes('description')
                 && (
                 <FormHelperText className={styles.helperTextSecondInput}>
-                  Either summary or commentary must be filled in.
+                  {constants.EMPTY_FIELD}
                 </FormHelperText>
-                )} */}
-          {/* {commentaryLengthIsInvalid.current
-                && (
-                <FormHelperText className={styles.helperTextSecondInput}>
-                  Commentary must be less than 500 characters.
-                </FormHelperText>
-                )} */}
+                )}
           <FormItem
             placeholder="0.00"
             id="rate"
             type="number"
             label="Rate:"
+            className={roomRateInvalid.current && styles.invalidField}
             value={parseFloat(formData.rate).toFixed(2)}
             onChange={handleFormChange}
             step={0.01}
           />
+          {(emptyFields.current.includes('rate') || roomRateInvalid.current)
+                && (
+                <FormHelperText className={styles.helperTextSecondInput}>
+                  {constants.NUMBER_INVALID}
+                </FormHelperText>
+                )}
           <FormItem
             id="active"
             type="checkbox"
@@ -180,7 +172,6 @@ const AddRoomType = () => {
             value={formData.active}
             onChange={handleFormChange}
           />
-
           <div className={styles.buttonContainer}>
             <Button
               type="button"
