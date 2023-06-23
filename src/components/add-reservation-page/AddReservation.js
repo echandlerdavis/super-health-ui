@@ -26,11 +26,15 @@ export const validateNumberOfNights = (formData) => {
    */
 export const getEmptyFields = (formData) => {
   const emptyInputs = Object.keys(formData).filter((key) => {
-    let formInput = formData[key];
-    if (typeof formInput === 'string') {
-      formInput = formInput.trim();
+    const formInput = formData[key];
+    if (formInput) {
+      if (typeof formInput === 'string') {
+        formInput.trim();
+      }
+      return formInput.length === 0;
     }
-    return formInput.length === 0;
+
+    return !formInput;
   });
   return emptyInputs;
 };
@@ -92,8 +96,9 @@ const AddReservation = () => {
       || checkInDateInvalid.current
       || guestEmailInvalid.current) {
       formHasError.current = true;
+    } else {
+      formHasError.current = false;
     }
-    formHasError.current = false;
   };
 
   // TODO: Change Error messages
@@ -111,9 +116,12 @@ const AddReservation = () => {
 
   const handleRoomId = () => {
     if (roomName && roomData) {
-      console.log('hit handle room id');
       const singleRoomData = roomData.find((room) => room.name === roomName);
-      setFormData({ ...formData, roomTypeId: singleRoomData.id });
+      if (singleRoomData !== undefined) {
+        setFormData({ ...formData, roomTypeId: singleRoomData.id });
+      } else {
+        setFormData({ ...formData, roomTypeId: null });
+      }
     }
   };
   // todo set roomtypedid by finding name in the data.
@@ -130,6 +138,7 @@ const AddReservation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     generateError();
+    // validateFormData();
     if (!formHasError.current) {
       let newReservation;
       if (reservationId) {
@@ -151,7 +160,7 @@ const AddReservation = () => {
       <h2>
         New Reservation
       </h2>
-      {(formHasError.current || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+      {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reviewForm}>
           <FormItem
@@ -159,14 +168,13 @@ const AddReservation = () => {
             type="email"
             id="guestEmail"
             label="Guest Email:"
-            // className={(emptyFields.contains('email') ||
-            // guestEmailInvalid.current) ? styles.summaryInput : styles.invalidField}
+            className={(emptyFields.current.includes('guestEmail') || guestEmailInvalid.current) && styles.invalidField}
             onChange={handleFormChange}
             value={formData.guestEmail}
           />
           {guestEmailInvalid.current
               && (
-              <FormHelperText className={styles.helperTextFirstInput}>
+              <FormHelperText className={styles.helperTextSecondInput}>
                 {constants.INVAID_EMAIL}
               </FormHelperText>
               )}
@@ -175,10 +183,10 @@ const AddReservation = () => {
             id="checkInDate"
             type="text"
             label="Check-in Date:"
-            // className={
-            //       (inputsAreInvalid.current || commentaryLengthIsInvalid.current)
-            //       && styles.invalidField
-            //     }
+            className={
+                  (emptyFields.current.includes('checkInDate') || checkInDateInvalid.current)
+                  && styles.invalidField
+                }
             onChange={handleFormChange}
             value={formData.checkInDate}
           />
@@ -186,8 +194,6 @@ const AddReservation = () => {
               && (
               <FormHelperText className={styles.helperTextSecondInput}>
                 {constants.INVALID_DATE}
-                \
-                {' '}
               </FormHelperText>
               )}
           <FormItem
@@ -195,7 +201,10 @@ const AddReservation = () => {
             id="numberOfNights"
             type="number"
             label="Number of Nights:"
-            // className: conditional statement
+            className={
+              (emptyFields.current.includes('numberOfNights') || numberOfNightsInvalid.current)
+              && styles.invalidField
+            }
             value={formData.numberOfNights}
             onChange={handleFormChange}
           />
@@ -203,8 +212,6 @@ const AddReservation = () => {
               && (
               <FormHelperText className={styles.helperTextSecondInput}>
                 {constants.NUMBER_INVALID}
-                \
-                {' '}
               </FormHelperText>
               )}
           <FormItemDropdown
@@ -212,19 +219,22 @@ const AddReservation = () => {
             id="roomTypeId"
             type="select"
             label="Room Type:"
+            className={
+              emptyFields.current.includes('roomTypeId')
+              && styles.invalidField
+            }
             onChange={handleFormChange}
             options={roomOptions}
             value={roomName}
             formValue={formData.roomTypeId}
           />
-          {/* {emptyFields.contains('roomTypeId')
+          {(emptyFields.current && emptyFields.current.includes('roomTypeId'))
               && (
               <FormHelperText className={styles.helperTextSecondInput}>
                 {constants.ROOM_TYPE_INVALID}
-                \
                 {' '}
               </FormHelperText>
-              )} */}
+              )}
           <div className={styles.buttonContainer}>
             <Button
               type="button"

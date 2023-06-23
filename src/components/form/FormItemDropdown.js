@@ -21,6 +21,9 @@ const FormItemDropdown = ({
           onChange={onChange}
           value={value}
         >
+          <option value={null} key="placeholder">
+            Select
+          </option>
           {options.map((optionText) => (
             <option
               value={optionText}
