@@ -19,7 +19,7 @@ import styles from './ReservationCard.module.css';
  */
 const useStyles = makeStyles(() => ({
   root: {
-    // maxWidth: 345,
+    minWidth: 500,
     height: '100%'
   },
   header: {
@@ -63,32 +63,38 @@ const ReservationCard = ({
       <Card id={reservation.id} className={classes.root}>
         <div className={styles.CardContainer}>
           <CardContent>
-            <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
-              {reservation.guestEmail}
-            </Typography>
-            <Typography data-au="nights-label">
-              {reservation.numberOfNights}
-            </Typography>
-            <Typography data-au="room-type-label">
-              {roomName}
-            </Typography>
-            <Typography data-au="check-in-date-label">
-              {reservation.checkInDate}
-            </Typography>
-            <Typography variant="body2" color="textSecondary" component="p">
-              Price:
-              {totalPrice}
-            </Typography>
+            <div>
+              <Typography data-au="guest-email-label" variant="body2" color="textSecondary" component="p">
+                {reservation.guestEmail}
+              </Typography>
+              <Typography data-au="nights-label">
+                {reservation.numberOfNights}
+              </Typography>
+              <Typography data-au="room-type-label">
+                {roomName}
+              </Typography>
+              <Typography data-au="check-in-date-label">
+                {reservation.checkInDate}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                Price:
+                {totalPrice}
+              </Typography>
+            </div>
           </CardContent>
+          <div>
+
+            <CardActions disableSpacing>
+              <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
+                <Edit />
+              </IconButton>
+              <IconButton data-au="delete-button" aria-label="delete" id={reservation.id} onClick={handleDelete}>
+                <Delete />
+              </IconButton>
+            </CardActions>
+          </div>
+
         </div>
-        <CardActions disableSpacing>
-          <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
-            <Edit />
-          </IconButton>
-          <IconButton data-au="delete-button" aria-label="delete" id={reservation.id} onClick={handleDelete}>
-            <Delete />
-          </IconButton>
-        </CardActions>
       </Card>
     </>
   );
