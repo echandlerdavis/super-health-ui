@@ -21,9 +21,6 @@ const useStyles = makeStyles(() => ({
   root: {
     minWidth: 500,
     height: '100%'
-  },
-  header: {
-    minHeight: 100
   }
 }));
 

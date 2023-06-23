@@ -9,6 +9,7 @@ import { Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
+import styles from './RoomTypeCard.module.css';
 
 /**
  * @name useStyles
@@ -19,83 +20,8 @@ const useStyles = makeStyles(() => ({
   root: {
     // maxWidth: 345,
     height: '100%'
-  },
-  header: {
-    minHeight: 100
   }
 }));
-// /**
-//  * Validates the product id
-//  * @param {product Object} product
-//  * @returns boolean
-//  */
-// export const productHasId = (product) => product.id !== undefined && product.id !== null;
-
-// /**
-//  * Verify that there is enough inventory to handle the order
-//  * @param {int} inventoryQty quanity from product from the server; NOT state.prodcuts
-//  * @param {int} orderQty quantity that the customer would like to order
-//  * @returns boolean
-//  */
-// export const haveEnoughInventory = (inventoryQty, orderQty) => inventoryQty >= orderQty;
-
-// /**
-//  * Returns true if the given product is in the given orders
-//  * @param {product} product
-//  * @param {array} orders
-//  * @returns boolean
-//  */
-// export const inOrder = (product, orders) => orders.filter((p) => p.id === product.id).length > 0;
-
-// /**
-//  * Validate that the given product is valid
-//  * @param {Product object} product
-//  * @returns result Object {valid: boolean, errors: [string]}
-//  */
-// export const validateOrder = (product, orders, desiredQty) => {
-//   const result = {
-//     valid: true,
-//     errors: []
-//   };
-//   // Validate the product id
-//   if (!productHasId(product)) {
-//     result.valid = false;
-//     result.errors.push(Constants.PRODUCT_MISSING_ID);
-//   }
-//   // Validate inventory
-//   // if product has no id, can't verify inventory
-//   if (result.valid) {
-//     // user has already clicked add icon, so orderQty is currenty orderQty + 1
-//     let orderQty = desiredQty;
-//     if (orderQty === undefined && inOrder(product, orders)) {
-//       orderQty = orders.filter((p) => p.id === product.id)[0].quantity + 1;
-//     } else if (orderQty === undefined) {
-//       orderQty = 1;
-//     }
-//     if (!haveEnoughInventory(product.quantity, orderQty)) {
-//       result.valid = false;
-//       result.errors.push(Constants.INSUFFICIENT_INVENTORY);
-//     }
-//   }
-
-//   return result;
-// };
-
-// /**
-//  * Consolidate the given list of duplicates into a single order item with a larger quantity.
-//  * @param {object} product the product that has duplicates
-//  * @param {array} duplicates an array of the duplicate products iin the order
-//  * @param {array} order state.products
-//  */
-// export const consolidateOrder = (product, duplicates, order) => {
-//   const firstDuplicate = order.find((p) => p.id === product.id);
-//   while (duplicates.length > 1) {
-//     const duplicate = duplicates.pop();
-//     const duplicateIndex = order.lastIndexOf((p) => p.id === product.id);
-//     firstDuplicate.quantity += duplicate.quantity;
-//     order.splice(duplicateIndex, 1);
-//   }
-// };
 
 /**
  * @name RoomTypeCard
@@ -113,33 +39,40 @@ const RoomTypeCard = ({
     history.push(`/room-types/edit/${roomType.id}`);
   };
 
-  // TODO: use apiError.
   return (
     <>
       {apiError && <AppAlert severity="error" title="Error" message={constants.API_ERROR} />}
       <Card id={roomType.id} className={classes.root}>
-        {/* <div className={styles.CardContainer}> */}
-        <CardContent>
-          <Typography data-au="room-type-label" variant="body2" color="textSecondary" component="p">
-            {roomType.name}
-          </Typography>
-          <Typography data-au="nights-label">
-            {roomType.description}
-          </Typography>
-          <Typography data-au="room-type-label">
-            $
-            {roomType.rate.toFixed(2)}
-          </Typography>
-          <Typography data-au="check-in-date-label">
-            {roomType.active ? 'Active' : 'Inactive'}
-          </Typography>
-        </CardContent>
-        {/* </div> */}
-        <CardActions disableSpacing>
-          <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
-            <Edit />
-          </IconButton>
-        </CardActions>
+        <div className={styles.CardContainer}>
+          <CardContent>
+            <div className={styles.content}>
+              <Typography variant="body2" color="textSecondary">Name:</Typography>
+              <Typography data-au="room-type-label">
+                {roomType.name}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">Description:</Typography>
+              <Typography data-au="room-description-label">
+                {roomType.description}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">Nightly Rate:</Typography>
+              <Typography data-au="room-rate-label">
+                $
+                {roomType.rate.toFixed(2)}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">Active Status:</Typography>
+              <Typography data-au="room-active-label">
+                {roomType.active ? 'Active' : 'Inactive'}
+              </Typography>
+            </div>
+          </CardContent>
+          <CardActions disableSpacing>
+            <div className={styles.buttons}>
+              <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
+                <Edit />
+              </IconButton>
+            </div>
+          </CardActions>
+        </div>
       </Card>
     </>
   );
