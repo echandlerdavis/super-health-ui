@@ -7,6 +7,9 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import RoomTypePage from '../room-type-page/RoomTypePage';
 import AddRoomType from '../add-room-type-page/AddRoomType';
+import HomePage from '../homepage/Homepage';
+import NotFound from '../not-found-page/NotFound';
+
 /**
  * @name App
  * @returns component
@@ -18,13 +21,14 @@ const App = () => (
         <Header />
         <main>
           <Switch>
-            {/* <Route exact path="/" render={() => <ProductPage />} /> */}
+            <Route exact path="/" render={() => <HomePage />} />
             <Route exact path="/reservations" render={() => <ReservationPage />} />
             <Route exact path="/reservations/create" render={() => <AddReservation />} />
             <Route exact path="/reservations/edit/:reservationId" render={() => <AddReservation />} />
             <Route exact path="/room-types" render={() => <RoomTypePage />} />
             <Route exact path="/room-types/create" render={() => <AddRoomType />} />
             <Route exact path="/room-types/edit/:roomTypeId" render={() => <AddRoomType />} />
+            <Route path="*" render={() => <NotFound />} />
           </Switch>
         </main>
         <Footer />
