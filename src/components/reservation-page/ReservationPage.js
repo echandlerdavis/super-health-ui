@@ -37,17 +37,18 @@ const ReservationPage = () => {
     <article>
       <div className={styles.reservationHeader}>
         <section>
-          <h2>Create New</h2>
+          <h2>New Reservation</h2>
           <div className={styles.buttonSection}>
             <Button
               style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
               disabled={false}
+              data-au="create-button"
               size="small"
               variant="contained"
               startIcon={<Add />}
               onClick={() => history.push('reservations/create')}
             >
-              Reservation
+              Create
             </Button>
           </div>
         </section>
@@ -56,7 +57,7 @@ const ReservationPage = () => {
       {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {reservations.map((reservation) => (
-          <div key={reservation.id}>
+          <div key={reservation.id} data-au="reservation-display">
             <ReservationCard
               reservation={reservation}
               handleDelete={() => handleDeleteReservation(reservation.id)}

@@ -77,11 +77,11 @@ const ReservationCard = ({
               </div>
               <div>
                 <Typography variant="body2" color="textSecondary">Check-in Date:</Typography>
-                <Typography data-au="check-in-date-label">
+                <Typography data-au="checkin-date-label">
                   {reservation.checkInDate}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">Total Price:</Typography>
-                <Typography variant="body2" component="p">
+                <Typography variant="body2" component="p" data-au="total-cost-label">
                   {totalPrice}
                 </Typography>
               </div>

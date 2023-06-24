@@ -27,17 +27,18 @@ const RoomTypePage = () => {
       <div className={styles.roomTypeHeader}>
 
         <section>
-          <h2>Create New</h2>
+          <h2>New Room Type</h2>
           <div className={styles.buttonSection}>
             <Button
               style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
               disabled={false}
+              data-au="create-button"
               size="small"
               variant="contained"
               startIcon={<Add />}
               onClick={() => history.push('room-types/create')}
             >
-              Room Type
+              Create
             </Button>
           </div>
         </section>
@@ -46,7 +47,7 @@ const RoomTypePage = () => {
       {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {roomTypes.map((roomType) => (
-          <div key={roomType.id}>
+          <div key={roomType.id} data-au="room-type-display">
             <RoomTypeCard
               roomType={roomType}
               apiError={apiError}

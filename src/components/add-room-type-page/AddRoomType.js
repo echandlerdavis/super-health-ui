@@ -120,6 +120,7 @@ const AddRoomType = () => {
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.roomTypeForm}>
           <FormItem
+            dataAU="room-name-input"
             placeholder="Write room name here."
             type="text"
             id="name"
@@ -135,6 +136,7 @@ const AddRoomType = () => {
                 </FormHelperText>
                 )}
           <FormItem
+            dataAU="room-description-input"
             placeholder="Write description here."
             id="description"
             type="textarea"
@@ -153,6 +155,7 @@ const AddRoomType = () => {
                 </FormHelperText>
                 )}
           <FormItem
+            dataAU="room-rate-input"
             placeholder="0.00"
             id="rate"
             type="number"
@@ -169,6 +172,7 @@ const AddRoomType = () => {
                 </FormHelperText>
                 )}
           <FormItem
+            dataAU="room-active-input"
             id="active"
             type="checkbox"
             label="Active Status: "
@@ -191,6 +195,7 @@ const AddRoomType = () => {
               Cancel
             </Button>
             <Button
+              data-au={roomTypeId ? 'update-button' : 'create-button'}
               type="submit"
               variant="outlined"
               startIcon={<Save />}

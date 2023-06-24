@@ -27,5 +27,26 @@
 
 .rateInputBox{
   display: flex;
+}
 
+.rateInputBox div {
+  display: flex;
+  width: auto!important;
+  text-align: center;
+  align-items: center;
+}
+
+.checkBox {
+  font-weight: 700;
+  color: #666666;
+  margin-bottom: .5em;
+  margin-top: .5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkBox div {
+  width: auto!important;
 }

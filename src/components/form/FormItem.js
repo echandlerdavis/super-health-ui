@@ -65,7 +65,7 @@ const FormItem = ({
 
   return (
     <div key={`input${id}`}>
-      <label className={styles.label} htmlFor={id}>
+      <label className={type === 'checkbox' ? styles.checkBox : styles.label} htmlFor={id}>
         {label}
         <div>
           {type === 'checkbox' ? checkbox : inputBox}

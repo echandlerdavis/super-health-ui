@@ -252,6 +252,7 @@ const AddReservation = () => {
             <Button
               type="submit"
               variant="outlined"
+              data-au={reservationId ? 'update-button' : 'create-button'}
               startIcon={<Save />}
               style={{
                 backgroundColor: '#b0e5b0',

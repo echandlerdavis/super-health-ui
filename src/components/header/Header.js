@@ -59,7 +59,7 @@ const Header = () => {
         </Button>
         <Button
           id="2"
-          data-au="room-typ-link"
+          data-au="room-type-link"
           color="inherit"
           className={active === '2' ? 'active' : undefined}
           onClick={handleRoomTypeClick}
