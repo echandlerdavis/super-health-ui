@@ -10,7 +10,7 @@ import fetchReservations, { deleteReservation } from './ReservationPageService';
 
 /**
  * @name ReservationPage
- * @description fetches products from API and displays products as product cards
+ * @description fetches reservations from API and displays reservations as reservations cards
  * @return component
  */
 const ReservationPage = () => {

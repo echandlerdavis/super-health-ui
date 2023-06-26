@@ -10,7 +10,7 @@ import RoomTypeCard from '../room-type-card/RoomTypeCard';
 
 /**
  * @name RoomTypePage
- * @description fetches products from API and displays products as product cards
+ * @description fetches room types from API and displays room types as room type cards
  * @return component
  */
 const RoomTypePage = () => {

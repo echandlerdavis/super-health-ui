@@ -26,8 +26,10 @@ export const getRoomTypeEmptyFields = (formData) => {
       }
       return formInput.length === 0;
     }
-
-    return formInput === null;
+    if (key === 'active') {
+      return formInput === null;
+    }
+    return !formInput;
   });
 
   return emptyInputs;
@@ -70,6 +72,8 @@ const AddRoomType = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [apiError, setApiError] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState(null);
+  const [emptyFieldErrors, setEmptyFieldErrors] = useState([]);
+  const [invalidFieldErrors, setInvalidFieldErrors] = useState([]);
   const formHasError = useRef(false);
   const emptyFields = useRef([]);
   const nameLengthInvalid = useRef(false);
@@ -101,10 +105,19 @@ const AddRoomType = () => {
     setFormErrorMessage(null);
     validateFormData();
     let errorMessage = null;
-    if (emptyFields.current.length) {
-      errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
+    if (formHasError.current) {
+      if (emptyFields.current.length) {
+        setEmptyFieldErrors([...emptyFields.current]);
+        errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
+      }
+      setFormErrorMessage(errorMessage);
+      if (nameLengthInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'name']);
+      }
+      if (roomRateInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'rate']);
+      }
     }
-    setFormErrorMessage(errorMessage);
   };
 
   /**
@@ -151,7 +164,7 @@ const AddRoomType = () => {
         {' '}
         Room Type
       </h2>
-      {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+      {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.roomTypeForm}>
           <FormItem
@@ -160,11 +173,11 @@ const AddRoomType = () => {
             type="text"
             id="name"
             label="Name:"
-            className={(emptyFields.current.includes('name') || nameLengthInvalid.current) && styles.invalidField}
+            className={(emptyFieldErrors.includes('name') || invalidFieldErrors.includes('name')) && styles.invalidField}
             onChange={handleFormChange}
             value={formData.name}
           />
-          {(emptyFields.current.includes('name') || nameLengthInvalid.current)
+          {(emptyFieldErrors.includes('name') || invalidFieldErrors.includes('name'))
                 && (
                 <FormHelperText className={styles.helperText}>
                   {constants.NAME_INVALID}
@@ -177,13 +190,13 @@ const AddRoomType = () => {
             type="textarea"
             label="Description:"
             className={
-                    (emptyFields.current.includes('description'))
+              (emptyFieldErrors.includes('description'))
                     && styles.invalidField
                   }
             onChange={handleFormChange}
             value={formData.description}
           />
-          {emptyFields.current.includes('description')
+          {emptyFieldErrors.includes('description')
                 && (
                 <FormHelperText className={styles.helperText}>
                   {constants.EMPTY_FIELD}
@@ -195,12 +208,12 @@ const AddRoomType = () => {
             id="rate"
             type="number"
             label="Rate:"
-            className={roomRateInvalid.current && styles.invalidField}
+            className={(emptyFieldErrors.includes('rate') || invalidFieldErrors.includes('rate')) && styles.invalidField}
             value={parseFloat(formData.rate).toFixed(2)}
             onChange={handleFormChange}
             step={0.01}
           />
-          {(emptyFields.current.includes('rate') || roomRateInvalid.current)
+          {(emptyFieldErrors.includes('rate') || invalidFieldErrors.includes('rate'))
                 && (
                 <FormHelperText className={styles.helperText}>
                   {constants.NUMBER_INVALID}

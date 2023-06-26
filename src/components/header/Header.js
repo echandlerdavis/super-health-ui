@@ -19,14 +19,13 @@ const useStyles = makeStyles(() => ({
  * @return component
  */
 const Header = () => {
-  // const [apiError, setApiError] = useState(false);
   const history = useHistory();
   const classes = useStyles();
   const [active, setActive] = useState('');
 
   /**
    * @name handleReservationsClick
-   * @description Redirect the page to /checkout when clicked
+   * @description Redirect the page to /reservations when clicked
    */
   const handleReservationsClick = (event) => {
     history.push('/reservations');
@@ -35,7 +34,7 @@ const Header = () => {
 
   /**
    * @name handleRoomTypeClick
-   * @description Redirect the page to /profilepage when clicked
+   * @description Redirect the page to /room-types when clicked
    */
   const handleRoomTypeClick = (event) => {
     history.push('/room-types');

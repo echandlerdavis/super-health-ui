@@ -96,6 +96,8 @@ const AddReservation = () => {
   const [roomOptions, setRoomOptions] = useState([]);
   const [roomName, setRoomName] = useState('');
   const [formErrorMessage, setFormErrorMessage] = useState(null);
+  const [emptyFieldErrors, setEmptyFieldErrors] = useState([]);
+  const [invalidFieldErrors, setInvalidFieldErrors] = useState([]);
   const formHasError = useRef(false);
   const emptyFields = useRef([]);
   const numberOfNightsInvalid = useRef(false);
@@ -116,6 +118,7 @@ const AddReservation = () => {
    * validates all fields.
    */
   const validateFormData = () => {
+    formHasError.current = false;
     emptyFields.current = getEmptyFields(formData);
     numberOfNightsInvalid.current = !validateNumberOfNights(formData);
     checkInDateInvalid.current = !validateCheckInDate(formData);
@@ -139,7 +142,17 @@ const AddReservation = () => {
     let errorMessage = null;
     if (formHasError.current) {
       if (emptyFields.current.length) {
+        setEmptyFieldErrors([...emptyFields.current]);
         errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
+      }
+      if (numberOfNightsInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'numberOfNights']);
+      }
+      if (checkInDateInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'checkInDate']);
+      }
+      if (guestEmailInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'guestEmail']);
       }
       setFormErrorMessage(errorMessage);
     }
@@ -203,7 +216,7 @@ const AddReservation = () => {
         {' '}
         Reservation
       </h2>
-      {(emptyFields.current.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+      {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
           <FormItem
@@ -211,29 +224,31 @@ const AddReservation = () => {
             type="email"
             id="guestEmail"
             label="Guest Email:"
-            className={(emptyFields.current.includes('guestEmail') || guestEmailInvalid.current) && styles.invalidField}
+            className={(emptyFieldErrors.includes('guestEmail') || invalidFieldErrors.includes('guestEmail')) && styles.invalidField}
             onChange={handleFormChange}
             value={formData.guestEmail}
             dataAU="guest-email-input"
           />
-          {guestEmailInvalid.current
+          {
+              (emptyFieldErrors.includes('guestEmail') || invalidFieldErrors.includes('guestEmail'))
               && (
               <FormHelperText className={styles.helperText}>
                 {constants.INVAID_EMAIL}
               </FormHelperText>
-              )}
+              )
+}
           <FormItem
             placeholder="mm-dd-yyyy"
             id="checkInDate"
             type="text"
             label="Check-in Date:"
-            className={(emptyFields.current.includes('checkInDate') || checkInDateInvalid.current)
+            className={(emptyFieldErrors.includes('checkInDate') || invalidFieldErrors.includes('checkInDate'))
                   && styles.invalidField}
             onChange={handleFormChange}
             value={formData.checkInDate}
             dataAU="checkin-date-input"
           />
-          {checkInDateInvalid.current
+          {(emptyFieldErrors.includes('checkInDate') || invalidFieldErrors.includes('checkInDate'))
               && (
               <FormHelperText className={styles.helperText}>
                 {constants.INVALID_DATE}
@@ -243,13 +258,13 @@ const AddReservation = () => {
             id="numberOfNights"
             type="number"
             label="Number of Nights:"
-            className={(emptyFields.current.includes('numberOfNights') || numberOfNightsInvalid.current)
+            className={(emptyFieldErrors.includes('numberOfNights') || invalidFieldErrors.includes('numberOfNights'))
               && styles.invalidField}
             value={formData.numberOfNights}
             onChange={handleFormChange}
             dataAU="nights-input"
           />
-          {numberOfNightsInvalid.current
+          {(emptyFieldErrors.includes('numberOfNights') || invalidFieldErrors.includes('numberOfNights'))
               && (
               <FormHelperText className={styles.helperText}>
                 {constants.NUMBER_INVALID}
