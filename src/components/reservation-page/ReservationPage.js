@@ -22,12 +22,13 @@ const ReservationPage = () => {
     fetchReservations(setReservations, setApiError);
   }, []);
 
+  // Removes deleted reservation from the display.
   const handleDeleteReservation = (id) => {
     deleteReservation(id, setApiError);
     const newList = [...reservations];
     const foundIndex = newList.findIndex((reservation) => reservation.id === id);
 
-    // If we find the blog post with matching ID, remove it
+    // If we find the reservation with matching ID, remove it
     if (foundIndex !== -1) newList.splice(foundIndex, 1);
 
     setReservations(newList);

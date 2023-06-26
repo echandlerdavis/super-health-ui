@@ -15,13 +15,21 @@ import {
 import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
+/**
+ * @name validateNumberOfNights
+ * @description validates that the number of nights field in the
+ * form data is not null, undefined, or less than 1
+ * @param {Object} formData
+ * @returns boolean
+ */
 export const validateNumberOfNights = (formData) => {
   const { numberOfNights } = formData;
   return numberOfNights !== undefined && numberOfNights !== null && numberOfNights > 0;
 };
 
 /**
-   * Generates a list of empty fields
+   * @name getEmptyFields
+   * @description Generates a list of empty fields
    * @returns array of field names that are empty
    */
 export const getEmptyFields = (formData) => {
@@ -40,6 +48,13 @@ export const getEmptyFields = (formData) => {
   return emptyInputs;
 };
 
+/**
+ * @name validateCheckInDate
+ * @description validates that the check in
+ * data string exists and is in the correct format 'mm-dd-yyyy'
+ * @param {Object} formData
+ * @returns boolean
+ */
 export const validateCheckInDate = (formData) => {
   const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
   return formData.checkInDate !== undefined
@@ -47,13 +62,23 @@ export const validateCheckInDate = (formData) => {
   && regex.test(formData.checkInDate);
 };
 
+/**
+ * @name validateGuestEmail
+ * @description Validates that the guest email exists and is in the correct format 'x@x.x'
+ * @param {Object} formData
+ * @returns boolean
+ */
 export const validateGuestEmail = (formData) => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   return formData.guestEmail !== undefined
   && formData.guestEmail !== null
   && regex.test(formData.guestEmail);
 };
-
+/**
+ * @name AddReservation
+ * @description Displays a form to update or create a new reservation
+ * @returns component
+ */
 const AddReservation = () => {
   const history = useHistory();
   const { reservationId } = useParams();
@@ -87,6 +112,9 @@ const AddReservation = () => {
     }
   }, [reservationId, dataLoaded, roomData]);
 
+  /**
+   * validates all fields.
+   */
   const validateFormData = () => {
     emptyFields.current = getEmptyFields(formData);
     numberOfNightsInvalid.current = !validateNumberOfNights(formData);
@@ -102,7 +130,9 @@ const AddReservation = () => {
     }
   };
 
-  // TODO: Change Error messages
+  /**
+   * sets the error message to list empty fields.
+   */
   const generateError = () => {
     setFormErrorMessage(null);
     validateFormData();
@@ -115,6 +145,9 @@ const AddReservation = () => {
     }
   };
 
+  /**
+   * takes the room-type name information and sets it to a valid roomTypeId.
+   */
   const handleRoomId = () => {
     if (roomName && roomData) {
       const singleRoomData = roomData.find((room) => room.name === roomName);
@@ -125,7 +158,11 @@ const AddReservation = () => {
       }
     }
   };
-  // todo set roomtypedid by finding name in the data.
+
+  /**
+   * Updates formData as a user updates the input.
+   * @param {event} e - event
+   */
   const handleFormChange = (e) => {
     formHasError.current = false;
     if (e.target.id !== 'roomTypeId') {
@@ -136,10 +173,13 @@ const AddReservation = () => {
     }
   };
 
+  /**
+   * Persists the form data to the database if there are no errors.
+   * @param {event} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     generateError();
-    // validateFormData();
     if (!formHasError.current) {
       let newReservation;
       if (reservationId) {

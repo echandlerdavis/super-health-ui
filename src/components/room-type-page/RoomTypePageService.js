@@ -3,9 +3,9 @@ import constants from '../../utils/constants';
 
 /**
  *
- * @name fetchProducts
+ * @name fetchRoomTypes
  * @description Utilizes HttpHelper to make a get request to an API
- * @param {*} setProducts sets state for products
+ * @param {*} setRoomTypes sets state for room types
  * @param {*} setApiError sets error if response other than 200 is returned
  * @returns sets state for products if 200 response, else sets state for apiError
  */

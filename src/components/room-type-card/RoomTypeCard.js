@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 
 /**
  * @name RoomTypeCard
- * @description displays single product card component
+ * @description displays single room-type card component
  * @param {*} props product
  * @return component
  */

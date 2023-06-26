@@ -9,10 +9,15 @@ import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
-import saveRoomType, { getInitialData, updateRoomType } from './AddRoomTypeService';
+import saveRoomType, { getInitialRoomData, updateRoomType } from './AddRoomTypeService';
 import styles from './AddRoomType.module.css';
 
-export const getEmptyFields = (formData) => {
+/**
+   * @name getRoomTypeEmptyFields
+   * @description Generates a list of empty fields
+   * @returns array of field names that are empty
+   */
+export const getRoomTypeEmptyFields = (formData) => {
   const emptyInputs = Object.keys(formData).filter((key) => {
     const formInput = formData[key];
     if (formInput) {
@@ -28,13 +33,30 @@ export const getEmptyFields = (formData) => {
   return emptyInputs;
 };
 
+/**
+ * @name validateNameLength
+ * @description Validates that the name is greater than three characters in length.
+ * @param {Object} formData
+ * @returns boolean
+ */
 export const validateNameLength = (formData) => {
   const { name } = formData;
   return name && name.trim().length > 3;
 };
 
+/**
+ * @name validateRate
+ * @description Validates the rate is larger than 0.
+ * @param {Object} formData
+ * @returns boolean
+ */
 export const validateRate = (formData) => formData.rate && formData.rate > 0;
 
+/**
+ * @name AddRoomType
+ * @description Displays a form to add or update a room-type.
+ * @returns component
+ */
 const AddRoomType = () => {
   const history = useHistory();
   const { roomTypeId } = useParams();
@@ -55,12 +77,15 @@ const AddRoomType = () => {
 
   useEffect(() => {
     if (roomTypeId && !dataLoaded) {
-      getInitialData(roomTypeId, setFormData, setDataLoaded, setApiError);
+      getInitialRoomData(roomTypeId, setFormData, setDataLoaded, setApiError);
     }
   }, [roomTypeId, dataLoaded]);
 
+  /**
+   * validates all fields
+   */
   const validateFormData = () => {
-    emptyFields.current = getEmptyFields(formData);
+    emptyFields.current = getRoomTypeEmptyFields(formData);
     nameLengthInvalid.current = !validateNameLength(formData);
     roomRateInvalid.current = !validateRate(formData);
     if (emptyFields.current.length || nameLengthInvalid.current || roomRateInvalid.current) {
@@ -69,6 +94,9 @@ const AddRoomType = () => {
       formHasError.current = false;
     }
   };
+  /**
+   * creates error message for empty fields
+   */
   const generateError = () => {
     setFormErrorMessage(null);
     validateFormData();
@@ -79,7 +107,10 @@ const AddRoomType = () => {
     setFormErrorMessage(errorMessage);
   };
 
-  // todo set roomtypedid by finding name in the data.
+  /**
+   * updates the formData based on user input.
+   * @param {event} param target
+   */
   const handleFormChange = ({ target }) => {
     let { value } = target;
     const { id, type } = target;
@@ -90,6 +121,10 @@ const AddRoomType = () => {
     setFormData({ ...formData, [id]: value });
   };
 
+  /**
+   * persists the formData to the database if there are no errors
+   * @param {event} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     generateError();

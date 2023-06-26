@@ -4,7 +4,7 @@ import constants from '../../utils/constants';
 
 /**
  * @name NotFound
- * @description fetches products from API and displays products as product cards
+ * @description Page does not exist, defaults to this alert.
  * @return component
  */
 const NotFound = () => (
