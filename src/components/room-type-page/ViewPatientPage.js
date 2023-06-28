@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
-import styles from './RoomTypePage.module.css';
-import Constants from '../../utils/constants';
-import AppAlert from '../alert/Alert';
-import fetchRoomTypes from './RoomTypePageService';
-import RoomTypeCard from '../room-type-card/RoomTypeCard';
+import { useParams } from 'react-router-dom';
+// import { Button } from '@material-ui/core';
+// import { Add } from '@material-ui/icons';
+// import styles from './RoomTypePage.module.css';
+// import Constants from '../../utils/constants';
+// import AppAlert from '../alert/Alert';
+// import RoomTypeCard from '../room-type-card/RoomTypeCard';
+import fetchPatient from './RoomTypePageService';
+import ViewPatientCard from '../view-patient-card/ViewPatientCard';
 
 /**
- * @name RoomTypePage
+ * @name ViewPatientPage
  * @description fetches room types from API and displays room types as room type cards
  * @return component
  */
-const RoomTypePage = () => {
-  const [roomTypes, setRoomTypes] = useState([]);
+const ViewPatientPage = () => {
+  const { id } = useParams();
+  const [patient, setPatient] = useState({});
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [apiError, setApiError] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(() => {
-    fetchRoomTypes(setRoomTypes, setApiError);
-  }, []);
+    if (!dataLoaded) {
+      fetchPatient(id, setPatient, setDataLoaded, setApiError);
+    }
+  }, [id, dataLoaded]);
 
   return (
     <article>
-      <div className={styles.roomTypeHeader}>
+      {!apiError
+      && <ViewPatientCard patient={patient} />}
+      {/* <div className={styles.roomTypeHeader}>
 
         <section>
           <h2>New Room Type</h2>
@@ -54,9 +61,9 @@ const RoomTypePage = () => {
             />
           </div>
         ))}
-      </section>
+      </section> */}
     </article>
   );
 };
 
-export default RoomTypePage;
+export default ViewPatientPage;
