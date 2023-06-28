@@ -9,9 +9,9 @@ module.exports = Object.freeze({
   API_ERROR: 'Oops, something went wrong',
   BASE_URL_API: 'http://localhost:8085',
   PLACEHOLDER_IMAGE: 'https://www.signfix.com.au/wp-content/uploads/2017/09/placeholder-600x400.png',
-  ROOM_TYPE_ENDPOINT: '/room-types',
-  SINGLE_ROOM_TYPE_ENDPOINT: (id) => `/room-types/${id}`,
-  RESERVATIONS_ENDPOINT: '/reservations',
+  ENCOUNTERS_ENDPOINT: '/encounters',
+  PATIENTS_ENDPOINT: '/patients',
+  SINGLE_PATIENT_ENDPOINT: (id) => `/patients/${id}`,
   SEVERITY_LEVELS,
 
   // General Form Error Messages

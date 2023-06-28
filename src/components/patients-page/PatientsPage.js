@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import ReservationCard from '../reservation-card/ReservationCard';
+import ReservationCard from '../patient-card/PatientCard';
 import styles from './ReservationPage.module.css';
 import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
-import fetchReservations, { deleteReservation } from './ReservationPageService';
+import fetchPatients, { deleteReservation } from './PatientsPageService';
 
 /**
  * @name ReservationPage
@@ -14,24 +14,24 @@ import fetchReservations, { deleteReservation } from './ReservationPageService';
  * @return component
  */
 const ReservationPage = () => {
-  const [reservations, setReservations] = useState([]);
+  const [patients, setPatients] = useState([]);
   const [apiError, setApiError] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
-    fetchReservations(setReservations, setApiError);
+    fetchPatients(setPatients, setApiError);
   }, []);
 
   // Removes deleted reservation from the display.
   const handleDeleteReservation = (id) => {
     deleteReservation(id, setApiError);
-    const newList = [...reservations];
-    const foundIndex = newList.findIndex((reservation) => reservation.id === id);
+    const newList = [...patients];
+    const foundIndex = newList.findIndex((patient) => patient.id === id);
 
     // If we find the reservation with matching ID, remove it
     if (foundIndex !== -1) newList.splice(foundIndex, 1);
 
-    setReservations(newList);
+    setPatients(newList);
   };
 
   return (

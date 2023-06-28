@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import ReservationPage from '../reservation-page/ReservationPage';
+import ReservationPage from '../patients-page/PatientsPage';
 import AddReservation from '../add-reservation-page/AddReservation';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
@@ -22,12 +22,12 @@ const App = () => (
         <main>
           <Switch>
             <Route exact path="/" render={() => <HomePage />} />
-            <Route exact path="/reservations" render={() => <ReservationPage />} />
-            <Route exact path="/reservations/create" render={() => <AddReservation />} />
-            <Route exact path="/reservations/edit/:reservationId" render={() => <AddReservation />} />
-            <Route exact path="/room-types" render={() => <RoomTypePage />} />
-            <Route exact path="/room-types/create" render={() => <AddRoomType />} />
-            <Route exact path="/room-types/edit/:roomTypeId" render={() => <AddRoomType />} />
+            <Route exact path="/patients" render={() => <ReservationPage />} />
+            <Route exact path="/patients/create" render={() => <AddReservation />} />
+            <Route exact path="/patients/edit/:patientId" render={() => <AddReservation />} />
+            <Route exact path="/patient/:id" render={() => <RoomTypePage />} />
+            <Route exact path="/encounters/create" render={() => <AddRoomType />} />
+            <Route exact path="/encounters/edit/:encounterId" render={() => <AddRoomType />} />
             <Route path="*" render={() => <NotFound />} />
           </Switch>
         </main>
