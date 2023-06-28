@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import ReservationCard from '../patient-card/PatientCard';
-import styles from './ReservationPage.module.css';
+import styles from './PatientsPage.module.css';
 import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
 import fetchPatients, { deleteReservation } from './PatientsPageService';
+import PatientCard from '../patient-card/PatientCard';
 
 /**
  * @name ReservationPage
@@ -57,11 +57,11 @@ const ReservationPage = () => {
       <h1 className={styles.title}>Reservations</h1>
       {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
-        {reservations.map((reservation) => (
-          <div key={reservation.id} data-au="reservation-display">
-            <ReservationCard
-              reservation={reservation}
-              handleDelete={() => handleDeleteReservation(reservation.id)}
+        {patients.map((patient) => (
+          <div key={patient.id} data-au="patient-display">
+            <PatientCard
+              patient={patients}
+              handleDelete={() => handleDeleteReservation(patient.id)}
             />
           </div>
         ))}
@@ -70,4 +70,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+export default PatientPage;

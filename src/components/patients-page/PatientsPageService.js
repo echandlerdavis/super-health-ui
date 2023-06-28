@@ -9,15 +9,15 @@ import constants from '../../utils/constants';
  * @param {Function} setApiError sets error if response other than 200 is returned
  * @returns sets state for reservation if 200 response, else sets state for apiError
  */
-const fetchPatients = (setReservations, setApiError) => {
-  HttpHelper(constants.RESERVATIONS_ENDPOINT, 'GET')
+const fetchPatients = (setPatients, setApiError) => {
+  HttpHelper(constants.PATIENTS_ENDPOINT, 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
       throw new Error(constants.API_ERROR);
     })
-    .then(setReservations)
+    .then(setPatients)
     .catch(() => {
       setApiError(true);
     });
@@ -42,4 +42,4 @@ export const deleteReservation = (id, setApiError) => {
     });
 };
 
-export default fetchReservations;
+export default fetchPatients;

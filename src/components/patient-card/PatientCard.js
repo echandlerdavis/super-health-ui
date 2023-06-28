@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -7,9 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { Delete, PageViewIcon } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
-import AppAlert from '../alert/Alert';
-import constants from '../../utils/constants';
-import styles from './ReservationCard.module.css';
+import styles from './PatientCard.module.css';
 
 /**
  * @name useStyles
@@ -48,7 +46,9 @@ const PatientCard = ({
               <div>
                 <Typography variant="body2" color="textSecondary">Name: </Typography>
                 <Typography data-au="name-label">
-                  {patient.firstName} + ' ' + {patient.lastName}
+                  {patient.firstName}
+                  {' '}
+                  {patient.lastName}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">Age: </Typography>
                 <Typography data-au="age-label">
@@ -79,4 +79,4 @@ const PatientCard = ({
   );
 };
 
-export default ReservationCard;
+export default PatientCard;
