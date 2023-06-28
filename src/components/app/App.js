@@ -8,7 +8,7 @@ import Footer from '../footer/Footer';
 import AddRoomType from '../add-room-type-page/AddRoomType';
 import HomePage from '../homepage/Homepage';
 import NotFound from '../not-found-page/NotFound';
-import ViewPatientPage from '../room-type-page/ViewPatientPage';
+import ViewPatientPage from '../view-patient-page/ViewPatientPage';
 
 /**
  * @name App

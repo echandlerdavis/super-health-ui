@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { Edit } from '@material-ui/icons';
+import { Pageview } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
@@ -18,61 +18,59 @@ import styles from './RoomTypeCard.module.css';
  */
 const useStyles = makeStyles(() => ({
   root: {
-    // maxWidth: 345,
     height: '100%'
   }
 }));
 
 /**
- * @name RoomTypeCard
+ * @name EncounterCard
  * @description displays single room-type card component
  * @param {*} props product
  * @return component
  */
-const RoomTypeCard = ({
-  roomType, apiError
+const EncounterCard = ({
+  patientId, encounter, apiError
 }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const handleEditClick = () => {
-    history.push(`/room-types/edit/${roomType.id}`);
+  const handleViewClick = () => {
+    history.push(`/patients/${patientId}/encounters/${encounter.id}`);
   };
 
   return (
     <>
       {apiError && <AppAlert severity="error" title="Error" message={constants.API_ERROR} />}
-      <Card id={roomType.id} className={classes.root}>
+      <Card id={encounter.id} className={classes.root}>
         <div className={styles.CardContainer}>
           <CardContent>
             <div className={styles.content}>
               <div>
-                <Typography variant="body2" color="textSecondary">Name:</Typography>
-                <Typography data-au="room-type-label">
-                  {roomType.name}
+                <Typography variant="body2" color="textSecondary">Encounter Id:</Typography>
+                <Typography data-au="id-label">
+                  {encounter.id}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">Description:</Typography>
-                <Typography data-au="room-description-label">
-                  {roomType.description}
+                <Typography variant="body2" color="textSecondary">Visit Code:</Typography>
+                <Typography data-au="visit-code-label">
+                  {encounter.visitCode}
                 </Typography>
               </div>
               <div>
-                <Typography variant="body2" color="textSecondary">Nightly Rate:</Typography>
-                <Typography data-au="room-rate-label">
-                  $
-                  {roomType.rate.toFixed(2)}
+                <Typography variant="body2" color="textSecondary">Provider:</Typography>
+                <Typography data-au="provider-label">
+                  {encounter.provider}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">Active Status:</Typography>
-                <Typography data-au="room-active-label">
-                  {roomType.active ? 'Active' : 'Inactive'}
+                <Typography variant="body2" color="textSecondary">Date:</Typography>
+                <Typography data-au="date-label">
+                  {encounter.date}
                 </Typography>
               </div>
             </div>
           </CardContent>
           <CardActions disableSpacing>
             <div className={styles.buttons}>
-              <IconButton data-au="edit-button" aria-label="edit" onClick={handleEditClick}>
-                <Edit />
+              <IconButton data-au="view-button" aria-label="view" onClick={handleViewClick}>
+                <Pageview />
               </IconButton>
             </div>
           </CardActions>
@@ -82,4 +80,4 @@ const RoomTypeCard = ({
   );
 };
 
-export default RoomTypeCard;
+export default EncounterCard;

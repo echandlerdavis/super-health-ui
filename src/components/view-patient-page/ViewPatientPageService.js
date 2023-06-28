@@ -9,7 +9,7 @@ import constants from '../../utils/constants';
  * @param {*} setApiError sets error if response other than 200 is returned
  * @returns sets state for products if 200 response, else sets state for apiError
  */
-const fetchPatient = (id, setPatient, setDataLoaded, setApiError) => {
+const fetchPatient = (id, setPatient, setEncounters, setDataLoaded, setApiError) => {
   HttpHelper(constants.SINGLE_PATIENT_ENDPOINT(id), 'GET')
     .then((response) => {
       if (response.ok) {
@@ -19,6 +19,7 @@ const fetchPatient = (id, setPatient, setDataLoaded, setApiError) => {
     })
     .then((data) => {
       setPatient(data);
+      setEncounters(data.encounters);
       setDataLoaded(true);
     })
     .catch(() => {
