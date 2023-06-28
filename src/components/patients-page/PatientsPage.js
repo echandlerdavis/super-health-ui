@@ -9,11 +9,11 @@ import fetchPatients, { deleteReservation } from './PatientsPageService';
 import PatientCard from '../patient-card/PatientCard';
 
 /**
- * @name ReservationPage
+ * @name PatientsPage
  * @description fetches reservations from API and displays reservations as reservations cards
  * @return component
  */
-const ReservationPage = () => {
+const PatientsPage = () => {
   const [patients, setPatients] = useState([]);
   const [apiError, setApiError] = useState(false);
   const history = useHistory();
@@ -23,7 +23,7 @@ const ReservationPage = () => {
   }, []);
 
   // Removes deleted reservation from the display.
-  const handleDeleteReservation = (id) => {
+  const handleDeletePatient = (id) => {
     deleteReservation(id, setApiError);
     const newList = [...patients];
     const foundIndex = newList.findIndex((patient) => patient.id === id);
@@ -54,14 +54,14 @@ const ReservationPage = () => {
           </div>
         </section>
       </div>
-      <h1 className={styles.title}>Reservations</h1>
+      <h1 className={styles.title}>Patients</h1>
       {apiError && <AppAlert severity="error" title="Error" message={Constants.API_ERROR} />}
       <section className={styles.app}>
         {patients.map((patient) => (
           <div key={patient.id} data-au="patient-display">
             <PatientCard
-              patient={patients}
-              handleDelete={() => handleDeleteReservation(patient.id)}
+              patient={patient}
+              handleDelete={() => handleDeletePatient(patient.id)}
             />
           </div>
         ))}
@@ -70,4 +70,4 @@ const ReservationPage = () => {
   );
 };
 
-export default PatientPage;
+export default PatientsPage;

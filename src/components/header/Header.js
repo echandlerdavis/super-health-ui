@@ -27,17 +27,8 @@ const Header = () => {
    * @name handleReservationsClick
    * @description Redirect the page to /reservations when clicked
    */
-  const handleReservationsClick = (event) => {
-    history.push('/reservations');
-    setActive(event.target.id);
-  };
-
-  /**
-   * @name handleRoomTypeClick
-   * @description Redirect the page to /room-types when clicked
-   */
-  const handleRoomTypeClick = (event) => {
-    history.push('/room-types');
+  const handlePatientClick = (event) => {
+    history.push('/patients');
     setActive(event.target.id);
   };
 
@@ -45,25 +36,16 @@ const Header = () => {
     <AppBar data-au="nav-bar" position="static">
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          Hotel Bookings
+          Super Health, Inc.
         </Typography>
         <Button
           id="1"
           data-au="reservation-link"
           color="inherit"
           className={active === '1' ? 'active' : undefined}
-          onClick={handleReservationsClick}
+          onClick={handlePatientClick}
         >
-          Reservations
-        </Button>
-        <Button
-          id="2"
-          data-au="room-type-link"
-          color="inherit"
-          className={active === '2' ? 'active' : undefined}
-          onClick={handleRoomTypeClick}
-        >
-          Room Types
+          Patients
         </Button>
       </Toolbar>
     </AppBar>

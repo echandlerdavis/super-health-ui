@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import PatientPage from '../patients-page/PatientsPage';
+import PatientsPage from '../patients-page/PatientsPage';
 import AddReservation from '../add-reservation-page/AddReservation';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
@@ -22,7 +22,7 @@ const App = () => (
         <main>
           <Switch>
             <Route exact path="/" render={() => <HomePage />} />
-            <Route exact path="/patients" render={() => <PatientPage />} />
+            <Route exact path="/patients" render={() => <PatientsPage />} />
             <Route exact path="/patients/create" render={() => <AddReservation />} />
             <Route exact path="/patients/edit/:patientId" render={() => <AddReservation />} />
             <Route exact path="/patient/:id" render={() => <RoomTypePage />} />

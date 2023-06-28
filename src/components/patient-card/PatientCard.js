@@ -5,7 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { Delete, PageViewIcon } from '@material-ui/icons';
+import { Delete } from '@material-ui/icons';
+import PageviewIcon from '@material-ui/icons/Pageview';
 import { useHistory } from 'react-router-dom';
 import styles from './PatientCard.module.css';
 
@@ -64,7 +65,7 @@ const PatientCard = ({
           <CardActions disableSpacing>
             <div className={styles.buttons}>
               <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
-                <PageViewIcon />
+                <PageviewIcon />
               </IconButton>
               <IconButton data-au="delete-button" aria-label="delete" id={patient.id} onClick={handleDelete}>
                 <Delete />
