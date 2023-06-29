@@ -36,24 +36,61 @@ const ViewEncounterCard = ({ encounter, apiError }) => {
           <CardContent>
             <div className={styles.content}>
               <div>
+                <Typography variant="body2" color="textSecondary">Date:</Typography>
+                <Typography data-au="date-label">
+                  {encounter.date}
+                </Typography>
                 <Typography variant="body2" color="textSecondary">Encounter Id:</Typography>
                 <Typography data-au="id-label">
                   {encounter.id}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Chief Complaint:</Typography>
+                <Typography data-au="complaint-label">
+                  {encounter.chiefComplaint}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Notes:</Typography>
+                <Typography data-au="id-label">
+                  {encounter.notes}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">Visit Code:</Typography>
                 <Typography data-au="visit-code-label">
                   {encounter.visitCode}
                 </Typography>
-              </div>
-              <div>
                 <Typography variant="body2" color="textSecondary">Provider:</Typography>
                 <Typography data-au="provider-label">
                   {encounter.provider}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">Date:</Typography>
-                <Typography data-au="date-label">
-                  {encounter.date}
+                <Typography variant="body2" color="textSecondary">Billing Code:</Typography>
+                <Typography data-au="billing-code-label">
+                  {encounter.billingCode}
                 </Typography>
+              </div>
+              <div>
+                <Typography variant="body2" color="textSecondary">International Classification of Dieseases:</Typography>
+                <Typography data-au="icd10-label">
+                  {encounter.icd10}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Total Cost:</Typography>
+                <Typography data-au="total-cost-label">
+                  $
+                  {Number.parseFloat(encounter.totalCost).toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Copay:</Typography>
+                <Typography data-au="copay-label">
+                  $
+                  {Number.parseFloat(encounter.copay).toFixed(2)}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Pulse:</Typography>
+                <Typography data-au="pulse-label">
+                  {encounter.pulse}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">Blood Pressure:</Typography>
+                <Typography data-au="systolic-label">
+                  {encounter.systolic}
+                  /
+                  {encounter.diastolic}
+                </Typography>
+
               </div>
             </div>
           </CardContent>

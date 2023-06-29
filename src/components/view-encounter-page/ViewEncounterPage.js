@@ -26,7 +26,7 @@ const ViewEncounterPage = () => {
 
   return (
     <>
-     <h2>Encounter Details</h2>
+      <h2>Encounter Details</h2>
       {!apiError && <ViewEncounterCard encounter={encounter} apiError={apiError} />}
     </>
   );
