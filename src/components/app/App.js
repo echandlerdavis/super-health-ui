@@ -9,6 +9,7 @@ import AddRoomType from '../add-room-type-page/AddRoomType';
 import HomePage from '../homepage/Homepage';
 import NotFound from '../not-found-page/NotFound';
 import ViewPatientPage from '../view-patient-page/ViewPatientPage';
+import ViewEncounterPage from '../view-encounter-page/ViewEncounterPage';
 
 /**
  * @name App
@@ -24,7 +25,7 @@ const App = () => (
             <Route exact path="/" render={() => <HomePage />} />
             <Route exact path="/patients" render={() => <PatientsPage />} />
             <Route exact path="/patients/create" render={() => <AddReservation />} />
-            <Route exact path="/patients/edit/:patientId" render={() => <AddReservation />} />
+            <Route exact path="/patients/:patientId/encounters/:id" render={() => <ViewEncounterPage />} />
             <Route exact path="/patients/:id" render={() => <ViewPatientPage />} />
             <Route exact path="/encounters/create" render={() => <AddRoomType />} />
             <Route exact path="/encounters/edit/:encounterId" render={() => <AddRoomType />} />

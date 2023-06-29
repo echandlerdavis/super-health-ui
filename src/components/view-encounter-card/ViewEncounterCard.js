@@ -3,10 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { Pageview } from '@material-ui/icons';
-import { useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
 import styles from '../encounter-card/RoomTypeCard.module.css';
@@ -28,7 +25,7 @@ const useStyles = makeStyles(() => ({
  * @param {*} props product
  * @return component
  */
-const ViewEncounterCard = ({ encounter }) => {
+const ViewEncounterCard = ({ encounter, apiError }) => {
   const classes = useStyles();
 
   return (
@@ -60,13 +57,7 @@ const ViewEncounterCard = ({ encounter }) => {
               </div>
             </div>
           </CardContent>
-          <CardActions disableSpacing>
-            <div className={styles.buttons}>
-              <IconButton data-au="view-button" aria-label="view" onClick={handleViewClick}>
-                <Pageview />
-              </IconButton>
-            </div>
-          </CardActions>
+          <CardActions disableSpacing />
         </div>
       </Card>
     </>
