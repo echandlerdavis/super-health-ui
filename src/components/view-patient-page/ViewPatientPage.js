@@ -7,7 +7,7 @@ import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
 import fetchPatient from './ViewPatientPageService';
 import ViewPatientCard from '../view-patient-card/ViewPatientCard';
-import EncounterCard from '../room-type-card/EncounterCard';
+import EncounterCard from '../encounter-card/EncounterCard';
 
 /**
  * @name ViewPatientPage
