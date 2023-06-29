@@ -55,6 +55,10 @@ const ViewPatientCard = ({
                 <Typography data-au="id-label">
                   {patient.id}
                 </Typography>
+                <Typography variant="body2" color="textSecondary">SSN: </Typography>
+                <Typography data-au="ssn-label">
+                  {patient.ssn}
+                </Typography>
                 <Typography variant="body2" color="textSecondary">Email: </Typography>
                 <Typography data-au="email-label">
                   {patient.email}
