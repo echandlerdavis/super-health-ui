@@ -36,6 +36,20 @@ export const getRoomTypeEmptyFields = (formData) => {
 };
 
 /**
+ * @name validateCheckInDate
+ * @description validates that the check in
+ * data string exists and is in the correct format 'mm-dd-yyyy'
+ * @param {Object} formData
+ * @returns boolean
+ */
+export const validateCheckInDate = (formData) => {
+  const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
+  return formData.checkInDate !== undefined
+  && formData.checkInDate !== null
+  && regex.test(formData.checkInDate);
+};
+
+/**
  * @name validateNameLength
  * @description Validates that the name is greater than three characters in length.
  * @param {Object} formData
@@ -133,6 +147,20 @@ const AddRoomType = () => {
     }
     setFormData({ ...formData, [id]: value });
   };
+
+  // /**
+  //  * takes the room-type name information and sets it to a valid roomTypeId.
+  //  */
+  // const handleRoomId = () => {
+  //   if (roomName && roomData) {
+  //     const singleRoomData = roomData.find((room) => room.name === roomName);
+  //     if (singleRoomData !== undefined) {
+  //       setFormData({ ...formData, roomTypeId: singleRoomData.id });
+  //     } else {
+  //       setFormData({ ...formData, roomTypeId: null });
+  //     }
+  //   }
+  // };
 
   /**
    * persists the formData to the database if there are no errors

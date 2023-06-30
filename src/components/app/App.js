@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import PatientsPage from '../patients-page/PatientsPage';
-import AddReservation from '../add-reservation-page/AddReservation';
+import PatientForm from '../patient-form/PatientForm';
 import Header from '../header/Header';
 import Footer from '../footer/Footer';
 import AddRoomType from '../add-room-type-page/AddRoomType';
@@ -24,7 +24,7 @@ const App = () => (
           <Switch>
             <Route exact path="/" render={() => <HomePage />} />
             <Route exact path="/patients" render={() => <PatientsPage />} />
-            <Route exact path="/patients/create" render={() => <AddReservation />} />
+            <Route exact path="/patients/create" render={() => <PatientForm />} />
             <Route exact path="/patients/:patientId/encounters/:id" render={() => <ViewEncounterPage />} />
             <Route exact path="/patients/:id" render={() => <ViewPatientPage />} />
             <Route exact path="/encounters/create" render={() => <AddRoomType />} />

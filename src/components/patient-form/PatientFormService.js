@@ -8,21 +8,21 @@ import constants from '../../utils/constants';
  * @param {Function} setRoomOptions - sets the options to a list of names.
  * @param {Function} setApiError - sets error if error
  */
-export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
-  HttpHelper(constants.ROOM_TYPE_ENDPOINT, 'GET')
-    .then((response) => response.json())
-    .then((data) => {
-      setRoomData(data);
-      const roomArray = [];
-      Object.keys(data).forEach((key) => {
-        if (data[key].active === true) {
-          roomArray.push(data[key].name);
-        }
-      });
-      setRoomOptions(roomArray);
-    })
-    .catch(() => setApiError(true));
-};
+// export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
+//   HttpHelper(constants.ROOM_TYPE_ENDPOINT, 'GET')
+//     .then((response) => response.json())
+//     .then((data) => {
+//       setRoomData(data);
+//       const roomArray = [];
+//       Object.keys(data).forEach((key) => {
+//         if (data[key].active === true) {
+//           roomArray.push(data[key].name);
+//         }
+//       });
+//       setRoomOptions(roomArray);
+//     })
+//     .catch(() => setApiError(true));
+// };
 
 /**
  * @name saveReservation
@@ -31,9 +31,9 @@ export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
  * @param {*} setApiError - set to error if error
  * @returns saved object if success, boolean if error
  */
-export const saveReservation = async (reservation, setApiError) => {
+export const savePatient = async (patient, setApiError) => {
   try {
-    const response = await HttpHelper(constants.RESERVATIONS_ENDPOINT, 'POST', reservation);
+    const response = await HttpHelper(constants.PATIENTS_ENDPOINT, 'POST', patient);
     return response.json();
   } catch {
     setApiError(true);
@@ -53,9 +53,9 @@ export const saveReservation = async (reservation, setApiError) => {
  * @param {Function} setApiError - sets error
  */
 export const getInitialData = (
-  id, setFormData, setDataLoaded, setRoomName, roomData, setApiError
+  id, setFormData, setDataLoaded, setApiError
 ) => {
-  HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${id}`, 'GET')
+  HttpHelper(`${constants.PATIENTS_ENDPOINT}/${id}`, 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -65,10 +65,6 @@ export const getInitialData = (
     .then((data) => {
       setFormData(data);
       setDataLoaded(true);
-      return data.roomTypeId;
-    })
-    .then((roomTypeId) => {
-      setRoomName(roomData.find((room) => room.id === roomTypeId).name);
     })
     .catch(() => {
       setApiError(true);
@@ -82,9 +78,9 @@ export const getInitialData = (
  * @param {Function} setApiError
  * @returns updated object if success, boolean if error.
  */
-export const updateReservation = async (reservation, setApiError) => {
+export const updatePatient = async (patient, setApiError) => {
   try {
-    const response = await HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${reservation.id}`, 'PUT', reservation);
+    const response = await HttpHelper(`${constants.patient}/${patient.id}`, 'PUT', patient);
     return response.json();
   } catch {
     setApiError(true);

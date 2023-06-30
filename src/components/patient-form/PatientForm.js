@@ -2,7 +2,7 @@ import React, {
   useState, useRef, useEffect
 } from 'react';
 import {
-  Button, Card, FormHelperText
+  Button, Card
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
@@ -10,10 +10,13 @@ import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
 import {
-  fetchRoomData, saveReservation, getInitialData, updateReservation
-} from './AddReservationService';
+  savePatient, getInitialData, updatePatient
+} from './PatientFormService';
 import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
+
+
+//TODO: FormHelperText and FormHelperText validation
 
 /**
    * @name getEmptyFields
@@ -32,7 +35,6 @@ export const getEmptyFields = (formData) => {
 
     return !formInput;
   });
-
   return emptyInputs;
 };
 
@@ -64,29 +66,37 @@ export const validateSsn = (ssnString) => {
 /**
  * @name validateEmail
  * @description Validates that the guest email exists and is in the correct format 'x@x.x'
- * @param {Object} formData
+ * @param {String} formData
  * @returns boolean
  */
 export const validateEmail = (emailString) => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z]+\.[A-Za-z]+$/;
-  //TODO: might have issue if it's null?
+  // TODO: might have issue if it's null?
   return emailString
   && regex.test(emailString);
 };
+
 /**
- * @name validateCheckInDate
- * @description validates that the check in
- * data string exists and is in the correct format 'mm-dd-yyyy'
- * @param {Object} formData
- * @returns boolean
+ * @name validateState
+ * @description
+ * @param {String} stateString
+ * @returns
  */
-export const validateCheckInDate = (formData) => {
-  const regex = /^(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])-(\d{4})$/;
-  return formData.checkInDate !== undefined
-  && formData.checkInDate !== null
-  && regex.test(formData.checkInDate);
+export const validateState = (stateString) => {
+  const regex = /^[A-Z]{2}$/;
+  return stateString && regex.test(stateString);
 };
 
+export const validateZip = (postalCode) => {
+  const regex1 = /^\d{5}$/;
+  const regex2 = /^(\d){5}-(\d){4}/;
+  return postalCode && (regex1.test(postalCode) || regex2.test(postalCode));
+};
+
+export const validateNumberGreaterThanZero = (number) => number && number > 0;
+
+export const validateGender = (genderString) => genderString === 'Male' || genderString === 'Female'
+  || genderString === 'Other';
 
 /**
  * @name AddReservation
@@ -105,15 +115,14 @@ const AddReservation = () => {
     city: '',
     state: '',
     postal: '',
-    age: null,
-    height: null,
-    weight: null,
+    age: 0,
+    height: 0,
+    weight: 0,
     insurance: '',
     gender: ''
   };
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
-  const [roomData, setRoomData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const [emptyFieldErrors, setEmptyFieldErrors] = useState([]);
@@ -122,8 +131,14 @@ const AddReservation = () => {
   const emptyFields = useRef([]);
   const firstNameInvalid = useRef(false);
   const lastNameInvalid = useRef(false);
-  const guestEmailInvalid = useRef(false);
-  const checkInDateInvalid = useRef(false);
+  const ssnInvalid = useRef(false);
+  const emailInvalid = useRef(false);
+  const stateInvalid = useRef(false);
+  const zipInvalid = useRef(false);
+  const ageInvalid = useRef(false);
+  const heightInvalid = useRef(false);
+  const weightInvalid = useRef(false);
+  const genderInvalid = useRef(false);
 
   const formInputTypes = {
     firstName: 'text',
@@ -142,11 +157,10 @@ const AddReservation = () => {
   };
 
   const genderOptions = [
-    "Male",
-    "Female",
-    "Other"
+    'Male',
+    'Female',
+    'Other'
   ];
-    
 
   useEffect(() => {
     if (patientId && !dataLoaded) {
@@ -158,16 +172,28 @@ const AddReservation = () => {
    * validates all fields.
    */
   const validateFormData = () => {
-    formHasError.current = false;
     emptyFields.current = getEmptyFields(formData);
     firstNameInvalid.current = !validateNameStrings(formData.firstName);
     lastNameInvalid.current = !validateNameStrings(formData.lastName);
-    checkInDateInvalid.current = !validateCheckInDate(formData);
-    guestEmailInvalid.current = !validateGuestEmail(formData);
+    ssnInvalid.current = !validateSsn(formData.ssn);
+    emailInvalid.current = !validateEmail(formData.email);
+    stateInvalid.current = !validateState(formData.state);
+    zipInvalid.current = !validateZip(formData.postal);
+    ageInvalid.current = !validateNumberGreaterThanZero(formData.age);
+    heightInvalid.current = !validateNumberGreaterThanZero(formData.height);
+    weightInvalid.current = !validateNumberGreaterThanZero(formData.weight);
+    genderInvalid.current = !validateGender(formData.gender);
     if (emptyFields.current.length
-      || numberOfNightsInvalid.current
-      || checkInDateInvalid.current
-      || guestEmailInvalid.current) {
+      || firstNameInvalid.current
+      || lastNameInvalid.current
+      || ssnInvalid.current
+      || emailInvalid.current
+      || stateInvalid.current
+      || zipInvalid.current
+      || ageInvalid.current
+      || heightInvalid.current
+      || weightInvalid.current
+      || genderInvalid.current) {
       formHasError.current = true;
     } else {
       formHasError.current = false;
@@ -186,32 +212,39 @@ const AddReservation = () => {
         setEmptyFieldErrors([...emptyFields.current]);
         errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
       }
-      if (numberOfNightsInvalid.current) {
-        setInvalidFieldErrors((prev) => [...prev, 'numberOfNights']);
+      if (firstNameInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'firstName']);
       }
-      if (checkInDateInvalid.current) {
-        setInvalidFieldErrors((prev) => [...prev, 'checkInDate']);
+      if (lastNameInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'lastName']);
       }
-      if (guestEmailInvalid.current) {
-        setInvalidFieldErrors((prev) => [...prev, 'guestEmail']);
+      if (ssnInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'ssn']);
+      }
+      if (emailInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'email']);
+      }
+      if (stateInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'state']);
+      }
+      if (zipInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'postal']);
+      }
+      if (ageInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'age']);
+      }
+      if (heightInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'height']);
+      }
+      if (weightInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'weight']);
+      }
+      if (genderInvalid.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'gender']);
       }
       setFormErrorMessage(errorMessage);
     }
   };
-
-  // /**
-  //  * takes the room-type name information and sets it to a valid roomTypeId.
-  //  */
-  // const handleRoomId = () => {
-  //   if (roomName && roomData) {
-  //     const singleRoomData = roomData.find((room) => room.name === roomName);
-  //     if (singleRoomData !== undefined) {
-  //       setFormData({ ...formData, roomTypeId: singleRoomData.id });
-  //     } else {
-  //       setFormData({ ...formData, roomTypeId: null });
-  //     }
-  //   }
-  // };
 
   /**
    * Updates formData as a user updates the input.
@@ -220,7 +253,6 @@ const AddReservation = () => {
   const handleFormChange = (e) => {
     formHasError.current = false;
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    
   };
 
   /**
@@ -231,14 +263,19 @@ const AddReservation = () => {
     e.preventDefault();
     generateError();
     if (!formHasError.current) {
-      let newReservation;
+      let newPatient;
       if (patientId) {
-        newReservation = await updateReservation(formData, setApiError);
+        newPatient = await updatePatient(formData, setApiError);
       } else {
-        newReservation = await saveReservation(formData, setApiError);
+        newPatient = await savePatient(formData, setApiError);
       }
-      if (newReservation && !newReservation.error) {
-        history.push('/reservations');
+      if (newPatient && !newPatient.error) {
+        if (patientId) {
+          // this might just be setting a state so it renders a view only version
+          history.push(`/patients/${patientId}`);
+        } else {
+          history.push('/patients');
+        }
       } else {
         setApiError(true);
         setFormErrorMessage(constants.API_ERROR);
@@ -263,10 +300,10 @@ const AddReservation = () => {
             // Change the style of the input box
             if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
               styleClass = styles.invalidField;
-            }else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
+            } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
               styleClass = styles.invalidField;
             }
-            if(attribute === "gender"){
+            if (attribute === 'gender') {
               return (
                 <FormItemDropdown
                   key={attribute}
@@ -277,11 +314,11 @@ const AddReservation = () => {
                   label={attribute}
                   options={genderOptions}
                 />
-                //Put form helper text
-              )
+                // Put form helper text
+              );
             }
             return (
-              <FormItem 
+              <FormItem
                 key={attribute}
                 onChange={handleFormChange}
                 value={formData[attribute]}
@@ -291,8 +328,7 @@ const AddReservation = () => {
                 className={styleClass}
                 step={1}
               />
-            )
-
+            );
           })}
           <div className={styles.buttonContainer}>
             <Button
@@ -312,7 +348,7 @@ const AddReservation = () => {
             <Button
               type="submit"
               variant="outlined"
-              data-au={reservationId ? 'update-button' : 'create-button'}
+              data-au={patientId ? 'update-button' : 'create-button'}
               startIcon={<Save />}
               style={{
                 backgroundColor: '#b0e5b0',

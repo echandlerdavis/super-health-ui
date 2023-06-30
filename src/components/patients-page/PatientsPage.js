@@ -47,7 +47,7 @@ const PatientsPage = () => {
               size="small"
               variant="contained"
               startIcon={<Add />}
-              onClick={() => history.push('reservations/create')}
+              onClick={() => history.push('patients/create')}
             >
               Create
             </Button>
