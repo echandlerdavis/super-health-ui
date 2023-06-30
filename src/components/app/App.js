@@ -25,8 +25,9 @@ const App = () => (
             <Route exact path="/" render={() => <HomePage />} />
             <Route exact path="/patients" render={() => <PatientsPage />} />
             <Route exact path="/patients/create" render={() => <PatientForm />} />
-            <Route exact path="/patients/:patientId/encounters/:id" render={() => <ViewEncounterPage />} />
             <Route exact path="/patients/:id" render={() => <ViewPatientPage />} />
+            <Route exact path="/patients/:patientId/edit" render={() => <PatientForm />} />
+            <Route exact path="/patients/:patientId/encounters/:id" render={() => <ViewEncounterPage />} />
             <Route exact path="/encounters/create" render={() => <AddRoomType />} />
             <Route exact path="/encounters/edit/:encounterId" render={() => <AddRoomType />} />
             <Route path="*" render={() => <NotFound />} />

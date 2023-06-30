@@ -18,7 +18,7 @@ module.exports = Object.freeze({
   // General Form Error Messages
   FORM_FIELDS_EMPTY: (emptyFields) => `The following fields can not be empty: ${emptyFields.join(', ')}`,
   NUMBER_INVALID: 'Must be number greater than zero',
-  EMPTY_FIELD: 'This Field is reqiured',
+  EMPTY_FIELD: 'This Field is required',
   // Patient Form Messages
   INVAID_EMAIL: 'Must be a valid email.',
   INVALID_SSN: 'Must have format DDD-DD-DDDD',

@@ -55,7 +55,7 @@ export const savePatient = async (patient, setApiError) => {
 export const getInitialData = (
   id, setFormData, setDataLoaded, setApiError
 ) => {
-  HttpHelper(`${constants.PATIENTS_ENDPOINT}/${id}`, 'GET')
+  HttpHelper(constants.SINGLE_PATIENT_ENDPOINT(id), 'GET')
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -80,7 +80,7 @@ export const getInitialData = (
  */
 export const updatePatient = async (patient, setApiError) => {
   try {
-    const response = await HttpHelper(`${constants.patient}/${patient.id}`, 'PUT', patient);
+    const response = await HttpHelper(constants.SINGLE_PATIENT_ENDPOINT(patient.id), 'PUT', patient);
     return response.json();
   } catch {
     setApiError(true);

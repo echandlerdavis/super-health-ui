@@ -2,12 +2,12 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-// import CardActions from '@material-ui/core/CardActions';
-// import IconButton from '@material-ui/core/IconButton';
+import CardActions from '@material-ui/core/CardActions';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 // import { Delete } from '@material-ui/icons';
-// import PageviewIcon from '@material-ui/icons/Pageview';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { Edit } from '@material-ui/icons';
 import styles from '../patient-card/PatientCard.module.css';
 
 /**
@@ -32,11 +32,11 @@ const ViewPatientCard = ({
   patient
 }) => {
   const classes = useStyles();
-  // const history = useHistory();
+  const history = useHistory();
 
-  // const handleDetailsClick = () => {
-  //   history.push(`/patients/${patient.id}`);
-  // };
+  const handleDetailsClick = () => {
+    history.push(`/patients/${patient.id}/edit`);
+  };
 
   return (
     <>
@@ -105,20 +105,20 @@ const ViewPatientCard = ({
               </div>
             </div>
           </CardContent>
-          {/* <CardActions disableSpacing>
+          <CardActions disableSpacing>
             <div className={styles.buttons}>
               <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
-                <PageviewIcon />
+                <Edit />
               </IconButton>
               {/* <IconButton data-au="delete-button" aria-label="delete"
                id={patient.id} onClick={handleDelete}>
                 <Delete />
               </IconButton> */}
+            </div>
+
+          </CardActions>
+
         </div>
-
-        {/* </CardActions> */}
-
-        {/* </div> */}
       </Card>
     </>
   );

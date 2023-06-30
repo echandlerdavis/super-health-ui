@@ -12,7 +12,7 @@ import FormItem from '../form/FormItem';
 import {
   savePatient, getInitialData, updatePatient
 } from './PatientFormService';
-import styles from './AddReservation.module.css';
+import styles from './PatientForm.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
 // TODO: FormHelperText and FormHelperText validation
@@ -306,6 +306,7 @@ const PatientForm = () => {
         newPatient = await savePatient(formData, setApiError);
       }
       if (newPatient && !newPatient.error) {
+        console.log("it's fine");
         if (patientId) {
           // this might just be setting a state so it renders a view only version
           history.push(`/patients/${patientId}`);
@@ -324,7 +325,7 @@ const PatientForm = () => {
       <h2>
         {patientId ? 'Update ' : 'New '}
         {' '}
-        Reservation
+        Patient
       </h2>
       {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
