@@ -19,11 +19,16 @@ module.exports = Object.freeze({
   FORM_FIELDS_EMPTY: (emptyFields) => `The following fields can not be empty: ${emptyFields.join(', ')}`,
   NUMBER_INVALID: 'Must be number greater than zero',
   EMPTY_FIELD: 'This Field is reqiured',
-  // Reservations Form Messages
+  // Patient Form Messages
   INVAID_EMAIL: 'Must be a valid email.',
-  INVALID_DATE: 'Date must be mm-dd-yyyy',
-  ROOM_TYPE_INVALID: 'Must select a room type',
+  INVALID_SSN: 'Must have format DDD-DD-DDDD',
+  INVALID_NAME: 'Must be alphabetic characters',
+  INVALID_STATE: 'Must be two capital letters',
+  INVALID_POSTAL: 'Must have format DDDDD or DDDDD-DDDD',
+  INVALID_GENDER: 'Must select a gender',
 
   // Room type form messages
-  NAME_INVALID: 'Must be at least 3 characters'
+  NAME_INVALID: 'Must be at least 3 characters',
+  INVALID_DATE: 'Date must be mm-dd-yyyy'
+
 });

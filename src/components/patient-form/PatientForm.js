@@ -2,7 +2,7 @@ import React, {
   useState, useRef, useEffect
 } from 'react';
 import {
-  Button, Card
+  Button, Card, FormHelperText
 } from '@material-ui/core';
 import { Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
@@ -15,8 +15,7 @@ import {
 import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
-
-//TODO: FormHelperText and FormHelperText validation
+// TODO: FormHelperText and FormHelperText validation
 
 /**
    * @name getEmptyFields
@@ -103,7 +102,7 @@ export const validateGender = (genderString) => genderString === 'Male' || gende
  * @description Displays a form to update or create a new reservation
  * @returns component
  */
-const AddReservation = () => {
+const PatientForm = () => {
   const history = useHistory();
   const { patientId } = useParams();
   const initialFormData = {
@@ -140,20 +139,57 @@ const AddReservation = () => {
   const weightInvalid = useRef(false);
   const genderInvalid = useRef(false);
 
-  const formInputTypes = {
-    firstName: 'text',
-    lastName: 'text',
-    ssn: 'text',
-    email: 'email',
-    street: 'text',
-    city: 'text',
-    state: 'text',
-    postal: 'text',
-    age: 'number',
-    height: 'number',
-    weight: 'number',
-    insurance: 'text',
-    gender: 'select'
+  const formInputInfo = {
+    firstName:
+    {
+      type: 'text',
+      error: constants.INVALID_NAME
+    },
+    lastName: {
+      type: 'text',
+      error: constants.INVALID_NAME
+    },
+    ssn: {
+      type: 'text',
+      error: constants.INVALID_SSN
+    },
+    email: {
+      type: 'email',
+      error: constants.INVAID_EMAIL
+    },
+    street: {
+      type: 'text'
+    },
+    city: {
+      type: 'text'
+    },
+    state: {
+      type: 'text',
+      error: constants.INVALID_STATE
+    },
+    postal: {
+      type: 'text',
+      error: constants.INVALID_POSTAL
+    },
+    age: {
+      type: 'number',
+      error: constants.NUMBER_INVALID
+    },
+    height: {
+      type: 'number',
+      error: constants.NUMBER_INVALID
+    },
+    weight: {
+      type: 'number',
+      error: constants.NUMBER_INVALID
+    },
+    insurance: {
+      type: 'text'
+    },
+    gender: {
+      type: 'select',
+      error: constants.INVALID_GENDER
+    }
   };
 
   const genderOptions = [
@@ -285,49 +321,66 @@ const AddReservation = () => {
 
   return (
     <div className={styles.pageContainer}>
-      {/* <h2>
+      <h2>
         {patientId ? 'Update ' : 'New '}
         {' '}
         Reservation
-      </h2> */}
+      </h2>
       {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          {Object.keys(formInputTypes).map((attribute) => {
+          {Object.keys(formInputInfo).map((attribute) => {
             let styleClass = null;
-            // let helperText = '';
+            let helperText = null;
             // If the form attribute is listed as an empty field when errors are generated...
             // Change the style of the input box
             if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
               styleClass = styles.invalidField;
+              helperText = constants.EMPTY_FIELD;
             } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
               styleClass = styles.invalidField;
+              helperText = formInputInfo[attribute].error;
             }
             if (attribute === 'gender') {
               return (
-                <FormItemDropdown
-                  key={attribute}
-                  onChange={handleFormChange}
-                  value={formData[attribute]}
-                  className={styleClass}
-                  id={attribute}
-                  label={attribute}
-                  options={genderOptions}
-                />
-                // Put form helper text
+                <div key={attribute}>
+                  <FormItemDropdown
+                    key={attribute}
+                    onChange={handleFormChange}
+                    value={formData[attribute]}
+                    className={styleClass}
+                    id={attribute}
+                    label={attribute}
+                    options={genderOptions}
+                  />
+                  {helperText
+                  && (
+                  <FormHelperText className={styles.helperText}>
+                    {helperText}
+                  </FormHelperText>
+                  )}
+                </div>
               );
             }
             return (
-              <FormItem
-                key={attribute}
-                onChange={handleFormChange}
-                value={formData[attribute]}
-                id={attribute}
-                type={formInputTypes[attribute]}
-                label={attribute}
-                className={styleClass}
-                step={1}
-              />
+              <div key={attribute}>
+                <FormItem
+                  key={attribute}
+                  onChange={handleFormChange}
+                  value={formData[attribute]}
+                  id={attribute}
+                  type={formInputInfo[attribute].type}
+                  label={attribute}
+                  className={styleClass}
+                  step={1}
+                />
+                {helperText
+                && (
+                <FormHelperText className={styles.helperText}>
+                  {helperText}
+                </FormHelperText>
+                )}
+              </div>
             );
           })}
           <div className={styles.buttonContainer}>
@@ -366,4 +419,4 @@ const AddReservation = () => {
     </div>
   );
 };
-export default AddReservation;
+export default PatientForm;
