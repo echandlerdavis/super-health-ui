@@ -16,18 +16,6 @@ import styles from './AddReservation.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
 /**
- * @name validateNumberOfNights
- * @description validates that the number of nights field in the
- * form data is not null, undefined, or less than 1
- * @param {Object} formData
- * @returns boolean
- */
-export const validateNumberOfNights = (formData) => {
-  const { numberOfNights } = formData;
-  return numberOfNights !== undefined && numberOfNights !== null && numberOfNights > 0;
-};
-
-/**
    * @name getEmptyFields
    * @description Generates a list of empty fields
    * @returns array of field names that are empty
@@ -49,6 +37,43 @@ export const getEmptyFields = (formData) => {
 };
 
 /**
+ * @name validateNameStrings
+ * @description validates that the number of nights field in the
+ * form data is not null, undefined, or less than 1
+ * @param {Object} formData
+ * @returns boolean
+ */
+export const validateNameStrings = (nameString) => {
+  const regex = /^[a-zA-Z\s'-]+$/;
+  return nameString && regex.test(nameString);
+};
+
+/**
+ * @name validateSsn
+ * @description validates that the check in
+ * data string exists and is in the correct format 'mm-dd-yyyy'
+ * @param {Object} formData
+ * @returns boolean
+ */
+export const validateSsn = (ssnString) => {
+  const regex = /^(\d{3})-(\d{2})-(\d{4})$/;
+  return ssnString
+  && regex.test(ssnString);
+};
+
+/**
+ * @name validateEmail
+ * @description Validates that the guest email exists and is in the correct format 'x@x.x'
+ * @param {Object} formData
+ * @returns boolean
+ */
+export const validateEmail = (emailString) => {
+  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z]+\.[A-Za-z]+$/;
+  //TODO: might have issue if it's null?
+  return emailString
+  && regex.test(emailString);
+};
+/**
  * @name validateCheckInDate
  * @description validates that the check in
  * data string exists and is in the correct format 'mm-dd-yyyy'
@@ -62,18 +87,7 @@ export const validateCheckInDate = (formData) => {
   && regex.test(formData.checkInDate);
 };
 
-/**
- * @name validateGuestEmail
- * @description Validates that the guest email exists and is in the correct format 'x@x.x'
- * @param {Object} formData
- * @returns boolean
- */
-export const validateGuestEmail = (formData) => {
-  const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  return formData.guestEmail !== undefined
-  && formData.guestEmail !== null
-  && regex.test(formData.guestEmail);
-};
+
 /**
  * @name AddReservation
  * @description Displays a form to update or create a new reservation
@@ -81,38 +95,64 @@ export const validateGuestEmail = (formData) => {
  */
 const AddReservation = () => {
   const history = useHistory();
-  const { reservationId } = useParams();
+  const { patientId } = useParams();
   const initialFormData = {
-    user: 'user',
-    guestEmail: '',
-    roomTypeId: null,
-    checkInDate: '',
-    numberOfNights: 0
+    firstName: '',
+    lastName: '',
+    ssn: '',
+    email: '',
+    street: '',
+    city: '',
+    state: '',
+    postal: '',
+    age: null,
+    height: null,
+    weight: null,
+    insurance: '',
+    gender: ''
   };
   const [formData, setFormData] = useState(initialFormData);
   const [apiError, setApiError] = useState(false);
   const [roomData, setRoomData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [roomOptions, setRoomOptions] = useState([]);
-  const [roomName, setRoomName] = useState('');
   const [formErrorMessage, setFormErrorMessage] = useState(null);
   const [emptyFieldErrors, setEmptyFieldErrors] = useState([]);
   const [invalidFieldErrors, setInvalidFieldErrors] = useState([]);
   const formHasError = useRef(false);
   const emptyFields = useRef([]);
-  const numberOfNightsInvalid = useRef(false);
+  const firstNameInvalid = useRef(false);
+  const lastNameInvalid = useRef(false);
   const guestEmailInvalid = useRef(false);
   const checkInDateInvalid = useRef(false);
 
-  useEffect(() => {
-    fetchRoomData(setRoomData, setRoomOptions, setApiError);
-  }, []);
+  const formInputTypes = {
+    firstName: 'text',
+    lastName: 'text',
+    ssn: 'text',
+    email: 'email',
+    street: 'text',
+    city: 'text',
+    state: 'text',
+    postal: 'text',
+    age: 'number',
+    height: 'number',
+    weight: 'number',
+    insurance: 'text',
+    gender: 'select'
+  };
+
+  const genderOptions = [
+    "Male",
+    "Female",
+    "Other"
+  ];
+    
 
   useEffect(() => {
-    if (reservationId && !dataLoaded && roomData.length) {
-      getInitialData(reservationId, setFormData, setDataLoaded, setRoomName, roomData, setApiError);
+    if (patientId && !dataLoaded) {
+      getInitialData(patientId, setFormData, setDataLoaded, setApiError);
     }
-  }, [reservationId, dataLoaded, roomData]);
+  }, [patientId, dataLoaded]);
 
   /**
    * validates all fields.
@@ -120,7 +160,8 @@ const AddReservation = () => {
   const validateFormData = () => {
     formHasError.current = false;
     emptyFields.current = getEmptyFields(formData);
-    numberOfNightsInvalid.current = !validateNumberOfNights(formData);
+    firstNameInvalid.current = !validateNameStrings(formData.firstName);
+    lastNameInvalid.current = !validateNameStrings(formData.lastName);
     checkInDateInvalid.current = !validateCheckInDate(formData);
     guestEmailInvalid.current = !validateGuestEmail(formData);
     if (emptyFields.current.length
@@ -158,19 +199,19 @@ const AddReservation = () => {
     }
   };
 
-  /**
-   * takes the room-type name information and sets it to a valid roomTypeId.
-   */
-  const handleRoomId = () => {
-    if (roomName && roomData) {
-      const singleRoomData = roomData.find((room) => room.name === roomName);
-      if (singleRoomData !== undefined) {
-        setFormData({ ...formData, roomTypeId: singleRoomData.id });
-      } else {
-        setFormData({ ...formData, roomTypeId: null });
-      }
-    }
-  };
+  // /**
+  //  * takes the room-type name information and sets it to a valid roomTypeId.
+  //  */
+  // const handleRoomId = () => {
+  //   if (roomName && roomData) {
+  //     const singleRoomData = roomData.find((room) => room.name === roomName);
+  //     if (singleRoomData !== undefined) {
+  //       setFormData({ ...formData, roomTypeId: singleRoomData.id });
+  //     } else {
+  //       setFormData({ ...formData, roomTypeId: null });
+  //     }
+  //   }
+  // };
 
   /**
    * Updates formData as a user updates the input.
@@ -178,12 +219,8 @@ const AddReservation = () => {
    */
   const handleFormChange = (e) => {
     formHasError.current = false;
-    if (e.target.id !== 'roomTypeId') {
-      setFormData({ ...formData, [e.target.id]: e.target.value });
-    } else {
-      setRoomName(e.target.value);
-      handleRoomId();
-    }
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+    
   };
 
   /**
@@ -195,7 +232,7 @@ const AddReservation = () => {
     generateError();
     if (!formHasError.current) {
       let newReservation;
-      if (reservationId) {
+      if (patientId) {
         newReservation = await updateReservation(formData, setApiError);
       } else {
         newReservation = await saveReservation(formData, setApiError);
@@ -211,84 +248,52 @@ const AddReservation = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <h2>
-        {reservationId ? 'Update ' : 'New '}
+      {/* <h2>
+        {patientId ? 'Update ' : 'New '}
         {' '}
         Reservation
-      </h2>
+      </h2> */}
       {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          <FormItem
-            placeholder="example@example.com"
-            type="email"
-            id="guestEmail"
-            label="Guest Email:"
-            className={(emptyFieldErrors.includes('guestEmail') || invalidFieldErrors.includes('guestEmail')) && styles.invalidField}
-            onChange={handleFormChange}
-            value={formData.guestEmail}
-            dataAU="guest-email-input"
-          />
-          {
-              (emptyFieldErrors.includes('guestEmail') || invalidFieldErrors.includes('guestEmail'))
-              && (
-              <FormHelperText className={styles.helperText}>
-                {constants.INVAID_EMAIL}
-              </FormHelperText>
+          {Object.keys(formInputTypes).map((attribute) => {
+            let styleClass = null;
+            // let helperText = '';
+            // If the form attribute is listed as an empty field when errors are generated...
+            // Change the style of the input box
+            if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
+              styleClass = styles.invalidField;
+            }else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
+              styleClass = styles.invalidField;
+            }
+            if(attribute === "gender"){
+              return (
+                <FormItemDropdown
+                  key={attribute}
+                  onChange={handleFormChange}
+                  value={formData[attribute]}
+                  className={styleClass}
+                  id={attribute}
+                  label={attribute}
+                  options={genderOptions}
+                />
+                //Put form helper text
               )
-}
-          <FormItem
-            placeholder="mm-dd-yyyy"
-            id="checkInDate"
-            type="text"
-            label="Check-in Date:"
-            className={(emptyFieldErrors.includes('checkInDate') || invalidFieldErrors.includes('checkInDate'))
-                  && styles.invalidField}
-            onChange={handleFormChange}
-            value={formData.checkInDate}
-            dataAU="checkin-date-input"
-          />
-          {(emptyFieldErrors.includes('checkInDate') || invalidFieldErrors.includes('checkInDate'))
-              && (
-              <FormHelperText className={styles.helperText}>
-                {constants.INVALID_DATE}
-              </FormHelperText>
-              )}
-          <FormItem
-            id="numberOfNights"
-            type="number"
-            label="Number of Nights:"
-            className={(emptyFieldErrors.includes('numberOfNights') || invalidFieldErrors.includes('numberOfNights'))
-              && styles.invalidField}
-            value={formData.numberOfNights}
-            onChange={handleFormChange}
-            dataAU="nights-input"
-          />
-          {(emptyFieldErrors.includes('numberOfNights') || invalidFieldErrors.includes('numberOfNights'))
-              && (
-              <FormHelperText className={styles.helperText}>
-                {constants.NUMBER_INVALID}
-              </FormHelperText>
-              )}
-          <FormItemDropdown
-            placeholder="Select room type"
-            id="roomTypeId"
-            type="select"
-            label="Room Type:"
-            className={emptyFields.current.includes('roomTypeId')
-              && styles.invalidField}
-            onChange={handleFormChange}
-            options={roomOptions}
-            value={roomName}
-            formValue={formData.roomTypeId}
-            dataAU="room-type-select"
-          />
-          {(emptyFields.current && emptyFields.current.includes('roomTypeId'))
-              && (
-              <FormHelperText className={styles.helperText}>
-                {constants.ROOM_TYPE_INVALID}
-              </FormHelperText>
-              )}
+            }
+            return (
+              <FormItem 
+                key={attribute}
+                onChange={handleFormChange}
+                value={formData[attribute]}
+                id={attribute}
+                type={formInputTypes[attribute]}
+                label={attribute}
+                className={styleClass}
+                step={1}
+              />
+            )
+
+          })}
           <div className={styles.buttonContainer}>
             <Button
               type="button"
@@ -317,7 +322,7 @@ const AddReservation = () => {
               }}
               disabled={formHasError.current}
             >
-              {reservationId ? 'Update' : 'Create'}
+              {patientId ? 'Update' : 'Create'}
             </Button>
           </div>
         </form>
