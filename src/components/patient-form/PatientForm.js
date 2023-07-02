@@ -153,7 +153,7 @@ const PatientForm = () => {
     },
     email: {
       type: 'email',
-      error: constants.INVAID_EMAIL
+      error: constants.INVALID_EMAIL
     },
     street: {
       type: 'text'
@@ -238,7 +238,9 @@ const PatientForm = () => {
    * sets the error message to list empty fields.
    */
   const generateError = () => {
+    formHasError.current = false;
     setFormErrorMessage(null);
+    setInvalidFieldErrors([]);
     validateFormData();
     let errorMessage = null;
     if (formHasError.current) {

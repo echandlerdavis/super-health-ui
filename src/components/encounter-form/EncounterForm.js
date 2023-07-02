@@ -82,7 +82,7 @@ export const validateNumberGreaterThanZero = (number) => !number || number > 0;
 
 // TODO: figure out if you need the validate Date
 export const validateDateFormat = (date) => {
-  const regex = /^\\d{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
+  const regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
   return date
   && regex.test(date);
 };
@@ -129,36 +129,33 @@ const EncounterForm = () => {
 
   const formInputInfo = {
     notes: {
-      type: 'text',
-      error: constants.INVALID_NAME
+      type: 'text'
     },
     visitCode: {
       type: 'text',
-      error: constants.INVALID_SSN
+      error: constants.INVALID_VISIT_CODE
     },
     provider: {
-      type: 'email',
-      error: constants.INVAID_EMAIL
+      type: 'text'
     },
     billingCode: {
       type: 'text',
-      error: constants.INVAID_EMAIL
+      error: constants.INVALID_BILLING_CODE
     },
     icd10: {
       type: 'text',
-      error: constants.INVAID_EMAIL
+      error: constants.INVALID_ICD10
     },
     totalCost: {
       type: 'number',
-      error: constants.INVALID_STATE
+      error: constants.INVALID_COST
     },
     copay: {
       type: 'number',
-      error: constants.INVALID_POSTAL
+      error: constants.INVALID_COST
     },
     chiefComplaint: {
-      type: 'text',
-      error: constants.NUMBER_INVALID
+      type: 'text'
     },
     pulse: {
       type: 'number',
@@ -173,7 +170,7 @@ const EncounterForm = () => {
       error: constants.NUMBER_INVALID
     },
     date: {
-      type: 'date',
+      type: 'text',
       error: constants.INVALID_DATE
     }
   };
@@ -208,6 +205,7 @@ const EncounterForm = () => {
         || systolicInvalid.current
         || diastolicInvalid.current
         || dateInvalid.current) {
+      console.log('Something has error');
       formHasError.current = true;
     } else {
       formHasError.current = false;
@@ -219,6 +217,8 @@ const EncounterForm = () => {
      * sets the error message to list empty fields.
      */
   const generateError = () => {
+    formHasError.current = false;
+    setInvalidFieldErrors([]);
     setFormErrorMessage(null);
     validateFormData();
     let errorMessage = null;
@@ -324,6 +324,7 @@ const EncounterForm = () => {
                   value={formData[attribute]}
                   id={attribute}
                   type={formInputInfo[attribute].type}
+                  placeholder={(attribute === 'totalCost' || attribute === 'copay') ? 0.00 : ''}
                   label={attribute}
                   className={styleClass}
                   step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}

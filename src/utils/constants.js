@@ -20,15 +20,18 @@ module.exports = Object.freeze({
   NUMBER_INVALID: 'Must be number greater than zero',
   EMPTY_FIELD: 'This Field is required',
   // Patient Form Messages
-  INVAID_EMAIL: 'Must be a valid email.',
+  INVALID_EMAIL: 'Must be a valid email.',
   INVALID_SSN: 'Must have format DDD-DD-DDDD',
   INVALID_NAME: 'Must be alphabetic characters',
   INVALID_STATE: 'Must be two capital letters',
   INVALID_POSTAL: 'Must have format DDDDD or DDDDD-DDDD',
   INVALID_GENDER: 'Must select a gender',
 
-  // Room type form messages
-  NAME_INVALID: 'Must be at least 3 characters',
-  INVALID_DATE: 'Date must be mm-dd-yyyy'
+  // Encounter form messages
+  INVALID_VISIT_CODE: 'Must have format LDL DLD where L is a capital letter and D is a digit',
+  INVALID_BILLING_CODE: 'Must have format DDD.DDD.DDD-DD',
+  INVALID_ICD10: 'Must have format LDD where L is a capital letter and D is a digit',
+  INVALID_COST: 'Must be a value greater than zero with two decimal places',
+  INVALID_DATE: 'Date must be yyyy-mm-dd'
 
 });
