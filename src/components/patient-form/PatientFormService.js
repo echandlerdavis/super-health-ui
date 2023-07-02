@@ -8,21 +8,12 @@ import constants from '../../utils/constants';
  * @param {Function} setRoomOptions - sets the options to a list of names.
  * @param {Function} setApiError - sets error if error
  */
-// export const fetchRoomData = (setRoomData, setRoomOptions, setApiError) => {
-//   HttpHelper(constants.ROOM_TYPE_ENDPOINT, 'GET')
-//     .then((response) => response.json())
-//     .then((data) => {
-//       setRoomData(data);
-//       const roomArray = [];
-//       Object.keys(data).forEach((key) => {
-//         if (data[key].active === true) {
-//           roomArray.push(data[key].name);
-//         }
-//       });
-//       setRoomOptions(roomArray);
-//     })
-//     .catch(() => setApiError(true));
-// };
+export const fetchPatientEmails = (setPatientEmails, setApiError) => {
+  HttpHelper(`${constants.PATIENTS_ENDPOINT}/emails`, 'GET')
+    .then((response) => response.json())
+    .then(setPatientEmails)
+    .catch(() => setApiError(true));
+};
 
 /**
  * @name saveReservation

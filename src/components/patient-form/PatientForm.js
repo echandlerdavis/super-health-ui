@@ -10,7 +10,7 @@ import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
 import FormItem from '../form/FormItem';
 import {
-  savePatient, getInitialData, updatePatient
+  savePatient, getInitialData, updatePatient, fetchPatientEmails
 } from './PatientFormService';
 import styles from './PatientForm.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
@@ -66,11 +66,19 @@ export const validateSsn = (ssnString) => {
  * @param {String} formData
  * @returns boolean
  */
-export const validateEmail = (emailString) => {
+export const validateEmailFormat = (emailString) => {
   const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z]+\.[A-Za-z]+$/;
   // TODO: might have issue if it's null?
   return emailString
   && regex.test(emailString);
+};
+
+export const validateEmailDoesNotExist = (patientEmail, patientId, emailMap) => {
+  const emailMatch = Object.keys(emailMap).find(
+    (key) => emailMap[key] === patientEmail && key !== patientId
+  );
+  console.log(emailMatch);
+  return emailMatch === undefined;
 };
 
 /**
@@ -119,6 +127,7 @@ const PatientForm = () => {
     gender: ''
   };
   const [formData, setFormData] = useState(initialFormData);
+  const [patientEmails, setPatientEmails] = useState({});
   const [apiError, setApiError] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [formErrorMessage, setFormErrorMessage] = useState(null);
@@ -130,6 +139,7 @@ const PatientForm = () => {
   const lastNameInvalid = useRef(false);
   const ssnInvalid = useRef(false);
   const emailInvalid = useRef(false);
+  const emailExists = useRef(false);
   const stateInvalid = useRef(false);
   const zipInvalid = useRef(false);
   const ageInvalid = useRef(false);
@@ -202,6 +212,9 @@ const PatientForm = () => {
     }
   }, [patientId, dataLoaded]);
 
+  useEffect(() => {
+    fetchPatientEmails(setPatientEmails, setApiError);
+  }, []);
   /**
    * validates all fields.
    */
@@ -210,7 +223,8 @@ const PatientForm = () => {
     firstNameInvalid.current = !validateNameStrings(formData.firstName);
     lastNameInvalid.current = !validateNameStrings(formData.lastName);
     ssnInvalid.current = !validateSsn(formData.ssn);
-    emailInvalid.current = !validateEmail(formData.email);
+    emailInvalid.current = !validateEmailFormat(formData.email);
+    emailExists.current = !validateEmailDoesNotExist(formData.email, patientId, patientEmails);
     stateInvalid.current = !validateState(formData.state);
     zipInvalid.current = !validateZip(formData.postal);
     ageInvalid.current = !validateNumberGreaterThanZero(formData.age);
@@ -222,6 +236,7 @@ const PatientForm = () => {
       || lastNameInvalid.current
       || ssnInvalid.current
       || emailInvalid.current
+      || emailExists.current
       || stateInvalid.current
       || zipInvalid.current
       || ageInvalid.current
@@ -247,6 +262,14 @@ const PatientForm = () => {
       if (emptyFields.current.length) {
         setEmptyFieldErrors([...emptyFields.current]);
         errorMessage = constants.FORM_FIELDS_EMPTY(emptyFields.current);
+      }
+      if (emailExists.current) {
+        setInvalidFieldErrors((prev) => [...prev, 'emailExists']);
+        if (errorMessage) {
+          errorMessage = errorMessage.concat(' **AND** ', constants.EMAIL_ALREADY_EXISTS);
+        } else {
+          errorMessage = constants.EMAIL_ALREADY_EXISTS;
+        }
       }
       if (firstNameInvalid.current) {
         setInvalidFieldErrors((prev) => [...prev, 'firstName']);
@@ -327,7 +350,7 @@ const PatientForm = () => {
         {' '}
         Patient
       </h2>
-      {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+      {(emptyFieldErrors.length !== 0 || invalidFieldErrors.includes('emailExists') || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
           {Object.keys(formInputInfo).map((attribute) => {
@@ -338,7 +361,10 @@ const PatientForm = () => {
             if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
               styleClass = styles.invalidField;
               helperText = constants.EMPTY_FIELD;
-            } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
+            } else if (attribute === 'email' && (invalidFieldErrors.includes(attribute) || invalidFieldErrors.includes('emailExists'))) {
+              styleClass = styles.invalidField;
+              helperText = formInputInfo[attribute].error;
+            } else if (invalidFieldErrors.includes(attribute)) {
               styleClass = styles.invalidField;
               helperText = formInputInfo[attribute].error;
             }

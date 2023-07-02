@@ -324,7 +324,7 @@ const EncounterForm = () => {
                   value={formData[attribute]}
                   id={attribute}
                   type={formInputInfo[attribute].type}
-                  placeholder={(attribute === 'totalCost' || attribute === 'copay') ? 0.00 : ''}
+                  placeholder={(attribute === 'totalCost' || attribute === 'copay') ? formData[attribute].toFixed(2) : formData[attribute]}
                   label={attribute}
                   className={styleClass}
                   step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}

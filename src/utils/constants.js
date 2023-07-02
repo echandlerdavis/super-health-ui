@@ -26,6 +26,7 @@ module.exports = Object.freeze({
   INVALID_STATE: 'Must be two capital letters',
   INVALID_POSTAL: 'Must have format DDDDD or DDDDD-DDDD',
   INVALID_GENDER: 'Must select a gender',
+  EMAIL_ALREADY_EXISTS: 'This email already exists in our database under a different name.',
 
   // Encounter form messages
   INVALID_VISIT_CODE: 'Must have format LDL DLD where L is a capital letter and D is a digit',

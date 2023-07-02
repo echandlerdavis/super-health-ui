@@ -4,7 +4,7 @@ import {
   IconButton, Card, CardContent, CardActions, Typography
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
 import styles from '../encounter-card/RoomTypeCard.module.css';
@@ -27,11 +27,12 @@ const useStyles = makeStyles(() => ({
  * @return component
  */
 const ViewEncounterCard = ({ encounter, apiError }) => {
+  const { patientId } = useParams();
   const classes = useStyles();
   const history = useHistory();
 
   const handleDetailsClick = () => {
-    history.push('/edit');
+    history.push(`/patients/${patientId}/encounters/${encounter.id}/edit`);
   };
 
   return (
