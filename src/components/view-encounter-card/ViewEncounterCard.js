@@ -1,9 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
+import {
+  IconButton, Card, CardContent, CardActions, Typography
+} from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
 import styles from '../encounter-card/RoomTypeCard.module.css';
@@ -27,6 +28,11 @@ const useStyles = makeStyles(() => ({
  */
 const ViewEncounterCard = ({ encounter, apiError }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleDetailsClick = () => {
+    history.push('/edit');
+  };
 
   return (
     <>
@@ -94,7 +100,13 @@ const ViewEncounterCard = ({ encounter, apiError }) => {
               </div>
             </div>
           </CardContent>
-          <CardActions disableSpacing />
+          <CardActions disableSpacing>
+            <div className={styles.buttons}>
+              <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
+                <Edit />
+              </IconButton>
+            </div>
+          </CardActions>
         </div>
       </Card>
     </>

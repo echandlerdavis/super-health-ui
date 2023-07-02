@@ -9,11 +9,10 @@ import styles from './FormItem.module.css';
  * @return component
  */
 const FormItem = ({
-  onChange, value, id, label, placeholder, type, className, min, step, dataAU
+  onChange, value, id, label, placeholder, type, className, min, step
 }) => {
   const checkbox = (
     <Checkbox
-      data-au={dataAU}
       id={id}
       value={value}
       checked={value}
@@ -25,7 +24,6 @@ const FormItem = ({
 
   let inputBox = (
     <input
-      data-au={dataAU}
       className={`${styles.input} ${className}`}
       id={id}
       onChange={onChange}
@@ -50,7 +48,6 @@ const FormItem = ({
   if (type === 'textarea') {
     inputBox = (
       <textarea
-        data-au={dataAU}
         className={`${styles.textarea} ${className}`}
         id={id}
         onChange={onChange}

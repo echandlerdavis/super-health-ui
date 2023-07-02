@@ -15,8 +15,6 @@ import {
 import styles from './PatientForm.module.css';
 import FormItemDropdown from '../form/FormItemDropdown';
 
-// TODO: FormHelperText and FormHelperText validation
-
 /**
    * @name getEmptyFields
    * @description Generates a list of empty fields

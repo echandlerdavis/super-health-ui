@@ -44,7 +44,7 @@ const ViewPatientPage = () => {
               size="small"
               variant="contained"
               startIcon={<Add />}
-              onClick={() => history.push('/create')}
+              onClick={() => history.push(`${patient.id}/encounters`)}
             >
               Create
             </Button>
