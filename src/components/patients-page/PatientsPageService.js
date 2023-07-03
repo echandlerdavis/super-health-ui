@@ -24,13 +24,13 @@ const fetchPatients = (setPatients, setApiError) => {
 };
 
 /**
- * @name deleteReservation
+ * @name deletePatient
  * @description removes reservation from the database.
  * @param {int} id - id of reservation to be deleted
  * @param {Function} setApiError - sets error if error
  */
-export const deleteReservation = (id, setApiError) => {
-  HttpHelper(`${constants.RESERVATIONS_ENDPOINT}/${id}`, 'DELETE')
+export const deletePatient = (id, setApiError) => {
+  HttpHelper(`${constants.PATIENTS_ENDPOINT}/${id}`, 'DELETE')
     .then((response) => {
       if (response.ok) {
         return;

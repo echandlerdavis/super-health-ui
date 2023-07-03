@@ -9,6 +9,7 @@ import { Delete } from '@material-ui/icons';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import { useHistory } from 'react-router-dom';
 import styles from './PatientCard.module.css';
+import AppAlert from '../alert/Alert';
 
 /**
  * @name useStyles
@@ -29,7 +30,7 @@ const useStyles = makeStyles(() => ({
  * @return component
  */
 const PatientCard = ({
-  patient, handleDelete
+  patient, handleDelete, deleteErrorList, deleteErrorMessage
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -73,7 +74,7 @@ const PatientCard = ({
             </div>
 
           </CardActions>
-
+          {deleteErrorList.includes(patient.id) && <div><AppAlert severity="error" title="Error" message={deleteErrorMessage} /></div>}
         </div>
       </Card>
     </>

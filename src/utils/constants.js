@@ -15,6 +15,10 @@ module.exports = Object.freeze({
   SINGLE_PATIENT_ENDPOINT: (id) => `/patients/${id}`,
   SEVERITY_LEVELS,
 
+  // Delete Patient Error Messages
+  HAS_ENCOUNTERS: 'You cannot delete a patient that has associated encounters.',
+  DELETE_API_ERROR: 'There was an issue deleting this patient. Please refresh and try again.',
+
   // General Form Error Messages
   FORM_FIELDS_EMPTY: (emptyFields) => `The following fields can not be empty: ${emptyFields.join(', ')}`,
   NUMBER_INVALID: 'Must be number greater than zero',
