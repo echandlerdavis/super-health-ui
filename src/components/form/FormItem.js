@@ -36,11 +36,21 @@ const FormItem = ({
     />
   );
 
-  if (label === 'Rate:') {
+  if (label === 'totalCost' || label === 'copay') {
     inputBox = (
-      <div className={styles.rateInputBox}>
-        <div className={styles.rateInputIcon}>$</div>
+      <div className={styles.extraLabelInputBox}>
+        <div className={styles.extraLabelInputIcon}>$</div>
         {inputBox}
+      </div>
+    );
+  }
+  if (label === 'height' || label === 'weight') {
+    inputBox = (
+      <div className={styles.extraLabelInputBox}>
+        {inputBox}
+        <div className={styles.extraLabelInputIcon}>
+          {label === 'height' ? 'in.' : 'lbs.'}
+        </div>
       </div>
     );
   }

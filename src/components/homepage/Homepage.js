@@ -11,7 +11,7 @@ const HomePage = () => (
   <AppAlert
     severity={constants.SEVERITY_LEVELS.INFO}
     title="Info"
-    message="Get started by clicking on the Reservations or Room-Types links above!"
+    message="Get started by clicking on the Patients link above!"
   />
 );
 

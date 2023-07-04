@@ -19,7 +19,6 @@ const PatientsPage = () => {
   const [deleteApiError, setDeleteApiError] = useState(false);
   const [deleteErrorList, setDeleteErrorList] = useState([]);
   const [deleteErrorMessage, setDeleteErrorMessage] = useState('');
-  // const deleteError = useRef(false);
   const history = useHistory();
 
   useEffect(() => {

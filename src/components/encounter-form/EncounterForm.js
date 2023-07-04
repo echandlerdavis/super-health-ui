@@ -101,8 +101,8 @@ const EncounterForm = () => {
     provider: '',
     billingCode: '',
     icd10: '',
-    totalCost: 0.00,
-    copay: 0.00,
+    totalCost: '',
+    copay: '',
     chiefComplaint: '',
     pulse: '',
     systolic: '',
@@ -205,14 +205,12 @@ const EncounterForm = () => {
         || systolicInvalid.current
         || diastolicInvalid.current
         || dateInvalid.current) {
-      console.log('Something has error');
       formHasError.current = true;
     } else {
       formHasError.current = false;
     }
   };
 
-  // TODO: consider just having the minimum value of the numbers be 0.01
   /**
      * sets the error message to list empty fields.
      */
@@ -304,40 +302,42 @@ const EncounterForm = () => {
       {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          {Object.keys(formInputInfo).map((attribute) => {
-            let styleClass = null;
-            let helperText = null;
-            // If the form attribute is listed as an empty field when errors are generated...
-            // Change the style of the input box
-            if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
-              styleClass = styles.invalidField;
-              helperText = constants.EMPTY_FIELD;
-            } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
-              styleClass = styles.invalidField;
-              helperText = formInputInfo[attribute].error;
-            }
-            return (
-              <div key={attribute}>
-                <FormItem
-                  key={attribute}
-                  onChange={handleFormChange}
-                  value={formData[attribute]}
-                  id={attribute}
-                  type={formInputInfo[attribute].type}
-                  placeholder={(attribute === 'totalCost' || attribute === 'copay') ? formData[attribute].toFixed(2) : formData[attribute]}
-                  label={attribute}
-                  className={styleClass}
-                  step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}
-                />
-                {helperText
+          <div className={styles.inputs}>
+            {Object.keys(formInputInfo).map((attribute) => {
+              let styleClass = null;
+              let helperText = null;
+              // If the form attribute is listed as an empty field when errors are generated...
+              // Change the style of the input box
+              if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
+                styleClass = styles.invalidField;
+                helperText = constants.EMPTY_FIELD;
+              } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
+                styleClass = styles.invalidField;
+                helperText = formInputInfo[attribute].error;
+              }
+              return (
+                <div key={attribute}>
+                  <FormItem
+                    key={attribute}
+                    onChange={handleFormChange}
+                    value={formData[attribute]}
+                    id={attribute}
+                    type={formInputInfo[attribute].type}
+                    placeholder={(attribute === 'totalCost' || attribute === 'copay') ? '0.00' : ''}
+                    label={attribute}
+                    className={styleClass}
+                    step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}
+                  />
+                  {helperText
                   && (
                   <FormHelperText className={styles.helperText}>
                     {helperText}
                   </FormHelperText>
                   )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
           <div className={styles.buttonContainer}>
             <Button
               type="button"

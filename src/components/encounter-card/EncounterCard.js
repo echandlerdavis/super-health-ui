@@ -9,7 +9,7 @@ import { Pageview } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
-import styles from './RoomTypeCard.module.css';
+import styles from './EncounterCard.module.css';
 
 /**
  * @name useStyles

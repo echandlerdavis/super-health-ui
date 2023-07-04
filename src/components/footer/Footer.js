@@ -9,7 +9,7 @@ function Copyright() {
   return (
     <Typography variant="body2">
       {new Date().getFullYear()}
-      {' Hotel Bookings, Inc.'}
+      {' Super Health, Inc.'}
       {copyright}
     </Typography>
   );

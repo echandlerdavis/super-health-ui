@@ -7,7 +7,7 @@ import { Edit } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
-import styles from '../encounter-card/RoomTypeCard.module.css';
+import styles from '../encounter-card/EncounterCard.module.css';
 
 /**
  * @name useStyles

@@ -20,16 +20,15 @@
   margin-bottom: .5em;
 }
 
-.rateInputIcon{
-  margin-top: .5em;
+.extraLabelInputIcon{
   padding: .5em;
 }
 
-.rateInputBox{
+.extraLabelInputBox{
   display: flex;
 }
 
-.rateInputBox div {
+.extraLabelInputBox div {
   display: flex;
   width: auto!important;
   text-align: center;
