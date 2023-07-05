@@ -89,13 +89,15 @@ const ViewEncounterCard = ({ encounter, apiError }) => {
                 </Typography>
                 <Typography variant="body2" color="textSecondary">Pulse:</Typography>
                 <Typography data-au="pulse-label">
-                  {encounter.pulse}
+                  {encounter.pulse ? encounter.pulse : 'N/A'}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">Blood Pressure:</Typography>
                 <Typography data-au="systolic-label">
-                  {encounter.systolic}
-                  /
-                  {encounter.diastolic}
+                  {(encounter.systolic && encounter.diastolic)
+                    ? `${encounter.systolic
+                    }/${encounter.diastolic}`
+                    : 'N/A'}
+
                 </Typography>
 
               </div>
