@@ -1,0 +1,33 @@
+.CardContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;    
+}
+
+.CardContainer > div:first-child{
+    width: 95%;
+}
+
+.content{
+    display: flex;
+    width: auto;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content > div {
+    padding: 1em;
+    margin: 1em;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.buttons > button {
+    margin: 0.5em;
+}

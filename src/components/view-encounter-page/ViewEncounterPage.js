@@ -13,16 +13,16 @@ import fetchEncounter from './ViewEncounterPageService';
  * @return component
  */
 const ViewEncounterPage = () => {
-  const { id, patientId } = useParams();
+  const { encounterId, patientId } = useParams();
   const [encounter, setEncounter] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [apiError, setApiError] = useState(false);
 
   useEffect(() => {
     if (!dataLoaded) {
-      fetchEncounter(id, patientId, setEncounter, setDataLoaded, setApiError);
+      fetchEncounter(encounterId, patientId, setEncounter, setDataLoaded, setApiError);
     }
-  }, [id, patientId, dataLoaded]);
+  }, [encounterId, patientId, dataLoaded]);
 
   return (
     <>

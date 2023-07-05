@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import styles from './RoomTypePage.module.css';
+import styles from './ViewPatientPage.module.css';
 import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
 import fetchPatient from './ViewPatientPageService';

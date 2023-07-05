@@ -5,10 +5,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-// import { Delete } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { Edit } from '@material-ui/icons';
-import styles from '../patient-card/PatientCard.module.css';
+import styles from './ViewPatientCard.module.css';
 
 /**
  * @name useStyles
@@ -63,6 +62,9 @@ const ViewPatientCard = ({
                 <Typography data-au="email-label">
                   {patient.email}
                 </Typography>
+              </div>
+
+              <div>
                 <Typography variant="body2" color="textSecondary">Street: </Typography>
                 <Typography data-au="street-label">
                   {patient.street}
@@ -79,9 +81,9 @@ const ViewPatientCard = ({
                 <Typography data-au="zip-label">
                   {patient.postal}
                 </Typography>
-
               </div>
               <div>
+
                 <Typography variant="body2" color="textSecondary">Age: </Typography>
                 <Typography data-au="age-label">
                   {patient.age}
@@ -110,10 +112,6 @@ const ViewPatientCard = ({
               <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
                 <Edit />
               </IconButton>
-              {/* <IconButton data-au="delete-button" aria-label="delete"
-               id={patient.id} onClick={handleDelete}>
-                <Delete />
-              </IconButton> */}
             </div>
 
           </CardActions>

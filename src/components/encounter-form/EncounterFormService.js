@@ -54,7 +54,7 @@ export const getInitialEncounterData = (
       throw new Error(constants.API_ERROR);
     })
     .then((data) => {
-      setFormData(data);
+      setFormData({ ...data, patientId });
       setDataLoaded(true);
     })
     .catch(() => {

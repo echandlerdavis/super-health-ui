@@ -77,7 +77,6 @@ export const validateEmailDoesNotExist = (patientEmail, patientId, emailMap) => 
   const emailMatch = Object.keys(emailMap).find(
     (key) => emailMap[key] === patientEmail && key !== patientId
   );
-  console.log(emailMatch);
   return emailMatch === undefined;
 };
 
@@ -329,7 +328,6 @@ const PatientForm = () => {
         newPatient = await savePatient(formData, setApiError);
       }
       if (newPatient && !newPatient.error) {
-        console.log("it's fine");
         if (patientId) {
           // this might just be setting a state so it renders a view only version
           history.push(`/patients/${patientId}`);

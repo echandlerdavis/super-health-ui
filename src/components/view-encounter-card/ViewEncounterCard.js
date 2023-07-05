@@ -7,7 +7,7 @@ import { Edit } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants from '../../utils/constants';
-import styles from '../encounter-card/EncounterCard.module.css';
+import styles from './ViewEncounterCard.module.css';
 
 /**
  * @name useStyles
@@ -59,6 +59,8 @@ const ViewEncounterCard = ({ encounter, apiError }) => {
                 <Typography data-au="id-label">
                   {encounter.notes}
                 </Typography>
+              </div>
+              <div>
                 <Typography variant="body2" color="textSecondary">Visit Code:</Typography>
                 <Typography data-au="visit-code-label">
                   {encounter.visitCode}
@@ -71,12 +73,12 @@ const ViewEncounterCard = ({ encounter, apiError }) => {
                 <Typography data-au="billing-code-label">
                   {encounter.billingCode}
                 </Typography>
-              </div>
-              <div>
-                <Typography variant="body2" color="textSecondary">International Classification of Dieseases:</Typography>
+                <Typography variant="body2" color="textSecondary">ICD 10:</Typography>
                 <Typography data-au="icd10-label">
                   {encounter.icd10}
                 </Typography>
+              </div>
+              <div>
                 <Typography variant="body2" color="textSecondary">Total Cost:</Typography>
                 <Typography data-au="total-cost-label">
                   $
