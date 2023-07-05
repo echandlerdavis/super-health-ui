@@ -353,63 +353,65 @@ const PatientForm = () => {
       {(emptyFieldErrors.length !== 0 || invalidFieldErrors.includes('emailExists') || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
       <Card className={styles.formCard}>
         <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          {Object.keys(formInputInfo).map((attribute) => {
-            let styleClass = null;
-            let helperText = null;
-            // If the form attribute is listed as an empty field when errors are generated...
-            // Change the style of the input box
-            if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
-              styleClass = styles.invalidField;
-              helperText = constants.EMPTY_FIELD;
-            } else if (attribute === 'email' && (invalidFieldErrors.includes(attribute) || invalidFieldErrors.includes('emailExists'))) {
-              styleClass = styles.invalidField;
-              helperText = formInputInfo[attribute].error;
-            } else if (invalidFieldErrors.includes(attribute)) {
-              styleClass = styles.invalidField;
-              helperText = formInputInfo[attribute].error;
-            }
-            if (attribute === 'gender') {
-              return (
-                <div key={attribute}>
-                  <FormItemDropdown
-                    key={attribute}
-                    onChange={handleFormChange}
-                    value={formData[attribute]}
-                    className={styleClass}
-                    id={attribute}
-                    label={attribute}
-                    options={genderOptions}
-                  />
-                  {helperText
+          <div className={styles.inputs}>
+            {Object.keys(formInputInfo).map((attribute) => {
+              let styleClass = null;
+              let helperText = null;
+              // If the form attribute is listed as an empty field when errors are generated...
+              // Change the style of the input box
+              if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
+                styleClass = styles.invalidField;
+                helperText = constants.EMPTY_FIELD;
+              } else if (attribute === 'email' && (invalidFieldErrors.includes(attribute) || invalidFieldErrors.includes('emailExists'))) {
+                styleClass = styles.invalidField;
+                helperText = formInputInfo[attribute].error;
+              } else if (invalidFieldErrors.includes(attribute)) {
+                styleClass = styles.invalidField;
+                helperText = formInputInfo[attribute].error;
+              }
+              if (attribute === 'gender') {
+                return (
+                  <div key={attribute}>
+                    <FormItemDropdown
+                      key={attribute}
+                      onChange={handleFormChange}
+                      value={formData[attribute]}
+                      className={styleClass}
+                      id={attribute}
+                      label={attribute}
+                      options={genderOptions}
+                    />
+                    {helperText
                   && (
                   <FormHelperText className={styles.helperText}>
                     {helperText}
                   </FormHelperText>
                   )}
-                </div>
-              );
-            }
-            return (
-              <div key={attribute}>
-                <FormItem
-                  key={attribute}
-                  onChange={handleFormChange}
-                  value={formData[attribute]}
-                  id={attribute}
-                  type={formInputInfo[attribute].type}
-                  label={attribute}
-                  className={styleClass}
-                  step={1}
-                />
-                {helperText
+                  </div>
+                );
+              }
+              return (
+                <div key={attribute}>
+                  <FormItem
+                    key={attribute}
+                    onChange={handleFormChange}
+                    value={formData[attribute]}
+                    id={attribute}
+                    type={formInputInfo[attribute].type}
+                    label={attribute}
+                    className={styleClass}
+                    step={1}
+                  />
+                  {helperText
                 && (
                 <FormHelperText className={styles.helperText}>
                   {helperText}
                 </FormHelperText>
                 )}
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
           <div className={styles.buttonContainer}>
             <Button
               type="button"

@@ -76,7 +76,11 @@ export const validateIcd10 = (icd10String) => {
    * @param {number} number
    * @returns
    */
-export const validateCost = (cost) => cost && cost > 0;
+export const validateCost = (cost) => {
+  const costString = cost.toString();
+  const costArray = costString.split('.');
+  return cost && cost > 0 && costArray.length === 2 && costArray[1].length === 2;
+};
 
 export const validateNumberGreaterThanZero = (number) => !number || number > 0;
 

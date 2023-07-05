@@ -11,14 +11,16 @@ h2{
 
 .formCard {
     display: flex;
-    width: 60%;
+    align-items: center;
+    width: 85%;
     margin-top: 1em;
 }
 
 .reservationForm {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 1em 2em!important;
     margin: 2em 2em!important;
@@ -31,7 +33,13 @@ h2{
     margin-bottom: 0;
 }
 
-
+.inputs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(7, auto);
+    grid-column-gap: 5%;
+    width: 100%;
+}
 
 .invalidField{
     border: .05em solid red;
