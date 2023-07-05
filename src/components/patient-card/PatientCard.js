@@ -61,21 +61,27 @@ const PatientCard = ({
                   {patient.gender}
                 </Typography>
               </div>
+              <CardActions disableSpacing>
+                <div className={styles.buttons}>
+                  <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
+                    <PageviewIcon />
+                  </IconButton>
+                  <IconButton data-au="delete-button" aria-label="delete" id={patient.id} onClick={handleDelete}>
+                    <Delete />
+                  </IconButton>
+                </div>
+              </CardActions>
             </div>
+            {deleteErrorList.includes(patient.id)
+              && (
+              <div className={styles.alert}>
+                <AppAlert severity="error" title="Error" message={deleteErrorMessage} />
+              </div>
+              )}
           </CardContent>
-          <CardActions disableSpacing>
-            <div className={styles.buttons}>
-              <IconButton data-au="view-button" aria-label="edit" onClick={handleDetailsClick}>
-                <PageviewIcon />
-              </IconButton>
-              <IconButton data-au="delete-button" aria-label="delete" id={patient.id} onClick={handleDelete}>
-                <Delete />
-              </IconButton>
-            </div>
 
-          </CardActions>
-          {deleteErrorList.includes(patient.id) && <div><AppAlert severity="error" title="Error" message={deleteErrorMessage} /></div>}
         </div>
+
       </Card>
     </>
   );

@@ -1,12 +1,13 @@
 .CardContainer{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     height: 100%;    
 }
 
 .content{
     display: flex;
+    flex-direction: row;
     width: auto;
     justify-content: space-between;
     align-items: center;
@@ -25,4 +26,8 @@
 
 .buttons > button {
     margin: 0.5em;
+}
+
+.alert > div{
+    margin-top: 0!important;
 }
