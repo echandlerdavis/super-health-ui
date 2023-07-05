@@ -1,6 +1,6 @@
-# Home Bookings, Inc.
+# Super Health, Inc.
 
-This is website for the company Hotel Bookings, Inc., where the user can view the company's data on reservations and room-types. 
+This is website for the company Super Health, Inc., where the user can view the company's data on patients and their associated encounters. 
 
 The reservation and room-type links are in the header. When you click on "Reservations", you can see a list of all the current reservations in the company's database.
 

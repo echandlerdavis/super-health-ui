@@ -4,7 +4,7 @@ import constants from '../../utils/constants';
 
 /**
  * @name HomePage
- * @description fetches products from API and displays products as product cards
+ * @description informs user where to navigate
  * @return component
  */
 const HomePage = () => (

@@ -8,8 +8,8 @@ import ViewEncounterCard from '../view-encounter-card/ViewEncounterCard';
 import fetchEncounter from './ViewEncounterPageService';
 
 /**
- * @name ViewPatientPage
- * @description fetches room types from API and displays room types as room type cards
+ * @name ViewEncounterPage
+ * @description fetches single encounter from API and displays it as a single card.
  * @return component
  */
 const ViewEncounterPage = () => {

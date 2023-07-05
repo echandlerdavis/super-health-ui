@@ -18,6 +18,7 @@ import FormItemDropdown from '../form/FormItemDropdown';
 /**
    * @name getEmptyFields
    * @description Generates a list of empty fields
+   * @param {Object} formData
    * @returns array of field names that are empty
    */
 export const getEmptyFields = (formData) => {
@@ -37,9 +38,9 @@ export const getEmptyFields = (formData) => {
 
 /**
  * @name validateNameStrings
- * @description validates that the number of nights field in the
- * form data is not null, undefined, or less than 1
- * @param {Object} formData
+ * @description validates that the name string
+ * is made up of alphabetic name characters (includes apostrophe and hypen)
+ * @param {String} nameString
  * @returns boolean
  */
 export const validateNameStrings = (nameString) => {
@@ -49,9 +50,9 @@ export const validateNameStrings = (nameString) => {
 
 /**
  * @name validateSsn
- * @description validates that the check in
- * data string exists and is in the correct format 'mm-dd-yyyy'
- * @param {Object} formData
+ * @description validates that the ssn exists and
+ *  is in the correct format DDD-DD-DDDD where D is a digit
+ * @param {String} ssnString
  * @returns boolean
  */
 export const validateSsn = (ssnString) => {
@@ -62,8 +63,8 @@ export const validateSsn = (ssnString) => {
 
 /**
  * @name validateEmail
- * @description Validates that the guest email exists and is in the correct format 'x@x.x'
- * @param {String} formData
+ * @description Validates that the email exists and is in the correct format 'x@x.x'
+ * @param {String} emailString
  * @returns boolean
  */
 export const validateEmailFormat = (emailString) => {
@@ -73,6 +74,15 @@ export const validateEmailFormat = (emailString) => {
   && regex.test(emailString);
 };
 
+/**
+ * @name validateEmailDoesNotExist
+ * @description Validates that the email does not already belong to another patient
+ * based on a hashmap from an api call.
+ * @param {String} patientEmail 
+ * @param {Int} patientId 
+ * @param {Hashmap} emailMap 
+ * @returns boolean
+ */
 export const validateEmailDoesNotExist = (patientEmail, patientId, emailMap) => {
   const emailMatch = Object.keys(emailMap).find(
     (key) => emailMap[key] === patientEmail && key !== patientId
@@ -82,29 +92,42 @@ export const validateEmailDoesNotExist = (patientEmail, patientId, emailMap) => 
 
 /**
  * @name validateState
- * @description
+ * @description Validates string is two capital letters
  * @param {String} stateString
- * @returns
+ * @returns boolean
  */
 export const validateState = (stateString) => {
   const regex = /^[A-Z]{2}$/;
   return stateString && regex.test(stateString);
 };
 
+/**
+ * @name validateZip
+ * @description validates that the zip code string matches either
+ * DDDDD or DDDDD-DDDD where D is a digit.
+ * @param {String} postalCode 
+ * @returns boolean
+ */
 export const validateZip = (postalCode) => {
   const regex1 = /^\d{5}$/;
   const regex2 = /^(\d){5}-(\d){4}/;
   return postalCode && (regex1.test(postalCode) || regex2.test(postalCode));
 };
 
+/**
+ * @name validateNumberGreaterThanZero
+ * @description validates that the number exists and is greater than zero.
+ * @param {int} number 
+ * @returns boolean
+ */
 export const validateNumberGreaterThanZero = (number) => number && number > 0;
 
 export const validateGender = (genderString) => genderString === 'Male' || genderString === 'Female'
   || genderString === 'Other';
 
 /**
- * @name AddReservation
- * @description Displays a form to update or create a new reservation
+ * @name PatientForm
+ * @description Displays a form to update or create a new patient
  * @returns component
  */
 const PatientForm = () => {
@@ -249,7 +272,7 @@ const PatientForm = () => {
   };
 
   /**
-   * sets the error message to list empty fields.
+   * sets the error message to list empty fields or email exists error.
    */
   const generateError = () => {
     formHasError.current = false;

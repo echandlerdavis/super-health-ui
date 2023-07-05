@@ -20,8 +20,9 @@ export const saveEncounter = async (patientId, encounter, setApiError) => {
 
 /**
  * @name updateEncounter
- * @description Persists updated room type object to the database.
- * @param {Object} roomType
+ * @description Persists updated enconter object to the database.
+ * @param {int} patientId - id of the patient to which the encounter belongs
+ * @param {Object} encounter - payload
  * @param {Function} setApiError
  * @returns response object if success, boolean if error
  */
@@ -37,8 +38,9 @@ export const updateEncounter = async (patientId, encounter, setApiError) => {
 
 /**
  * @name getInitialEncounterData
- * @description when updating a room, sets the form to the initial data of the room.
- * @param {int} id - id of the room type to be updated
+ * @description when updating an encounter, sets the form to the initial data of the encounter.
+ * @param {int} patientId - id of the patient to which the encounter belongs
+ * @param {int} encounterId - id of the encounter to be updated
  * @param {Function} setFormData - sets the form Data to the data retrieved
  * @param {Function} setDataLoaded - sets the data loaded to true so it's only run once
  * @param {Function} setApiError - sets error if error.

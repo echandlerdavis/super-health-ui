@@ -5,9 +5,9 @@ import constants from '../../utils/constants';
  *
  * @name fetchPatients
  * @description Utilizes HttpHelper to make a get request to an API
- * @param {Function} setReservations sets state for reservations
+ * @param {Function} setOatuebts sets state for patients
  * @param {Function} setApiError sets error if response other than 200 is returned
- * @returns sets state for reservation if 200 response, else sets state for apiError
+ * @returns sets state for patients if 200 response, else sets state for apiError
  */
 const fetchPatients = (setPatients, setApiError) => {
   HttpHelper(constants.PATIENTS_ENDPOINT, 'GET')
@@ -25,8 +25,8 @@ const fetchPatients = (setPatients, setApiError) => {
 
 /**
  * @name deletePatient
- * @description removes reservation from the database.
- * @param {int} id - id of reservation to be deleted
+ * @description removes patient from the database.
+ * @param {int} id - id of patient to be deleted
  * @param {Function} setApiError - sets error if error
  */
 export const deletePatient = (id, setApiError) => {

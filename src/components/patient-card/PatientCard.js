@@ -13,7 +13,7 @@ import AppAlert from '../alert/Alert';
 
 /**
  * @name useStyles
- * @description Material-ui styling for ProductCard component
+ * @description Material-ui styling for PatientCard component
  * @return styling
  */
 const useStyles = makeStyles(() => ({

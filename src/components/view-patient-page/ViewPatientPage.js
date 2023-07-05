@@ -11,7 +11,7 @@ import EncounterCard from '../encounter-card/EncounterCard';
 
 /**
  * @name ViewPatientPage
- * @description fetches room types from API and displays room types as room type cards
+ * @description fetches patients from API and displays patients as patient cards
  * @return component
  */
 const ViewPatientPage = () => {

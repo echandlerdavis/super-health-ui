@@ -35,9 +35,9 @@ export const getEmptyFields = (formData) => {
 
 /**
    * @name validateVisitCode
-   * @description validates that the number of nights field in the
-   * form data is not null, undefined, or less than 1
-   * @param {Object} formData
+   * @description validates that the visit code exists and matches the format LDL DLD
+   * where L is a capital letter and D is a digit
+   * @param {String} visitCodeString
    * @returns boolean
    */
 export const validateVisitCode = (visitCodeString) => {
@@ -47,9 +47,9 @@ export const validateVisitCode = (visitCodeString) => {
 
 /**
    * @name validateBillingCode
-   * @description validates that the check in
-   * data string exists and is in the correct format 'mm-dd-yyyy'
-   * @param {Object} formData
+   * @description validates that the billing code exists and
+   * matches the format DDD.DDD.DDD-DD where D is a digit.
+   * @param {String} billingCodeString
    * @returns boolean
    */
 export const validateBillingCode = (billingCodeString) => {
@@ -60,8 +60,9 @@ export const validateBillingCode = (billingCodeString) => {
 
 /**
    * @name validateIcd10
-   * @description Validates that the guest email exists and is in the correct format 'x@x.x'
-   * @param {String} formData
+   * @description Validates that the icd10 exists
+   * and matches the format LDD where L is a capital letter and D is a digit.
+   * @param {String} icd10String
    * @returns boolean
    */
 export const validateIcd10 = (icd10String) => {
@@ -72,9 +73,10 @@ export const validateIcd10 = (icd10String) => {
 
 /**
    * @name validateCost
-   * @description
-   * @param {number} number
-   * @returns
+   * @description validates that a cost string is greater than zero
+   *  and has two decimal places
+   * @param {number} cost
+   * @returns boolean
    */
 export const validateCost = (cost) => {
   const costString = cost.toString();
@@ -82,9 +84,20 @@ export const validateCost = (cost) => {
   return cost && cost > 0 && costArray.length === 2 && costArray[1].length === 2;
 };
 
+/**
+ * @name validateNumberGreaterThanZero
+ * @description validates that a number is larger than zero, or that it is null
+ * @param {number} number 
+ * @returns boolean
+ */
 export const validateNumberGreaterThanZero = (number) => !number || number > 0;
 
-// TODO: figure out if you need the validate Date
+/**
+ * @name validateDateFormat
+ * @description validates that a date exists and is in the format 'YYY-MM-DD'
+ * @param {*} date 
+ * @returns 
+ */
 export const validateDateFormat = (date) => {
   const regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
   return date

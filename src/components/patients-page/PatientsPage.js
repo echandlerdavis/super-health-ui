@@ -10,7 +10,7 @@ import PatientCard from '../patient-card/PatientCard';
 
 /**
  * @name PatientsPage
- * @description fetches reservations from API and displays reservations as reservations cards
+ * @description fetches patients from API and displays patients as patient cards
  * @return component
  */
 const PatientsPage = () => {
@@ -25,7 +25,7 @@ const PatientsPage = () => {
     fetchPatients(setPatients, setApiError);
   }, []);
 
-  // Removes deleted reservation from the display.
+  // Removes deleted patient from the display.
   const handleDeletePatient = (patient) => {
     setDeleteErrorList([]);
     if (patient.encounters.length > 0) {

@@ -13,7 +13,7 @@ import styles from './EncounterCard.module.css';
 
 /**
  * @name useStyles
- * @description Material-ui styling for ProductCard component
+ * @description Material-ui styling for EncounterCard component
  * @return styling
  */
 const useStyles = makeStyles(() => ({
@@ -24,8 +24,8 @@ const useStyles = makeStyles(() => ({
 
 /**
  * @name EncounterCard
- * @description displays single room-type card component
- * @param {*} props product
+ * @description displays single encounter card component
+ * @param {*} props encounter
  * @return component
  */
 const EncounterCard = ({
