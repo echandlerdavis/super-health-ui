@@ -78,9 +78,9 @@ export const validateEmailFormat = (emailString) => {
  * @name validateEmailDoesNotExist
  * @description Validates that the email does not already belong to another patient
  * based on a hashmap from an api call.
- * @param {String} patientEmail 
- * @param {Int} patientId 
- * @param {Hashmap} emailMap 
+ * @param {String} patientEmail
+ * @param {Int} patientId
+ * @param {Hashmap} emailMap
  * @returns boolean
  */
 export const validateEmailDoesNotExist = (patientEmail, patientId, emailMap) => {
@@ -105,7 +105,7 @@ export const validateState = (stateString) => {
  * @name validateZip
  * @description validates that the zip code string matches either
  * DDDDD or DDDDD-DDDD where D is a digit.
- * @param {String} postalCode 
+ * @param {String} postalCode
  * @returns boolean
  */
 export const validateZip = (postalCode) => {
@@ -117,7 +117,7 @@ export const validateZip = (postalCode) => {
 /**
  * @name validateNumberGreaterThanZero
  * @description validates that the number exists and is greater than zero.
- * @param {int} number 
+ * @param {int} number
  * @returns boolean
  */
 export const validateNumberGreaterThanZero = (number) => number && number > 0;

@@ -1,12 +1,16 @@
 # Super Health, Inc.
 
-This is website for the company Super Health, Inc., where the user can view the company's data on patients and their associated encounters. 
+This is website for the company Super Health, Inc., where the user(presumably an administrator or provider) can view the company's data on patients and their associated encounters. 
 
-The reservation and room-type links are in the header. When you click on "Reservations", you can see a list of all the current reservations in the company's database.
+In the header, you can find a link labeled 'Patients' that will lead you to the patients page, where you can see all patients in the database and abbreviated data.
 
-Each reservation card has a pencil and trash icon. The trash icon deletes the reservation from the database and it will no longer appear on the page. The pencil icon will lead you to the edit page, where you can update the information from a form that has the previous information filled out. At the top of the page there is a create button that leads to a form where you can save a new reservation. 
+On this page, there is a create button in the top right corner that will lead you a blank form to add a new patient to the database. On the add patient page, there is validation for each field, and if you submit anything invalid, it will instruct you on what is incorrect on the form. If you submit a valid form, a new patient will be created and can be seen on the patients page. If you click cancel, you will also be led back to the patients page. 
 
-When you click on the "Room-types" button in the header, it will lead you to a page with all room-types, active or inactive. Each reservation card has a pencil icon that leads to the edit page with all the previous information filled out. The top of the page has a create button that will lead you to a blank form to create a new room-type. 
+On the patients page, each patient card  has a view page icon and a trash icon. If the user clicks the trash icon and the patient does not have associated encounters, the patient will be removed from the database and from the ui. If the patient has associated encounters and the user attempts to delete it, an error message will show up in the patient's card. 
+
+The view page icon will lead you to the patient details page, where you can see all of the patient's information, as well as all associated encounters below the patient details card. On the right hand side of the patient card, there is a pencil icon that will lead you to the edit page, where you can edit all patient information with valid fields. Again, if anything is invalid, an error message will appear. 
+
+Below the patients details page is a card for every encounter, as well as a create button that will lead you to a blank form to create a new encounter. Each encounter field has appropriate validation and error messages for submission.
 
 If you are to direct to a page that does not exist, an alert page will show up with the message "404 not found".
 
@@ -19,8 +23,8 @@ Follow the Installation Steps for [NVM on GitHub](https://github.com/coreybutler
 ## Getting Started
 
 ### Back-end
-* Clone the hotel-api project locally.
-* Open IntelliJ and run the `HotelApiApplication.java` file
+* Clone the super-health-api project locally.
+* Open IntelliJ and run the `AppRunner.java` file
 * Proceed to front-end to view
 
 ### Front-end
@@ -36,7 +40,7 @@ Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Dependencies
-* Hotel Bookings api must be running for the application to work
+* Super Health api must be running for the application to work
 
 ## Testing
 * You can run tests with coverage via `npm run test:coverage`

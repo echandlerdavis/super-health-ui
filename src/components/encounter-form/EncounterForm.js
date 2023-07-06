@@ -87,7 +87,7 @@ export const validateCost = (cost) => {
 /**
  * @name validateNumberGreaterThanZero
  * @description validates that a number is larger than zero, or that it is null
- * @param {number} number 
+ * @param {number} number
  * @returns boolean
  */
 export const validateNumberGreaterThanZero = (number) => !number || number > 0;
@@ -95,8 +95,8 @@ export const validateNumberGreaterThanZero = (number) => !number || number > 0;
 /**
  * @name validateDateFormat
  * @description validates that a date exists and is in the format 'YYY-MM-DD'
- * @param {*} date 
- * @returns 
+ * @param {*} date
+ * @returns
  */
 export const validateDateFormat = (date) => {
   const regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])$/;
