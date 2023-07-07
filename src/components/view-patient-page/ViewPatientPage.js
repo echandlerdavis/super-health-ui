@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add, ArrowBack } from '@material-ui/icons';
 import styles from './ViewPatientPage.module.css';
 import Constants from '../../utils/constants';
 import AppAlert from '../alert/Alert';
@@ -32,7 +32,20 @@ const ViewPatientPage = () => {
     <article>
       {!apiError
       && <ViewPatientCard patient={patient} />}
-      <div className={styles.roomTypeHeader}>
+      <div className={styles.backButton}>
+        <Button
+          style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
+          disabled={false}
+          size="small"
+          variant="contained"
+          startIcon={<ArrowBack />}
+          onClick={() => history.push('/patients')}
+        >
+          {' '}
+          Back to Patients Page
+        </Button>
+      </div>
+      <div className={styles.encounterHeader}>
 
         <section>
           <h2>New Encounter</h2>

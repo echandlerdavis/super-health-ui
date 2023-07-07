@@ -24,6 +24,7 @@ Follow the Installation Steps for [NVM on GitHub](https://github.com/coreybutler
 
 ### Back-end
 * Clone the super-health-api project locally.
+[Link to Backend](https://gitlab.ce.catalyte.io/training/cycleworkinggroups/nationwide/associates/chandler-davis/super-health-api)
 * Open IntelliJ and run the `AppRunner.java` file
 * Proceed to front-end to view
 
@@ -40,7 +41,10 @@ Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Dependencies
-* Super Health api must be running for the application to work
+* Super Health api must be running on IntelliJ for the application to work
+[Link to Download IntelliJ](https://www.jetbrains.com/idea/download/?section=windows)
+* This application was built on and runs best in VSCode:
+[Link to Download VSCode](https://code.visualstudio.com/download)
 
 ## Testing
 * You can run tests with coverage via `npm run test:coverage`

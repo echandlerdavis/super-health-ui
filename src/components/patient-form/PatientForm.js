@@ -4,7 +4,7 @@ import React, {
 import {
   Button, Card, FormHelperText
 } from '@material-ui/core';
-import { Cancel, Save } from '@material-ui/icons';
+import { ArrowBack, Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
@@ -26,7 +26,7 @@ export const getEmptyFields = (formData) => {
     const formInput = formData[key];
     if (formInput) {
       if (typeof formInput === 'string') {
-        formInput.trim();
+        return formInput.trim().length === 0;
       }
       return formInput.length === 0;
     }
@@ -365,108 +365,125 @@ const PatientForm = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <h2>
-        {patientId ? 'Update ' : 'New '}
-        {' '}
-        Patient
-      </h2>
-      {(emptyFieldErrors.length !== 0 || invalidFieldErrors.includes('emailExists') || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
-      <Card className={styles.formCard}>
-        <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          <div className={styles.inputs}>
-            {Object.keys(formInputInfo).map((attribute) => {
-              let styleClass = null;
-              let helperText = null;
-              // If the form attribute is listed as an empty field when errors are generated...
-              // Change the style of the input box
-              if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
-                styleClass = styles.invalidField;
-                helperText = constants.EMPTY_FIELD;
-              } else if (attribute === 'email' && (invalidFieldErrors.includes(attribute) || invalidFieldErrors.includes('emailExists'))) {
-                styleClass = styles.invalidField;
-                helperText = formInputInfo[attribute].error;
-              } else if (invalidFieldErrors.includes(attribute)) {
-                styleClass = styles.invalidField;
-                helperText = formInputInfo[attribute].error;
-              }
-              if (attribute === 'gender') {
-                return (
-                  <div key={attribute}>
-                    <FormItemDropdown
-                      key={attribute}
-                      onChange={handleFormChange}
-                      value={formData[attribute]}
-                      className={styleClass}
-                      id={attribute}
-                      label={attribute}
-                      options={genderOptions}
-                    />
-                    {helperText
+    <>
+      <div className={styles.pageContainer}>
+        <h2>
+          {patientId ? 'Update ' : 'New '}
+          {' '}
+          Patient
+        </h2>
+        {(emptyFieldErrors.length !== 0 || invalidFieldErrors.includes('emailExists') || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+        <Card className={styles.formCard}>
+          <form onSubmit={handleSubmit} className={styles.patientForm}>
+            <div className={styles.inputs}>
+              {Object.keys(formInputInfo).map((attribute) => {
+                let styleClass = null;
+                let helperText = null;
+                // If the form attribute is listed as an empty field when errors are generated...
+                // Change the style of the input box
+                if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
+                  styleClass = styles.invalidField;
+                  helperText = constants.EMPTY_FIELD;
+                } else if (attribute === 'email' && (invalidFieldErrors.includes(attribute) || invalidFieldErrors.includes('emailExists'))) {
+                  styleClass = styles.invalidField;
+                  helperText = formInputInfo[attribute].error;
+                } else if (invalidFieldErrors.includes(attribute)) {
+                  styleClass = styles.invalidField;
+                  helperText = formInputInfo[attribute].error;
+                }
+                if (attribute === 'gender') {
+                  return (
+                    <div key={attribute}>
+                      <FormItemDropdown
+                        key={attribute}
+                        onChange={handleFormChange}
+                        value={formData[attribute]}
+                        className={styleClass}
+                        id={attribute}
+                        label={attribute}
+                        options={genderOptions}
+                      />
+                      {helperText
                   && (
                   <FormHelperText className={styles.helperText}>
                     {helperText}
                   </FormHelperText>
                   )}
-                  </div>
-                );
-              }
-              return (
-                <div key={attribute}>
-                  <FormItem
-                    key={attribute}
-                    onChange={handleFormChange}
-                    value={formData[attribute]}
-                    id={attribute}
-                    type={formInputInfo[attribute].type}
-                    label={attribute}
-                    className={styleClass}
-                    step={1}
-                  />
-                  {helperText
+                    </div>
+                  );
+                }
+                return (
+                  <div key={attribute}>
+                    <FormItem
+                      key={attribute}
+                      onChange={handleFormChange}
+                      value={formData[attribute]}
+                      id={attribute}
+                      type={formInputInfo[attribute].type}
+                      label={attribute}
+                      className={styleClass}
+                      step={1}
+                    />
+                    {helperText
                 && (
                 <FormHelperText className={styles.helperText}>
                   {helperText}
                 </FormHelperText>
                 )}
-                </div>
-              );
-            })}
-          </div>
-          <div className={styles.buttonContainer}>
-            <Button
-              type="button"
-              startIcon={<Cancel />}
-              onClick={() => history.goBack()}
-              variant="outlined"
-              style={{
-                backgroundColor: '#e99393',
-                borderColor: '#b00c00',
-                color: '#b00c00',
-                borderRadius: 20
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="outlined"
-              data-au={patientId ? 'update-button' : 'create-button'}
-              startIcon={<Save />}
-              style={{
-                backgroundColor: '#b0e5b0',
-                borderColor: '#2f662f',
-                color: '#2f662f',
-                borderRadius: 20
-              }}
-              disabled={formHasError.current}
-            >
-              {patientId ? 'Update' : 'Create'}
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.buttonContainer}>
+              <Button
+                type="button"
+                startIcon={<Cancel />}
+                onClick={() => history.goBack()}
+                variant="outlined"
+                style={{
+                  backgroundColor: '#e99393',
+                  borderColor: '#b00c00',
+                  color: '#b00c00',
+                  borderRadius: 20
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="outlined"
+                data-au={patientId ? 'update-button' : 'create-button'}
+                startIcon={<Save />}
+                style={{
+                  backgroundColor: '#b0e5b0',
+                  borderColor: '#2f662f',
+                  color: '#2f662f',
+                  borderRadius: 20
+                }}
+                disabled={formHasError.current}
+              >
+                {patientId ? 'Update' : 'Create'}
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+      <div className={styles.backButton}>
+        <Button
+          style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
+          disabled={false}
+          size="small"
+          variant="contained"
+          startIcon={<ArrowBack />}
+          onClick={patientId ? () => { history.push(`/patients/${patientId}`); } : () => history.push('/patients')}
+        >
+          {' '}
+          Back to
+          {patientId ? ' Patient Details ' : ' Patients '}
+          Page
+        </Button>
+      </div>
+    </>
   );
 };
 export default PatientForm;

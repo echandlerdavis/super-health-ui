@@ -6,23 +6,31 @@
   padding: .15rem;
 }
 
+.backButton{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: .5em;
+  padding: .25em;
+}
+
 .buttonHeader{
   margin: .05rem;
 }
 
-.roomTypeHeader{
+.encounterHeader{
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
 }
 
-.roomTypeHeader h2{
+.encounterHeader h2{
   margin: 0;
   padding: 0.5em;
 }
 
-.roomTypeHeader section{
+.encounterHeader section{
   display: flex;
   flex-direction: column;
   justify-content: center;

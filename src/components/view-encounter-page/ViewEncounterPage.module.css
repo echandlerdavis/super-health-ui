@@ -1,46 +1,10 @@
-.buttonSection{
+
+
+  .backButton{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    margin: .15rem;
-    padding: .15rem;
-  }
-  
-  .buttonHeader{
-    margin: .05rem;
-  }
-  
-  .roomTypeHeader{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-end;
-  }
-  
-  .roomTypeHeader h2{
-    margin: 0;
-    padding: 0.5em;
-  }
-  
-  .roomTypeHeader section{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-   margin: .05rem 0;
-  }
-  
-  .title {
-    text-align: center;
-  }
-  
-  .app {
-    display: grid;
-    grid-gap: 15px;
-    grid-template-columns: repeat(1, auto);
-    margin: 20px;
-  }
-  
-  .app > div {
-    min-width: 100%;
+    margin: .5em;
+    padding: .25em;
   }
   

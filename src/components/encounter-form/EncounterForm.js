@@ -4,7 +4,7 @@ import React, {
 import {
   Button, Card, FormHelperText
 } from '@material-ui/core';
-import { Cancel, Save } from '@material-ui/icons';
+import { ArrowBack, Cancel, Save } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router-dom';
 import AppAlert from '../alert/Alert';
 import constants, { SEVERITY_LEVELS } from '../../utils/constants';
@@ -20,10 +20,9 @@ import styles from './EncounterForm.module.css';
 export const getEmptyFields = (formData) => {
   const emptyInputs = Object.keys(formData).filter((key) => {
     const formInput = formData[key];
-
     if (formInput) {
       if (typeof formInput === 'string') {
-        formInput.trim();
+        return formInput.trim().length === 0;
       }
       return formInput.length === 0;
     }
@@ -310,85 +309,103 @@ const EncounterForm = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <h2>
-        {encounterId ? 'Update ' : 'New '}
-        {' '}
-        Encounter
-      </h2>
-      {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
-      <Card className={styles.formCard}>
-        <form onSubmit={handleSubmit} className={styles.reservationForm}>
-          <div className={styles.inputs}>
-            {Object.keys(formInputInfo).map((attribute) => {
-              let styleClass = null;
-              let helperText = null;
-              // If the form attribute is listed as an empty field when errors are generated...
-              // Change the style of the input box
-              if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
-                styleClass = styles.invalidField;
-                helperText = constants.EMPTY_FIELD;
-              } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
-                styleClass = styles.invalidField;
-                helperText = formInputInfo[attribute].error;
-              }
-              return (
-                <div key={attribute}>
-                  <FormItem
-                    key={attribute}
-                    onChange={handleFormChange}
-                    value={formData[attribute]}
-                    id={attribute}
-                    type={formInputInfo[attribute].type}
-                    placeholder={(attribute === 'totalCost' || attribute === 'copay') ? '0.00' : ''}
-                    label={attribute}
-                    className={styleClass}
-                    step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}
-                  />
-                  {helperText
+    <>
+      <div className={styles.pageContainer}>
+        <h2>
+          {encounterId ? 'Update ' : 'New '}
+          {' '}
+          Encounter
+        </h2>
+        {(emptyFieldErrors.length !== 0 || apiError) && <AppAlert severity={SEVERITY_LEVELS.ERROR} title="Error" message={formErrorMessage} />}
+        <Card className={styles.formCard}>
+          <form onSubmit={handleSubmit} className={styles.encounterForm}>
+            <div className={styles.inputs}>
+              {Object.keys(formInputInfo).map((attribute) => {
+                let styleClass = null;
+                let helperText = null;
+                // If the form attribute is listed as an empty field when errors are generated...
+                // Change the style of the input box
+                if (emptyFields.current.length && emptyFields.current.includes(attribute)) {
+                  styleClass = styles.invalidField;
+                  helperText = constants.EMPTY_FIELD;
+                } else if (invalidFieldErrors.length && invalidFieldErrors.includes(attribute)) {
+                  styleClass = styles.invalidField;
+                  helperText = formInputInfo[attribute].error;
+                }
+                return (
+                  <div key={attribute}>
+                    <FormItem
+                      key={attribute}
+                      onChange={handleFormChange}
+                      value={formData[attribute]}
+                      id={attribute}
+                      type={formInputInfo[attribute].type}
+                      placeholder={(attribute === 'totalCost' || attribute === 'copay') ? '0.00' : ''}
+                      label={attribute}
+                      className={styleClass}
+                      step={(attribute === 'totalCost' || attribute === 'copay') ? 0.01 : 1}
+                    />
+                    {helperText
                   && (
                   <FormHelperText className={styles.helperText}>
                     {helperText}
                   </FormHelperText>
                   )}
-                </div>
-              );
-            })}
-          </div>
-          <div className={styles.buttonContainer}>
-            <Button
-              type="button"
-              startIcon={<Cancel />}
-              onClick={() => history.goBack()}
-              variant="outlined"
-              style={{
-                backgroundColor: '#e99393',
-                borderColor: '#b00c00',
-                color: '#b00c00',
-                borderRadius: 20
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="outlined"
-              data-au={encounterId ? 'update-button' : 'create-button'}
-              startIcon={<Save />}
-              style={{
-                backgroundColor: '#b0e5b0',
-                borderColor: '#2f662f',
-                color: '#2f662f',
-                borderRadius: 20
-              }}
-              disabled={formHasError.current}
-            >
-              {encounterId ? 'Update' : 'Create'}
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className={styles.buttonContainer}>
+              <Button
+                type="button"
+                startIcon={<Cancel />}
+                onClick={() => history.goBack()}
+                variant="outlined"
+                style={{
+                  backgroundColor: '#e99393',
+                  borderColor: '#b00c00',
+                  color: '#b00c00',
+                  borderRadius: 20
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="outlined"
+                data-au={encounterId ? 'update-button' : 'create-button'}
+                startIcon={<Save />}
+                style={{
+                  backgroundColor: '#b0e5b0',
+                  borderColor: '#2f662f',
+                  color: '#2f662f',
+                  borderRadius: 20
+                }}
+                disabled={formHasError.current}
+              >
+                {encounterId ? 'Update' : 'Create'}
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </div>
+      <div className={styles.backButton}>
+        <Button
+          style={{ backgroundColor: '#395aa1', color: 'white', borderRadius: 20 }}
+          disabled={false}
+          size="small"
+          variant="contained"
+          startIcon={<ArrowBack />}
+          onClick={encounterId ? () => { history.push(`/patients/${patientId}/encounters/${encounterId}`); }
+            : () => history.push(`/patients/${patientId}`)}
+        >
+          {' '}
+          Back to
+          {encounterId ? ' Encounter Details ' : ' Patient Details '}
+          Page
+        </Button>
+      </div>
+    </>
   );
 };
 export default EncounterForm;
