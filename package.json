@@ -1,5 +1,5 @@
 {
-  "name": "super-health-ui",
+  "name": "super-apparel-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,8 +27,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "coverage": "react-scripts test --coverage --watchAll=false",
+    "test": "react-scripts test --passWithNoTests",
+    "coverage": "react-scripts test --coverage --watchAll=false --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "eslint . --fix"
   },
